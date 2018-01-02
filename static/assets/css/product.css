@@ -1,0 +1,123 @@
+@charset "utf-8";
+/*!
+ * @author 736766193@qq.com
+ * @date 16-9-8
+ * @description description
+ */
+.productRule{
+    display: inline-block;
+    float: left;
+    margin-left: 20px;
+    width: 60%;
+}
+.editProductRule {
+    display: inline-block;
+    float: right;
+    margin-right:20px;
+}
+.sku_main{
+    height: 56px;
+}
+.sku_input{
+    width:200px!important;
+}
+.sku_label{
+    float: right;
+    margin-right: 100px;
+}
+.sku_label_search{
+
+}
+.sku_menu_row5{
+    width: 5%;
+}
+.sku_menu_row4{
+    width: 10%;
+}
+.sku_menu_row3{
+    width: 40%;
+}
+.sku_menu_row2{
+    width: 60%;
+}
+.sku_menu_row1{
+    width: 17%;
+}
+.sku_select{
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.sku_menu_main{
+    padding-top: 7px;
+    height: 44px;
+}
+/**添加商品属性**/
+.sku_add_frame{
+    overflow: hidden;
+}
+.add_sku_attr{
+    width:28.5%;
+    margin-left: 32%;
+}
+.add_sku_submit{
+    margin-left: 34%;
+}
+.popup-import {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.5);
+}
+.popup-import .popup-content {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 600px;
+    padding: 10px;
+    margin-top: 58px;
+    text-align: left;
+    background-color: #fff;
+}
+.popup-import .popup-content .select-all {
+    font: 700 14px/2em 'micosoft yahei';
+    margin-bottom: 20px;
+    color: #2d2d2d;
+}
+.popup-import .popup-content .select-item {
+    float: left;
+    width: 33.33%;
+    font: 400 14px/2em 'micosoft yahei';
+}
+.popup-import .popup-content input {
+    margin-right: 10px;
+    vertical-align: text-top;
+}
+.popup-import .popup-content .icon-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    font: 400 16px/1em 'sans serif';
+}
+.popup-import .popup-content .popup-body:after {
+    content: ' ';
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+.popup-import .popup-content .brn-wrap {
+    text-align: center;
+}
+.popup-import .popup-content .addbtn-link {
+    cursor: pointer;
+}
+.popup-title{
+    height:38px;
+}

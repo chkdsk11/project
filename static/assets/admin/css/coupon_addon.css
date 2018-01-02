@@ -1,0 +1,136 @@
+.text-red{
+    color: #ff0000;
+}
+.coupon {
+    height:34px;
+}
+.coupon .c_right{
+    float: left;
+    line-height:34px;
+    font-size: 14px;
+    margin-left:5px;
+}
+.coupon .c_left{
+    float: left;
+    line-height:34px;
+    font-size: 14px;
+    margin-right:5px;
+}
+.relative_validity {
+    height:34px;
+}
+.relative_validity .c_right{
+    float: left;
+    line-height:34px;
+    font-size: 14px;
+    margin-left:5px;
+}
+.relative_validity .c_left{
+    float: left;
+    line-height:34px;
+    font-size: 14px;
+    margin-right:5px;
+}
+
+.limitC {
+    height:34px;
+}
+.limitC .c_right{
+    float: left;
+    line-height:34px;
+    font-size: 14px;
+    margin-left:5px;
+}
+
+.lister{
+    float: left;
+    width: 300px;
+}
+.lister>ul{
+    overflow-y: scroll;
+    padding: 5px 0;
+    width: 99%;
+    height: 390px;
+    border: 1px solid #ddd;
+    margin-top: 0;
+    margin-left: 0;
+}
+.lister>ul>li{
+    display: list-item;
+}
+.lister>ul>li>a{
+    display: block;
+    padding: 0 15px;
+    height: 27px;
+    color: #222;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    line-height: 27px;
+    text-decoration: none;
+    outline: none;
+}
+.mid_panel{
+    float: left;
+    width: 126px;
+    padding: 78px 20px;
+}
+.mid_panel>div{
+    text-align: center;
+    margin-top: 30px;
+    width: 96px;
+}
+.mid_panel>div>a{
+    background-color: #dadada;
+    padding: 8px;
+    text-decoration: none;
+    color: #666;
+    outline: none;
+}
+.lister>ul>li:hover, .lister>ul>li.list_on {
+    background-color: #ededed;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*添加限时优惠*/
+.add-discount-t {max-width: 1045px; width: 100%; border:1px solid #ccc; float: left;}
+.add-discount-t dl{font-size: 14px; color: #333;}
+.add-discount-t dt{float: left;width: 17.5%;clear: left; text-align: right; line-height: 25px;}
+.add-discount-t dd{float: left;margin-bottom: 15px;}
+.add-discount-t .info-dd input {padding: 0 5px; width: 480px; height: 25px; border:1px solid #ccc;}
+.add-discount-t .stag-dd input {margin: 0 10px; position: relative;top: 2px;}
+.add-discount-t textarea {padding:5px; width: 480px; border:1px solid #ccc;resize: none;}
+
+.add-discount{font-size: 14px; clear: both; max-width: 1045px; width: 100%; margin-top: 20px;float: left; border:1px solid #ccc; border-top: none;}
+.add-discount form {margin: 0;}
+.add-discount dl{float: left; margin:0; width: 100%;}
+.add-discount dt{float: left;width: 17.5%;padding-right: 20px;box-sizing: border-box;text-align: right; border-top: 1px solid #ccc;line-height: 67px;}
+.add-discount dd{padding-left: 20px;/* min-width: 800px; */float: left;margin:0;width: 82.5%;border-top: 1px solid #ccc;border-left: 1px solid #ccc;box-sizing: border-box;min-height: 68px;line-height: 68px; }
+.mutex-active input {margin-right: -5px; position: relative;top: 2px;}
+.discount-type select { height: 30px; line-height: 30px; margin-top: 18px;}
+.discount-type span {font-size: 12px;line-height: 68px;color: rgb(255,94,144);}
+.discount-type span em{font-style: normal;font-size: 12px;line-height: 68px;font-weight: 600;}
+.add-production {}
+.search-strat {width: 520px; height: 32px; border:1px solid #ccc;position: relative;}
+.search-strat input {width: 100%; border:none;height: 30px; padding: 0 45px 0 15px;}
+.search-strat a {position: absolute;right: 0; top: 0; border-left: 1px solid #ccc; display: block;height: 30px; width: 31px;background-size: 31px 30px;   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAIAAABbkFLLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAedJREFUeNrsVb2rQWEc9nEoKVnkY0KUlIkYDLIbpJTBYrGw+xNkVDYTVoNkksWkjEKkyCJS8v0ROffpnrrpeo9z7inD7d5neHvP76nn/X0873vEt9tN9B5st1uJ6J34V2cDRdP0r839BbderxuNRrfbXS6XCoXCZDI5nU632y2R8M1JfL1eicRwOMzn86fT6VscZ8TjcZVKxSm92+3I6kg2k8lAWq/Xh0Ihm82G4GAwKJfLi8XCYDCkUimKojjVyTXW63VIa7VaqNjtdsknsMGnRqOZzWbNZpPXVGkSOp0OuHA4jAQf43K5PBgMgmq32zQXyJ5Br/b7PTZWq/WZZbq0Wq0EOlImk0mlUmzu9/szywSVSqVwvxuNRqzw4jOF2WLFDIT33ePxgKtWq5vN5jGOz0qlgsp8Ph+fvpNdhSvTarUmk0k6nQ4EAswARqNRrVbDSJA4nMPrNl0uFyJxPB6LxWKv1yOyXq83Eom8lj4cDqzqDFBBv9+fTqdqtRpuMZvNhUKBcZTL5YpGo8z8Bao/Yz6fZ7NZ5gCHwxGLxeAxVvXz+fzTlw8H5HI5/Daxt1gsiUSCWAF6K+QF1ul0yWSSecjG4zFeHtapCsj9q4JSqeT3+zEANl8IV+eEwM78/7X/tvqHAAMAjjJiq/461z0AAAAASUVORK5CYII=") no-repeat;}
+.discount-left,.discount-right {box-sizing: border-box; float: left; width: 40%; overflow: hidden; border:1px solid #ccc; margin-top: 10px;}
+.discount-left .search-item,.discount-right .search-item{ margin: 0;padding:0; color: #333;overflow-y: scroll;height: 400px; }
+.discount-left .search-item li,.discount-right .search-item li {white-space: nowrap; list-style-type: none; font-size: 12px; line-height: 25px;}
+.search-item li a {text-decoration:none;display:inline-block;width: 100%}.search-item li a:active{color: initial;}.search-item li a:link{color: initial;}.search-item li a:visited{color: initial;}.search-item li a:hover{color: initial;}
+.discount-left .pro-name,.discount-right .pro-name {max-width: 68%; white-space: nowrap;text-overflow: ellipsis;overflow: hidden; display: block; float: left;}
+.discount-left .search-item .pro-price,.discount-right .search-item .pro-price{margin-left:10px; }
+.select-discount{box-sizing: border-box; width: 19%; text-align: center; float: left; padding-top: 105px;}
+.select-discount a {font-size: 12px; margin:0 auto; text-decoration: none; display: block;width: 82px; height: 32px;line-height: 32px; margin-bottom: 20px; text-align: center; color: #666;  background: rgb(219,219,219);}
+.dis-submit {}
+.dis-submit input {border:none; background: rgb(255,102,153); color: #fff; width: 60px; height: 30px; border-radius: 3px;}
+.search-item li:hover,.search-item .list_on { background-color: #ededed;}
+
+.discount-tab {float: left;max-width: 1045px; width: 100%; border:1px solid #ccc;border-collapse: collapse;border-spacing: 0; }
+.discount-tab th {font-size: 12px; font-weight: bold;color: #666;line-height: 45px; height:45px;}
+.discount-tab th input[type=text] {width: 60px;}
+.discount-tab th input { max-width: 150px;}
+.discount-tab th input[type=button] {box-shadow: none; border-radius: 2px; width: auto;height: 30px;margin: 0;font-weight: bold;color: #fff;background: #6fb3e0;border: 1px solid #6fb3e0;}
+.discount-tab th,.discount-tab td{border:1px solid #ccc;}
+.confirm-btn {padding: 6px 40px;border-radius: 2px; cursor: pointer;background: #f69;font-weight: bold;color: #fff;border: 1px solid #f69; margin-top: 20px; }

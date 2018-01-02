@@ -1,0 +1,227 @@
+<?php
+defined('APP_PATH') || define('APP_PATH', realpath(__DIR__.'/../../'));
+date_default_timezone_set('Asia/ShangHai');
+
+return new \Phalcon\Config(array(
+    'debug'=>true,
+    //58服务器
+    'database' => array(
+        'read' => array(
+            'adapter'  => 'Mysql',
+            'host'     => '172.16.40.250',
+            'username' => 'root',
+            'password' => '3edc#RFV',
+            'dbname'   => 'qiyao',
+            'charset'  => 'utf8',
+	    'port'  => '3306',
+        ),
+        'write' => array(
+            'adapter'  => 'Mysql',
+            'host'     => '172.16.40.250',
+            'username' => 'root',
+            'password' => '3edc#RFV',
+            'dbname'   => 'qiyao',
+            'charset'  => 'utf8',
+	    'port'  => '3306',
+        ),
+    ),
+	//app库
+	'appdatabase' => array(
+		'read' => array(
+		 'adapter'  => 'Mysql',
+		'host'     => '172.16.40.250',
+		'username' => 'root',
+		'password' => '3edc#RFV',
+		'dbname'   => 'qiyao_byjk',
+		'charset'  => 'utf8',
+		),
+        'write' => array(
+            'adapter'  => 'Mysql',
+            'host'     => '172.16.40.250',
+            'username' => 'root',
+            'password' => '3edc#RFV',
+            'dbname'   => 'byjk',
+            'charset'  => 'utf8',
+        ),
+	),
+
+    'application' => array(
+        'modelsDir'     => APP_PATH . '/serve/models/shopmodel',
+        'libsDir'    => APP_PATH . '/common/libs/',
+        'policysDir' =>  APP_PATH .'/common/policys/',
+        'servicesDir'   => APP_PATH . '/serve/services/shopservice/',
+        'listenDir'     =>APP_PATH.'/serve/listen/shoplisten/',
+        'datasDir'      => APP_PATH . '/serve/datas/shopdata/',
+        'languageDir'   => APP_PATH . '/common/language/',
+        'baseUri'       => '/',
+        'uploadDir'     => APP_PATH . '/static/',
+    ),
+
+    'cookie' => array(
+        'path'=>'/',
+        'domain'=>'qiyao.com'
+    ),
+
+    'domain' => array(
+        'home'  =>'www.qiyao.com',
+        'admin' =>'demo.qiyao.com',
+        'static'=>'demo.qiyao.com',
+        'img'=> 'http://172.16.40.252/',
+        'updateEsSearch'=> 'http://172.16.40.252:8380/',
+        'appImg'=>'http://172.16.40.250:8087/upload/',
+    ),
+
+    'redis' => array(
+        'baiyang'=>array(
+            'host' => '172.16.40.250',
+            'port' => 6379,
+            'auth' => '',
+            'select_db' => 3,
+        ),
+        'tencent'=>array(
+            'host' => '172.16.40.250',
+            'port' => 6379,
+            'auth' => '',
+            'select_db' => 3,
+        ),
+		'app'=>array(
+            'host' => '172.16.40.250',
+            'port' => 6379,
+            'auth' => '3edc#RFV',
+            'select_db' => 3,
+        )
+    ),
+
+    'keys'=>array(
+        'aesKey' => 'baiy123456789123', // aes加密密钥
+        'aesIv' => 'baiy123456789123', // aes加密iv
+        'code' => 'code', // 验证码标识符
+    ),
+
+    //文件上传配置
+    'uploadFile'=>array(
+        'rootPath' => '../../../static', //用于替换成绝对路径
+        'filePath' => '../../../static/upload/', //文件目录
+        'fileSize' => 1 * 1024 * 1024, //文件大小
+        'fileType' => 'jpg,png,gif,jpeg', //文件类型
+        'fileTmp'  => '/tmp/',//文件上传临时存放路径
+    ),
+
+    // 环境变量 dev,stg,pro
+    'environment' => 'dev',
+    'soa' => [
+        'host' => 'http://soa.qiyao.com'
+    ],
+	'mongo'=>[
+        'master' => 'mongodb://gzdeveloper:baiyang@172.16.40.251:27017/syslog',
+        'slave'  => 'mongodb://gzdeveloper:baiyang@172.16.40.251:27017/syslog'
+    ],
+    'gearman_host' => '127.0.0.1:4374',
+    // wap前端地址（暂时用于app发红包后跳到wap页抢）
+    'wap_base_url' => [
+        'dev' => 'http://172.16.40.250:8086/',
+        'stg' => 'https://mtest.baiyangwang.com/',
+        'pro' => 'https://m.baiyangwang.com/',
+    ],
+    // 是否使用快递100wap端，直接抓取数据
+    'used_logistics_wap_api' => 0,
+    // 物流接口url
+    'app_url' => [
+        'dev'   =>  'http://172.16.40.250:8087',
+        'stg'   =>  'http://app.baiyangwang.com',
+        'pro'   =>  'http://mallapp.baiyjk.com',
+    ],
+    'pc_url' => [
+        'dev'   =>  'http://172.16.40.250:8088',
+        'stg'   =>  'http://stg.baiyangwang.com',
+        'pro'   =>  'http://www.baiyangwang.com',
+    ],
+    // wap后端接口url
+    'wap_url' => [
+        'dev'   =>  'http://172.16.40.250:8087',
+        'stg'   =>  'http://mstest.baiyangwang.com',
+        'pro'   =>  'http://mservice.baiyjk.com',
+    ],
+    // wap前端接口url
+    'wap_home_url' => [
+        'dev'   =>  'http://172.16.40.250:8086',
+        'stg'   =>  'http://mstest.baiyangwang.com',
+        'pro'   =>  'http://mservice.baiyjk.com',
+    ],
+    // 中民返利网
+    'zm_rebate' => [
+        'dev' => [
+            'zm_cps_url' => 'http://www.zm123.com/comm/doTest.do',
+            'zm_ad_by_id' => 'byzm',
+            'zm_siteid' => 10001,
+            'zm_key' => 'zm123key',
+        ],
+        'stg' => [
+            'zm_cps_url' => 'http://www.zm123.com/comm/doTest.do',
+            'zm_ad_by_id' => 'byzm',
+            'zm_siteid' => 10001,
+            'zm_key' => 'zm123key',
+        ],
+        'pro' => [
+            'zm_cps_url' => 'http://www.zm123.com/comm/doTest.do',
+            'zm_ad_by_id' => 'byzm',
+            'zm_siteid' => 10001,
+            'zm_key' => 'zm123key',
+        ],
+    ],
+	//es配置地址
+	'es' => [
+        'pcUrl' => 'http://172.16.40.252:8380/',
+        'appUrl' => 'http://172.16.40.252:8380/',
+        'wapUrl' => 'http://172.16.40.252:8380/',
+        'wechatUrl' => 'http://172.16.40.252:8380/'
+    ],
+    'max_upload_img' => 5, // 上传图片的最大数
+    'order_effective_time'       => 2*24, //订单支付有效时间 /小时
+    'o2o_order_effective_time'   => 0.5, //O2O的订单支付有效时间 /小时
+    'ec'=>false,//是否允许导入
+    // 自提门店地址
+    'since_shop_address' => ['奇药科技园','奇药健康科技园','开封路88号'],
+	//相关资讯地址
+    'infoUrl' => '',
+	// 海关支付公司代码
+    'kj_custom_id' => array(
+        'alipay' => 'ZF14021901',
+        'wechat' => 'ZF14120401'
+    ),
+	'pc_admin_url' =>[
+        'dev' => 'http://172.16.40.250:8088/Admin',
+        'stg' => 'http://stg.baiyangwang.com/Admin',
+        'pro' => 'http://www.baiyangwang.com/Admin',
+    ],
+    // 标准版 Api erp订单对接地址
+    'erp_url' => [
+        'dev' => '',
+        'stg' => '',
+    ],
+
+    //用户申请为推广员默认渠道（官网渠道ID）
+    'user_apply_channel' => [
+        'dev' => 24,
+        'stg' => 24,
+        'pro' => 24,
+    ],
+
+    // 育学园店铺ID
+    'yxy_shop_id' => [
+        'dev' => '100014',
+        'stg' => '1',
+        'pro' => '1',
+    ],
+	//专题
+    'subject_file' => [
+        'dir' => APP_PATH . '/static/',             //静态文件存放地址
+        'dir_url' => [                                    //静态文件访问地址
+            'dev' => 'http://demo.qiyao.com/subject/',
+            'stg' => 'http://stgsource2.baiyangwang.com',
+            'pro' => 'http://source.baiyangwang.com',
+        ],
+    ],
+    //自营商城名称
+    'company_name' => '奇药'
+));

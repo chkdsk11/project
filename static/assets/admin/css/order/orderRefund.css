@@ -1,0 +1,134 @@
+/*申请退款/取消退款*/
+.order-refund,.order-return {
+	padding:25px;
+}
+.order-refund h4,.order-return h4{
+	padding:0;
+	margin-bottom:30px;
+}
+.order-refund table th,.order-refund table td,.order-return table th,.order-return table td{
+	text-align: center;
+	vertical-align: middle !important;
+}
+.order-refund table td select,.order-return table td select{
+	width:80%;
+}
+.order-return .box i {
+	color:red;
+	margin-right:5px;
+}
+.order-refund dl{
+	float: left;
+	width:100%;
+}
+.order-refund dt {
+	float: left;
+	line-height: 30px;
+	width:9.2%;
+	font-style: normal;
+	font-weight: normal;
+	text-align: right;
+}
+.order-refund dd{
+	float: left;
+	width:90.5%;
+	margin-bottom: 20px;
+}
+.order-refund dd > select{
+	width:17.5%;
+	float: left;
+}
+.order-refund dd > .box{
+	margin-left:4.5%;
+	float: left;
+	width: 78%;
+}
+.order-refund dd > .box input {
+	width:88%;
+}
+.order-refund dd > .box select {
+	margin-right: 3%;
+}
+.order-refund dd textarea {
+	width: 100%;
+	height: 140px;
+	resize:none;
+}
+.textarea-box {
+	position: relative;
+}
+.textarea-box span.red{
+	color:#f00;
+	font-style: normal;
+}
+.textarea-box i {
+	position: absolute;
+	bottom: 8px;
+    right: 9px;
+    z-index: 2;
+}
+.order-refund dl:after{
+	content: '';
+	display: block;
+	clear:both
+};
+.btn-con{
+	margin-top: 15px !important;
+    margin-right: 20px !important;
+}
+
+.order-return dl{
+	float: left;
+	width:100%;
+}
+.order-return dt {
+	float: left;
+	line-height: 30px;
+	width:9.2%;
+	font-style: normal;
+	font-weight: normal;
+	text-align: right;
+}
+.order-return dd{
+	float: left;
+	width:90.5%;
+	margin-bottom: 20px;
+}
+.order-return dd > select{
+	width:17.5%;
+	float: left;
+}
+.order-return dd > .box{
+	margin-left:4.5%;
+	float: left;
+	width: 78%;
+}
+.order-return dd > .box input {
+	width:88%;
+}
+.order-return dd > .box select {
+	margin-right: 3%;
+}
+.order-return dd textarea {
+	width: 100%;
+	height: 140px;
+	resize:none;
+}
+.order-return dl:after{
+	content: '';
+	display: block;
+	clear:both
+};
+.max-txt{
+	font-style: normal;
+}
+.hide{
+	display:none;
+}
+.refundSubmitButton {
+	text-align:center;
+}
+.refundNum{
+	width: 40%;
+    text-align: center;
+}

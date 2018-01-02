@@ -1,0 +1,14 @@
+### Phalcon template ###
+/cache/_*
+/config/development/
+/docs/
+/common/config/config.local.php
+/application/admin/app/cache/_
+/common/config/config.php
+/common/config/services.php
+/application/home/app/controllers/TestController.php
+/common/logs/mysql
+/static/subject/pc/subject_
+/static/subject/mobile/subject_
+/.idea
+

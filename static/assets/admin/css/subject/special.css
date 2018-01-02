@@ -1,0 +1,139 @@
+@charset "utf-8";
+.special-box {
+    border: 1px solid #666;
+    padding: 10px;
+    margin-bottom: 30px
+}
+
+.special-box .title {
+    font: 700 16px/2 'Microsoft YaHei';
+    color: #000;
+    border-bottom: 1px solid #999;
+    margin: 0 0 10px
+}
+
+.special-box .widget-list {
+    list-style: none;
+    padding: 0;
+    margin: 0
+}
+
+.special-box .widget-list .widget-item {
+    font: 700 14px/2.5em 'Microsoft YaHei';
+    color: #000;
+    text-align: center;
+    padding: 0 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px #666
+}
+
+.special-box .widget-list .widget-item:nth-child(8n+1) {
+    background-color: #07f
+}
+
+.special-box .widget-list .widget-item:nth-child(8n+2), .special-box .widget-list .widget-item:nth-child(8n+8) {
+    background-color: #09f
+}
+
+.special-box .widget-list .widget-item:nth-child(8n+3), .special-box .widget-list .widget-item:nth-child(8n+7) {
+    background-color: #0bf
+}
+
+.special-box .widget-list .widget-item:nth-child(8n+4), .special-box .widget-list .widget-item:nth-child(8n+6) {
+    background-color: #0df
+}
+
+.special-box .widget-list .widget-item:nth-child(8n+5) {
+    background-color: #0ff
+}
+
+.special-box .widget-list .widget-item:last-child {
+    display: block
+}
+
+.special-box .review-content {
+    margin: 0 auto;
+}
+
+.special-box .img-upload-review {
+    display: block;
+    width: 100%;
+    height: 100px;
+    background-position: 0 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.top-search {
+    margin-bottom: 30px
+}
+
+.view-content {
+    margin: 30px auto;
+    overflow: hidden
+}
+
+.view-content.mobile {
+    width: 375px;
+    height: 667px
+}
+
+.view-content.pc {
+    width: 1280px;
+    height: 800px
+}
+
+.view-content iframe {
+    width: 100%;
+    height: 100%
+}
+
+.widget-code label {
+    font: 800 16px/1.5em 'Open Sans'
+}
+
+.widget-code textarea {
+    height: 10em;
+    margin-bottom: 15px
+}
+
+.widget-param {
+    margin-top: 24px
+}
+
+.widget-param .select-options {
+    margin-top: 10px;
+    padding: 0
+}
+
+.widget-param .form-horizontal {
+    margin-top: 30px
+}
+
+.add-widget-act {
+    margin-top: 30px
+}
+
+.tag-edit .form-inline .form-group {
+    margin-left: 0;
+    margin-right: 0
+}
+
+.tag-edit .tags {
+    width: auto;
+    padding: 0;
+    border: 0
+}
+
+.tag-edit .use-special {
+    margin-top: 50px
+}
+
+.tag-edit .form-control-static {
+    margin-left: 30px
+}

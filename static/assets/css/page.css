@@ -1,0 +1,67 @@
+.page{
+    margin:0 auto;
+    text-align: center;
+}
+.page a{
+    height: 34px;
+    line-height: 34px;
+    margin: 0 5px;
+    padding: 0 14px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #666;
+    display: inline-block;
+    zoom: 1;
+    background: #fff;
+    text-decoration: none;
+}
+.page .span{
+    height: 34px;
+    line-height: 34px;
+    margin: 0 5px;
+    padding: 0 14px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #666;
+    display: inline-block;
+    zoom: 1;
+    background: #fff;
+}
+.page input{
+    height: 36px;
+    padding: 0 14px;
+    margin: 0 5px;
+    padding-top: 2px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    width: 60px;
+}
+.page .selected{
+    height: 34px;
+    line-height: 34px;
+    margin: 0 5px;
+    padding: 0 14px;
+    border: 1px solid #ffb752;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #fff;
+    display: inline-block;
+    zoom: 1;
+    background: #ffb752;
+    text-decoration: none;
+}
+.page .btn{
+    display: inline-block;
+    zoom: 1;
+    height: 32px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    line-height: 32px;
+    text-align: center;
+    background-color: #ddd;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}

@@ -1,0 +1,398 @@
+<?php
+/**
+ * Services are globally registered in this file
+ *
+ * @var \Phalcon\Config $config
+ */
+
+use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
+use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
+use Phalcon\Flash\Direct as Flash;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\File as FileLogger;
+use Phalcon\Http\Response\Cookies;
+use Phalcon\Mvc\Model\Manager;
+use Phalcon\Cache\Backend\File as CacheFile;
+use Shop\Libs\RedisCache;
+use Shop\Libs\BestYooPay;
+
+/**
+ * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
+ */
+$di = new FactoryDefault();
+
+$di->set('crypt', function() {
+    $crypt = new Phalcon\Crypt();
+    /*
+     * 别用PADDING_DEFAULT影响cookies的取值
+     */
+    $crypt->setPadding(\Phalcon\Crypt::PADDING_ZERO);
+    $crypt->setKey('baiy.com.gz12345'); // Use your own key!
+    return $crypt;
+});
+
+/**
+ * 注入cookies
+ */
+$di->set('cookies', function(){
+    $config=$this->getConfig();
+    $cookies = new Cookies();
+    $cookies->useEncryption(false);
+    return $cookies;
+});
+
+/**
+ * The URL component is used to generate all kind of urls in the application
+ */
+$di->setShared('url', function (){
+    $config=$this->getConfig();
+    $url = new UrlResolver();
+    $url->setBaseUri($config->application->baseUri);
+    return $url;
+});
+/**
+ * app库
+ */
+$di->set('dbWriteApp', function ()  {
+    $config=$this->getConfig();
+    $dbConfig = $config->appdatabase->write->toArray();
+    $adapter = $dbConfig['adapter'];
+    unset($dbConfig['adapter']);
+    $class = 'Phalcon\Db\Adapter\Pdo\\' . $adapter;
+    $dbWrite=new $class($dbConfig);
+    if ($config->debug) {
+        $eventsManager = new EventsManager();
+        $logger = new FileLogger(APP_PATH. '/common/logs/mysql.log');
+        $eventsManager->attach('dbWriteApp', function ($event, $dbWrite) use ($logger) {
+            if ($event->getType() == 'beforeQuery') {
+                $logger->log($dbWrite->getSQLStatement(), Logger::INFO);
+            }
+        });
+        $dbWrite->setEventsManager($eventsManager);
+    }
+    return $dbWrite;
+},true);
+/**
+ * 写库
+ */
+$di->set('dbWrite', function ()  {
+    $config=$this->getConfig();
+    if ($config->debug) {
+        $dbconfig = $config->database->read->toArray();
+        if (!is_array($dbconfig) || count($dbconfig) == 0) {
+            throw new \Exception("the database config is error");
+        }
+        $eventsManager = new \Phalcon\Events\Manager();
+        // 分析底层sql性能，并记录日志
+        $profiler = new Phalcon\Db\Profiler();
+        $eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+            if ($event->getType() == 'beforeQuery') {
+                //在sql发送到数据库前启动分析
+                $profiler->startProfile($connection->getSQLStatement());
+            }
+            if ($event->getType() == 'afterQuery') {
+                //在sql执行完毕后停止分析
+                $profiler->stopProfile();
+                //获取分析结果
+                $profile = $profiler->getLastProfile();
+                $sql = $profile->getSQLStatement();
+                $params = $connection->getSqlVariables();
+                (is_array($params) && count($params)) && $params = json_encode($params);
+                $executeTime = $profile->getTotalElapsedSeconds();
+                //日志记录
+                $currentDay = date('Ymd');
+                $logger = new \Phalcon\Logger\Adapter\File(APP_PATH . "/common/logs/mysql_{$currentDay}.log");
+                $logger->debug("sql:{$sql} param:{$params} time:{$executeTime}");
+            }
+        });
+        $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+                "host" => $dbconfig['host'],
+                "port" => $dbconfig['port'],
+                "username" => $dbconfig['username'],
+                "password" => $dbconfig['password'],
+                "dbname" => $dbconfig['dbname'],
+                "charset" => $dbconfig['charset'])
+        );
+
+        /* 注册监听事件 */
+        $connection->setEventsManager($eventsManager);
+
+        return $connection;
+    }
+},true);
+
+//读库
+$di->set('dbRead', function (){
+    $config=$this->getConfig();
+    if ($config->debug) {
+        $dbconfig = $config->database->read->toArray();
+        if (!is_array($dbconfig) || count($dbconfig) == 0) {
+            throw new \Exception("the database config is error");
+        }
+        $eventsManager = new \Phalcon\Events\Manager();
+        // 分析底层sql性能，并记录日志
+        $profiler = new Phalcon\Db\Profiler();
+        $eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+            if ($event->getType() == 'beforeQuery') {
+                //在sql发送到数据库前启动分析
+                $profiler->startProfile($connection->getSQLStatement());
+            }
+            if ($event->getType() == 'afterQuery') {
+                //在sql执行完毕后停止分析
+                $profiler->stopProfile();
+                //获取分析结果
+                $profile = $profiler->getLastProfile();
+                $sql = $profile->getSQLStatement();
+                $params = $connection->getSqlVariables();
+                if(empty($params)) $params = null;
+                (is_array($params) && count($params)) && $params = json_encode($params);
+                $executeTime = $profile->getTotalElapsedSeconds();
+                //日志记录
+                $currentDay = date('Ymd');
+                $logger = new \Phalcon\Logger\Adapter\File(APP_PATH . "/common/logs/mysql_{$currentDay}.log");
+                $logger->debug("sql:{$sql} param:{$params} time:{$executeTime}");
+            }
+        });
+        $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+                "host" => $dbconfig['host'],
+                "port" => $dbconfig['port'],
+                "username" => $dbconfig['username'],
+                "password" => $dbconfig['password'],
+                "dbname" => $dbconfig['dbname'],
+                "charset" => $dbconfig['charset'])
+        );
+
+        /* 注册监听事件 */
+        $connection->setEventsManager($eventsManager);
+
+        return $connection;
+    }
+},true);
+
+//注入volt
+$di->set('volt', function ($view, $di){
+    $config=$this->getConfig();
+    $volt = new VoltEngine($view, $di);
+    $volt->setOptions([
+        'compiledPath'      => $config->application->cacheDir,
+        'compiledSeparator' => '_',
+        'compileAlways' => true,
+    ]);
+    return $volt;
+}, true);
+
+
+/**
+ * Setting up the view component
+ */
+$di->set('view', function () {
+    $config=$this->getConfig();
+    $view = new View();
+    $view->setViewsDir($config->application->viewsDir);
+    $view->registerEngines([
+        '.volt' => 'volt',
+        '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
+    ]);
+    return $view;
+}, true);
+
+/**
+ * If the configuration specify the use of metadata adapter use it or use memory otherwise
+ */
+$di->setShared('modelsMetadata', function () {
+    return new MetaDataAdapter();
+});
+
+/**
+ * Register the session flash service with the Twitter Bootstrap classes
+ */
+$di->set('flash', function () {
+    return new Flash(array(
+        'error'   => 'alert alert-danger',
+        'success' => 'alert alert-success',
+        'notice'  => 'alert alert-info',
+        'warning' => 'alert alert-warning'
+    ));
+});
+
+/**
+ * 注入cache,使用了重写的cacheRedis来做缓存，使用时应避免选择0库（session库）和15库
+ * cache存储和读取的时候，需要先进行库的选择：$this->cache->selectDb(库编号1~14);
+ */
+$di->setShared('cache', function (){
+    $config=$this->getConfig();
+    $frontCache = new \Phalcon\Cache\Frontend\Data(array(
+        "lifetime" => 172800
+    ));
+    $cache = new \Shop\Libs\CacheRedis($frontCache, array(
+        'host' => $config->redis->baiyang->host,
+        'port' => $config->redis->baiyang->port,
+        'auth' => $config->redis->baiyang->auth,
+        'select_db' => $config->redis->baiyang->select_db,
+        'persistent' => false,
+    ));
+    return $cache;
+});
+
+// 注入腾讯云redis
+$di->setShared('RedisCache', function() {
+    $config=$this->getConfig();
+    $frontCache = new \Phalcon\Cache\Frontend\Data(array(
+        "lifetime" => 172800
+    ));
+    $RedisCache = new RedisCache($frontCache, array(
+        'host' => $config->redis->tencent->host,
+        'port' => $config->redis->tencent->port,
+        'auth' => $config->redis->tencent->auth,
+        'select_db' => $config->redis->tencent->select_db,
+        'persistent' => false,
+    ));
+    return $RedisCache;
+});
+// APP 的 redis
+$di->setShared('AppRedisCache', function() {
+    $config=$this->getConfig();
+    $frontCache = new \Phalcon\Cache\Frontend\Data(array(
+        "lifetime" => 172800
+    ));
+    $cache = new \Shop\Libs\CacheRedis($frontCache, array(
+        'host' => $config->redis->app->host,
+        'port' => $config->redis->app->port,
+        'auth' => $config->redis->app->auth,
+        'select_db' => $config->redis->app->select_db,
+        'persistent' => false,
+    ));
+    return $cache;
+});
+
+// 注入AES加密
+$di->setShared('aes', function(){
+    $config=$this->getConfig();
+    $aes = new \Shop\Libs\Aes($config->keys->aesKey, $config->keys->aesIv);
+    return $aes;
+});
+
+// 注入验证码
+$di->set('code', function() {
+    $code = new \Shop\Libs\Code();
+    return $code;
+});
+
+// 注入树(生成树和结构树)
+$di->set('tree', function() {
+    $tree = new \Shop\Libs\Tree();
+    return $tree;
+});
+
+// 注入邮箱发送
+$di->set('mail', function() {
+    $config=$this->getConfig();
+    $mail = new \Shop\Libs\Mail(array(
+        'host' => $config->mail->host,
+        'userName' => $config->mail->userName,
+        'password' => $config->mail->password,
+        'charSet' => $config->mail->charSet,
+        'from' => $config->mail->from,
+        'fromName' => $config->mail->fromName,
+    ));
+    return $mail;
+});
+
+// 注入csv导入导出
+$di->set('csv', function() {
+    $csv = new \Shop\Libs\Csv();
+    return $csv;
+});
+
+// 注入CURL请求
+$di->setShared('curl', function() {
+    $curl = new \Shop\Libs\Curl();
+    return $curl;
+});
+
+// 注入Image图像处理
+$di->set('image', function() {
+    $image = new \Shop\Libs\Image();
+    return $image;
+});
+
+// 注入Excel导入导出
+$di->set('excel', function() {
+    $excel = new \Shop\Libs\Excel();
+    return $excel;
+});
+
+// 注入分页
+$di->setShared('page', function() {
+    $page = new \Shop\Libs\Pager();
+    return $page;
+});
+
+// 注入锁
+$di->setShared('lock', function() {
+    $lock = new \Shop\Libs\Lock();
+    return $lock;
+});
+
+// 注入FastDfs
+$di->setShared('FastDfs', function() {
+    $FastDfs = new \Shop\Libs\FastDfsClient();
+    return $FastDfs;
+});
+
+// 注入KeywordFilter
+$di->setShared('KeywordFilter', function() {
+    $KeywordFilter = new \Shop\Libs\KeywordFilter();
+//    $KeywordFilter->init();
+    return $KeywordFilter;
+});
+
+
+$di->set('GearmanClient',function (){
+   $config=$this->getConfig();
+   $client = new GearmanClient();
+   $client->addServers($config->gearman_host);
+   return $client;
+});
+
+$di->set('SOAURL',function (){
+    $config=$this->getConfig();
+    return $config->soa->host;
+});
+
+//注入log
+$di->set('log',function(){
+    $dirPath = APP_PATH . '/logs';
+    if (!file_exists($dirPath)) mkdir ($dirPath);
+    $filePath = $dirPath . '/' . date('Ymd') . '.log';
+    if (!file_exists($filePath)) touch($filePath);
+    $log = new FileLogger($filePath);
+    $formatter = new Phalcon\Logger\Formatter\Line("[%date%] - [%message%]");
+    $log->setFormatter($formatter);
+    return $log;
+});
+
+//注入公共方法
+$di->set('func',function(){
+    $func=new Shop\Libs\Func();
+    return $func;
+});
+
+//注入订单操作
+$di->set('order',function(){
+    $order=new Shop\Libs\Order();
+    return $order;
+});
+
+$di->set('profiler', function(){
+    return new \Phalcon\Db\Profiler();
+}, true);
+
+// 百洋钱包服务
+$di->set('bayoo', function(){
+    return BestYooPay::getInstance();
+}, true);

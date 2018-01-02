@@ -1,0 +1,16 @@
+{
+    "name": "baiyang/shop",
+    "description" : "100115599",
+    "require": {
+        "intervention/image": "^2.3",
+        "phpoffice/phpexcel": "^1.8",
+        "hprose/hprose": "^2.0",
+        "php-amqplib/php-amqplib":"2.6.*",
+        "psx/openssl": "^1.0",
+        "defuse/php-encryption": "^2.0",
+	"phalcon/incubator": "^3.0"
+    },
+    "require-dev": {
+        "snowair/phalcon-debugbar": "^1.2"
+    }
+}

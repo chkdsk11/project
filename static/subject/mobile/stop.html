@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <title>本轮活动已结束</title>
+</head>
+<body>
+    <h1>本轮活动已结束！</h1>
+    <p><span id="times">3s</span>后跳转到首页</p>
+    <script>
+        (function() {
+            var times = document.getElementById('times');
+
+            var sec = 3;
+
+            setInterval(function() {
+                sec--;
+                times.innerHTML = sec + 's';
+
+                if(sec === 0){
+                    window.location = 'http://m.crtjt.com';
+                }
+            }, 3000);
+        })()
+    </script>
+</body>
+</html>

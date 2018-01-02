@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="{{description}}">
+    <meta name="keywords" content="{{keywords}}">
+    <meta name="share_title" content="{{share_title}}">
+    <meta name="share" content="{{share}}">
+    <meta name="shareUrl" content="{{shareUrl}}">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta name="apple-mobile-web-app-title" content="{{title}}">
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <link href="http://172.16.40.250:8086/images/icon-download.png" rel="apple-touch-icon">
+    <link href="http://172.16.40.250:8086/images/icon-download.png" rel="apple-touch-icon-precomposed">
+    <link rel="shortcut icon" type="image/ico" href="http://172.16.40.250:8086/favicon.ico"/>
+    <link rel="stylesheet" href="http://172.16.40.250:8086/css/normalize.css"/>
+    <link rel="stylesheet" href="http://172.16.40.250:8086/css/layout.css"/>
+    <link rel="stylesheet" href="http://172.16.40.250:8086/css/widget.css"/>
+    <title>{{title}}</title>
+    <style>
+        body, html {
+            height: auto;
+            width:100% !important;
+            background-color: {{background}};
+        }
+    </style>
+    {{style}}
+</head>
+<body>
+<div style="display: none;">{{config_domain}}</div>
+{{html}}
+<script src="http://172.16.40.250:8086/js/plugin/react.min.js"></script>
+<script src="http://172.16.40.250:8086/js/plugin/react-dom.min.js"></script>
+<script>
+    (function() {
+        // var style = document.documentElement.style;
+        // var isIphone = /iphone|ipod|ipad|ios/gi.test(navigator.userAgent);
+
+        // var setPageSize = function () {
+        //     var ratio = window.innerWidth / 750;
+
+        //     if(isIphone){
+        //         style.transform = style.webkitTransform = 'scale(' + ratio + ')';
+        //         style.transformOrigin = style.webkitTransformOrigin = '0 0';
+        //     } else {
+        //         style.zoom = ratio;
+        //     }
+        // };
+
+        // window.addEventListener('load', setPageSize);
+        // window.addEventListener('orientationchange', setPageSize);
+        // window.addEventListener('resize', setPageSize);
+        // setPageSize();
+        
+        /*
+        * 是否支持 vw 字体单位
+        * 不支持 vw 的字体根据屏幕尺寸转换成 px
+        */
+        var isSupportVw = false;
+        if(sessionStorage.getItem('_is_support_vw_')){
+            isSupportVw = !!Number(sessionStorage.getItem('_is_support_vw_'));
+        } else {
+            // 根节点字体大小设置
+            var span = document.createElement('span');
+            span.style.cssText = 'display: inline-block; width: 100vw';
+            document.body.appendChild(span);
+            if(span.offsetWidth == document.documentElement.offsetWidth){
+                sessionStorage.setItem('_is_support_vw_',1);
+                isSupportVw = true;
+            } else {
+                sessionStorage.setItem('_is_support_vw_',0);
+                isSupportVw = false;
+            }
+
+            document.body.removeChild(span);
+        }
+
+        var setFontSize = function() {
+            var pageRatio = document.documentElement.offsetWidth / window.innerWidth;
+            if(isSupportVw) {
+                document.documentElement.style.fontSize = pageRatio * 3.75 + 'vw';
+            } else {
+                document.documentElement.style.fontSize = window.innerWidth / 100 * pageRatio * 3.75 + 'px';
+            }
+
+        };
+
+        // 设置页面字体大小
+        window.onorientationchange = window.onresize = setFontSize;
+        setFontSize();
+
+    })();
+</script>
+<script src="http://172.16.40.250:8086/js/config.js"></script>
+<script>
+    seajs.use(['shareSpecial'],function(Share){
+        //微信内绑定分享
+        if( /MicroMessenger/gi.test(window.navigator.userAgent) ){
+            var img_url = '',
+                shareEle = document.querySelector("meta[name='share']");
+            if( shareEle ){
+                img_url = shareEle.getAttribute('content');
+            } else {
+                img_url = 'http://172.16.40.250:8086/images/icon-download.png';
+            }
+            var shareObject = new Share({
+                title: document.title || document.querySelector("meta[name='share_title']").getAttribute('content'),
+                description: document.querySelector("meta[name='description']").getAttribute('content'),
+                img: img_url,
+                url: document.querySelector("meta[name='shareUrl']").getAttribute('content') || String(window.location).replace(/(isband|token|unionid)=([^&]*)(&|$)/ig, ''),
+                type: 'link'
+            });
+        }
+    }); 
+    //cps判断
+    seajs.use('member', function(member) {
+        var invite_code = decodeURIComponent((location.search.substr(1).match(/(^|&)invite_code=([^&]*)(&|$)/) || [])[2] || '');
+        var act_id = decodeURIComponent((location.search.substr(1).match(/(^|&)act_id=([^&]*)(&|$)/) || [])[2] || '');
+
+        // cps推广代码
+        var localInviteCode = '';
+        try {
+            localInviteCode = JSON.parse(localStorage.getItem('__local_invite_code__'));
+        } catch(e) {
+            localInviteCode = '';
+        } finally {
+            if(localInviteCode &&
+                localInviteCode.invite_code &&
+                /^(null|undefined)$/.test(localInviteCode.invite_code)){
+                localInviteCode = '';
+            }
+        }
+
+        // 如果 url 有传递 invite_code 或者本地保存的 invite_code 未过期
+        if(invite_code || (localInviteCode && localInviteCode.invite_code && Date.now() - localInviteCode.time_stamp < 86400000)){
+
+            invite_code = invite_code || (localInviteCode ? (localInviteCode.invite_code || '') : '') || '';
+            act_id = act_id || (localInviteCode ? (localInviteCode.act_id || '') : '') || '';
+
+            invite_code && (member.appParam.invite_code = invite_code);
+
+            // 会员登录则将 invite_code 发送到后台
+            member.onLogin(function() {
+                if(member.userInfo && member.userInfo.phone){
+                    $.ajax({
+                        type: 'get',
+                        url: '//mservice.baiyjk.com/wap/cps_user/check_user',
+                        data: {
+                            token : member.token ,
+                            mobile: member.userInfo.phone,
+                            invite_code: invite_code,
+                            act_id: act_id
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            localStorage.removeItem('__local_invite_code__');
+                        }
+                    });
+                }
+            });
+
+            // 会员未登录则将 invite_code 保存到本地
+            member.onLogout(function() {
+                localStorage.setItem('__local_invite_code__', JSON.stringify({
+                    invite_code: invite_code,
+                    act_id: act_id,
+                    time_stamp: localInviteCode ? (localInviteCode.time_stamp || '') : Date.now()
+                }));
+            });
+
+        } else {
+            // 删除本地的 invite_code
+            localStorage.removeItem('__local_invite_code__');
+        }
+
+    });
+</script>
+{{javascript}}
+</body>
+</html>
