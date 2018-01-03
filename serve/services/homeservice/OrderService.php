@@ -19,7 +19,8 @@ use Shop\Home\Datas\{
 	BaiyangUserSinceShopData, BaiyangYfzData, BaiyangUserInvoiceData,
     BaiyangGoodsStockChangeLogData, BaiyangPromotionData, BaiyangShoppingCartData,
 	BaiyangKjOrderData, BaiyangKjOrderDetailData,BaiyangCpsData,BaiyangCouponRecordData,
-    BaiyangTouchMachineOrderData, BaiyangOrderPromotionData,BaiyangGoodsComment,BaiyangOrderGoodsReturnReasonData
+    BaiyangTouchMachineOrderData, BaiyangOrderPromotionData,BaiyangGoodsComment,BaiyangOrderGoodsReturnReasonData,
+    BaiyangPaymentData
 	};
 
 use Shop\Home\Listens\{
@@ -331,7 +332,11 @@ class OrderService extends BaseService
                     $result['expressType'] = 1;
                     $result['paymentId'] = 0;
                 }else {
-                    $result['ifFacePay'] = 1;
+                    //货到付款控制
+                    $result['ifFacePay'] = BaiyangPaymentData::getInstance()->checkCashOnDelivery([
+                        'channel_subid' => isset($param['channel_subid']) ? $param['channel_subid'] : 95,
+                        'goodsList' => isset($result['goodsList']) ? $result['goodsList'] : [],
+                    ]) ? 1 : 0;
                     // 极速配送
                     $o2oInfo = $this->_eventsManager->fire('order:getO2OExpressInfo', $this, ['consigneeInfo'=>$consigneeInfo]);
                     if ($o2oInfo['status'] == HttpStatus::SUCCESS) {
@@ -3803,7 +3808,6 @@ class OrderService extends BaseService
         return  $this->uniteReturnResult(HttpStatus::SUCCESS,$serviceRow);
     }
 
-
     /**
      * 根据订单获取店铺信息
      * @param $param
@@ -3858,4 +3862,22 @@ class OrderService extends BaseService
         return  $this->uniteReturnResult(HttpStatus::SUCCESS,$row);
     }
 
+    /**
+     * 获取在线支付方式
+     * @param $param
+     * @return \array[]
+     * @author CSL
+     * @date 2018-01-02
+     */
+    public function getOnlinePayment($param){
+        //参数错误
+        if(!$this->verifyRequiredParam($param)){
+            return $this->uniteReturnResult(\Shop\Models\HttpStatus::PARAM_ERROR, ['param' => $param]);
+        }
+        $onlinePayment = BaiyangPaymentData::getInstance()->getOnlinePayment($param);
+        if(!$onlinePayment){
+            return  $this->uniteReturnResult(HttpStatus::NO_DATA);
+        }
+        return  $this->uniteReturnResult(HttpStatus::SUCCESS, $onlinePayment);
+    }
 }

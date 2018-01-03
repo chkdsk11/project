@@ -218,7 +218,6 @@ class BaseData extends Component
         if(empty($whereStr)){
             $phql = "update {$table} set {$columStr}";
         }
-
         //数据绑定
         if (!empty($conditions)) {
             $result = $this->modelsManager->executeQuery($phql,$conditions);
@@ -229,6 +228,30 @@ class BaseData extends Component
         if (is_object($result)) {
             return $result->success();
         }
+    }
+
+    /**
+     * @desc 根据条件更新记录
+     * @param string $columStr 更新的字段，如：name=:name:,price=:price:
+     * @param string $table 表名的ORM映射，如：'\Shop\Models\BaiyangGoods'
+     * @param string $whereStr 查询的条件，如'id=:id: and name=:name:'
+     * @return bool true|false 更新的结果信息
+     * @author CSL
+     * @date 2018-01-02
+     */
+    public function nativeUpdate($columStr = '',$table = '',$whereStr = '')
+    {
+        if(empty($columStr) || empty($table)){
+            return false;
+        }
+        $sql = "update {$table} set {$columStr} ";
+        //where条
+        if ($whereStr) {
+            $sql .= "where {$whereStr}";
+        }
+
+        $stmt = $this->dbRead->prepare($sql);
+        return $stmt->execute();
     }
 
     /**
