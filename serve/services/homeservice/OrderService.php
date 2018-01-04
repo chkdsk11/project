@@ -3880,4 +3880,31 @@ class OrderService extends BaseService
         }
         return  $this->uniteReturnResult(HttpStatus::SUCCESS, $onlinePayment);
     }
+
+    /**
+     * 获取自提门店列表
+     * @param $param
+     * @return \array[]
+     * @author CSL
+     * @date 2018-01-03
+     */
+    public function getSinceShop($param)
+    {
+        //参数错误
+        if(!$this->verifyRequiredParam($param)){
+            return $this->uniteReturnResult(\Shop\Models\HttpStatus::PARAM_ERROR, ['param' => $param]);
+        }
+        $shopList = BaiyangUserSinceShopData::getInstance()->getSinceShopList();
+        if (!$shopList) {
+            return  $this->uniteReturnResult(HttpStatus::NO_DATA);
+        }
+        $region = BaiyangUserConsigneeData::getInstance()->getAllRegionList(true);
+        foreach ($shopList as $key => $shop) {
+            $shop['provinceName'] = isset($region[$shop['province']]) ? $region[$shop['province']] : $shop['province'];
+            $shop['cityName'] = isset($region[$shop['city']]) ? $region[$shop['city']] : $shop['city'];
+            $shop['countyName'] = isset($region[$shop['county']]) ? $region[$shop['county']] : $shop['county'];
+            $shopList[$key] = $shop;
+        }
+        return $this->uniteReturnResult(HttpStatus::SUCCESS, $shopList);
+    }
 }
