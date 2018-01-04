@@ -188,4 +188,34 @@ class OrderController extends ControllerBase
         echo '<pre>';
         print_r($res);
     }
+
+    public function confirmOrderAction()
+    {
+        $this->view->disable();
+
+        $param = [
+            'user_id' => 11019,
+            'channel_subid' => 91,
+            'platform' => 'wap',
+            'is_first' => 1,
+        ];
+        $order = OrderService::getInstance();
+        $res=$order->confirmOrder($param);
+        echo '<pre>';
+        print_r($res);
+    }
+
+    public function getSinceShopAction()
+    {
+        $this->view->disable();
+
+        $param = [
+            'channel_subid' => 91,
+            'platform' => 'wap',
+        ];
+        $order = OrderService::getInstance();
+        $res=$order->getSinceShop($param);
+        echo '<pre>';
+        print_r($res);
+    }
 }
