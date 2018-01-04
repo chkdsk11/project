@@ -468,7 +468,10 @@ class StatisticsService extends BaseService
                 if(!$false) $tempCount[] = 0;
 
                 $false = false;
+            }else{
+                $tempCount[] = 0;
             }
+
         }
         $return['counts'] = $tempCount;
         $return['max'] = (!empty($tempCount))?max($tempCount):10;
@@ -517,6 +520,8 @@ class StatisticsService extends BaseService
                 if(!$false) $tempCount[] = 0;
 
                 $false = false;
+            }else{
+                $tempCount[] = 0;
             }
         }
         $return['counts'] = $tempCount;
