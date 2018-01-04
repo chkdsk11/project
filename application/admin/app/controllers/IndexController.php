@@ -33,44 +33,21 @@ class IndexController extends ControllerBase
     public function indexAction()
     {
         if($this->request->isPost()) {
-            $type = $this->request->getPost('type');
-            $array =array();
-            $StatisticsService = StatisticsService::getInstance();
-            if($type == 'top') {
-                $catch_array = $this->CacheRedis->getValue('statistics_catch_top');
-                if($catch_array){
-                    $array['info'] = $catch_array['info'];
-                    $array['userCountList']	= $catch_array['userCountList'];
-                    $array['goodsCountList'] = $catch_array['goodsCountList'];
-                }else{
-                    $userCount = $StatisticsService->totalUserCount();
-                    $info['totalCount'] = array_sum($userCount);
-                    $userCountList = $StatisticsService->userCountList();
-                    $goodsCountList = $StatisticsService->goodsCountList();
-                    $info['orderCount'] = $StatisticsService->orderCount();
-                    $array['info'] = $info;
-                    $array['userCountList']	= $userCountList;
-                    $array['goodsCountList'] = $goodsCountList;
-                    $this->CacheRedis->setValue('statistics_catch_top',$array,3600);
+            $post_type = $this->request->getPost('type');
+            if($post_type == 'clearCatch'){
+                $this->cache->delete('statistics');
+                exit(json_encode(array('error'=>0,'msg'=>'清除缓存成功')));
+            }else {
+                $catch_array = $this->cache->getValue('statistics');
+                if ($catch_array) {
+                    $array = $catch_array;
+                } else {
+                    $StatisticsService = StatisticsService::getInstance();
+                    $array = $StatisticsService->getThisWeekCount();
+                    $this->cache->setValue('statistics', $array, 3600);
                 }
-            }else if($type == 'down') {
-                $catch_array = $this->CacheRedis->getValue('statistics_catch_down');
-                if($catch_array){
-                    $array['orderCountList']	= $catch_array['orderCountList'];
-                    $array['kjOrderCountList'] = $catch_array['kjOrderCountList'];
-                }else{
-                    $orderCountList = $StatisticsService->orderCountList();
-                    $kjOrderCountList = $StatisticsService->kjOrderCountList();
-                    $array['orderCountList']	= $orderCountList;
-                    $array['kjOrderCountList'] = $kjOrderCountList;
-                    $this->CacheRedis->setValue('statistics_catch_down',$array,3600);
-                }
-            }else{
-                $this->CacheRedis->delete('statistics_catch_top');
-                $this->CacheRedis->delete('statistics_catch_down');
-                exit(json_encode(array('error'=> 0)));
+                exit(json_encode($array));
             }
-            exit(json_encode($array));
         }else {
             $this->view->pick('index/statistics');
         }

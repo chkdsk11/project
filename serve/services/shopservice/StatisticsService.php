@@ -352,6 +352,494 @@ class StatisticsService extends BaseService
     }
 
     /**
+     * 本周数据
+     */
+    public function getThisWeekCount(){
+        $timeList = $this->getTimeByType('beginThisWeek');
+        $table = 'Shop\Models\BaiyangOrder as o';
+        $join = 'inner join Shop\Models\BaiyangRegion as r on o.province = r.id';
+        $orderWhere = "where o.add_time >= '{$timeList['beginThisWeek']}' and o.add_time <='{$timeList['now']}' and is_dummy <> 1 ";
+        $fields = "o.id,o.province,o.status,r.region_name";
+        $return = array();
+        $orderList = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $orderWhere,
+            'join'      =>  $join
+        ]);
+        if($orderList){
+            $return['order_count'] = count($orderList);
+            //paying-待付款，shipping-待发货，shipped-待收货, evaluating-待评价, refund-退款/售后, canceled-取消订单 , finished-订单完成, draw-待抽奖 , await-待成团,  all-所有',
+            $return['order_paid_count'] = 0;
+            $return['order_canceled_count'] = 0;
+            $paid_array = array('shipping','shipped','evaluating','finished');
+            $tempArray = array();
+            $areaArray = array();
+            foreach ($orderList as $item) {
+                if(in_array($item['status'],$paid_array)){
+                    $return['order_paid_count'] ++;
+                }
+                if($item['status'] == 'canceled'){
+                    $return['order_canceled_count'] ++;
+                }
+                if(in_array($item['region_name'],$tempArray)){
+                    $areaArray[$item['region_name']] ++;
+                }else{
+                    $tempArray[] = $item['region_name'];
+                    $areaArray[$item['region_name']] = 1;
+                }
+            }
+            $return['orderList'] = $orderList;
+            $return['areaOrder'] = $this->convertData($areaArray);
+            $return['goodMoveList'] = $this->goodMoveList();
+            $return['user_average_daily_count'] = $this->lastWeekUserAverageDailyRegisterCount();
+            $return['daysOrder'] = $this->daysOrder();
+            $return['weekOrderContrast'] = $this->weekOrderContrast();
+            $return['channelOrderContrast'] = $this->channelOrderContrast();
+            $return['weekUserLogin'] = $this->weekUserLogin();
+            $return['weekUserRegister'] = $this->weekUserRegister();
+            $return['weekUserRegister'] = $this->weekUserRegister();
+
+        }
+        return $return;
+    }
+
+    /**
+     * 动销商品
+     * @return mixed
+     */
+    public function goodMoveList(){
+        $timeList = $this->getTimeByType('beginThisMonth');
+        $table = 'Shop\Models\BaiyangOrder as o';
+        $orderWhere = "where o.add_time >= '{$timeList['beginThisMonth']}' and o.add_time <='{$timeList['now']}'";
+        $fields = "count(od.goods_id) as count,od.goods_name as name";
+        $group = "group by od.goods_id";
+        $join = "inner join Shop\Models\BaiyangOrderDetail as od on od.order_sn = o.order_sn";
+        $orderList = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $orderWhere,
+            'group'     =>  $group,
+            'join'      =>  $join,
+        ]);
+        return $orderList;
+    }
+
+    /**
+     * 过去一周用户注册
+     * @return array
+     */
+    public function weekUserRegister(){
+        $timeList = $this->getTimeByType('LastWeekFormNow');
+        $beginDate = date('Y-m-d',$timeList['beginLastWeek']);
+        $endDate = date('Y-m-d',$timeList['endLastWeek']);
+        $table = 'Shop\Models\BaiyangUser';
+        $where = "where last_login_time >= '{$beginDate}' and last_login_time <='{$endDate}'";
+        $fields = "count('id') as count,DATE_FORMAT(last_login_time,'%Y-%m-%d') as day";
+        $order = "order by day";
+        $group = 'group by day';
+        $return = array();
+        $list = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $where,
+            'order'     =>  $order,
+            'group'     =>  $group
+        ]);
+        $begin = $timeList['beginLastWeek'];
+        $now   = $timeList['endLastWeek'];
+        $days = array();
+        $return['days'] = array();
+        $tempCount = array();
+        for($i = $begin; $i<$now; $i += 86400){
+            array_push($days,date('Y-m-d',$i));
+            array_push($return['days'],date('m-d',$i));
+        }
+        $false = false;
+        foreach ($days as $itemTemp) {
+            if ($list) {
+                foreach ($list as $item) {
+                    if ($item['day'] == $itemTemp) {
+                        $tempCount[] = intval($item['count']);
+                        $false = true;
+                        break;
+                    }
+                }
+                if(!$false) $tempCount[] = 0;
+
+                $false = false;
+            }
+        }
+        $return['counts'] = $tempCount;
+        $return['max'] = (!empty($tempCount))?max($tempCount):10;
+        $return['sum'] = array_sum($tempCount);
+        return $return;
+    }
+
+    /**
+     * 过去一周用户登录
+     * @return array
+     */
+    public function weekUserLogin(){
+        $timeList = $this->getTimeByType('LastWeekFormNow');
+        $table = 'Shop\Models\BaiyangUser';
+        $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}'";
+        $fields = "count('id') as count,FROM_UNIXTIME(add_time,'%Y-%m-%d') as day";
+        $order = "order by day";
+        $group = 'group by day';
+        $return = array();
+        $list = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $where,
+            'order'     =>  $order,
+            'group'     =>  $group
+        ]);
+        $begin = $timeList['beginLastWeek'];
+        $now   = $timeList['endLastWeek'];
+        $days = array();
+        $return['days'] = array();
+        $tempCount = array();
+        for($i = $begin; $i<$now; $i += 86400){
+            array_push($days,date('Y-m-d',$i));
+            array_push($return['days'],date('m-d',$i));
+        }
+        $false = false;
+        foreach ($days as $itemTemp) {
+            if ($list) {
+                foreach ($list as $item) {
+                    if ($item['day'] == $itemTemp) {
+                        $tempCount[] = intval($item['count']);
+                        $false = true;
+                        break;
+                    }
+                }
+                if(!$false) $tempCount[] = 0;
+
+                $false = false;
+            }
+        }
+        $return['counts'] = $tempCount;
+        $return['max'] = (!empty($tempCount))?max($tempCount):10;
+        $return['sum'] = array_sum($tempCount);
+        return $return;
+    }
+
+    /**
+     * 数据转换
+     * @param $areaArray
+     * @return array
+     */
+    public function convertData($areaArray){
+        $return = array();
+        $provinceArray = array('北京','安徽','福建','甘肃','广东','广西','贵州','海南','河北','河南','黑龙江','湖北','湖南','吉林','江苏','江西','辽宁','内蒙古','宁夏','青海','山东','山西','陕西','上海','四川','天津','西藏','新疆','云南','浙江','重庆','香港','澳门','台湾');
+        foreach ($areaArray as $key=>$item) {
+            if(in_array($key,$provinceArray)){
+                $return['list'][] = array('name'=>$key,'value'=>$item);
+            }else{
+                foreach ($provinceArray as $provinceItem) {
+                    if(strpos($key,$provinceItem) !== false){
+                        $return['list'][] = array('name'=>$provinceItem,'value'=>$item);
+                        break;
+                    }
+                }
+            }
+        }
+        if($return['list']){
+            $return['max'] = max(array_column($return['list'],'value'));
+        }else{
+            $return['max'] = 10;
+        }
+
+        return $return;
+    }
+
+    /**
+     * 15天订单对比
+     * @return array
+     */
+    public function daysOrder(){
+        $timeList = $this->getTimeByType('fifteenDays');
+        $table = 'Shop\Models\BaiyangOrder as o';
+        $orderWhere = "where o.add_time >= '{$timeList['begin']}' and o.add_time <='{$timeList['now']}'";
+        $fields = "count(o.id) as count,o.status,FROM_UNIXTIME(o.add_time,'%Y-%m-%d') as day";
+        $orderListFifteenDays = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $orderWhere,
+            'order'     =>  'order by day',
+            'group'     =>  'group by day'
+        ]);
+
+        $begin = $timeList['begin'];
+        $now   = $timeList['now'];
+        $returnList = array();
+        $days = array();
+        $returnList['days'] = array();
+        $temp = array();
+        for($i = $begin; $i<$now; $i += 86400){
+            array_push($days,date('Y-m-d',$i));
+            array_push($returnList['days'],date('m-d',$i));
+        }
+
+        if($orderListFifteenDays){
+            $false = false;
+            foreach ($days as $itemTemp) {
+                foreach ($orderListFifteenDays as $item) {
+                    if($item['day'] == $itemTemp){
+                        $temp[] = $item['count'];
+                        $false = true;
+                        break;
+                    }
+                }
+                if(!$false){
+                    $temp[] = 0;
+                }
+                $false = false;
+            }
+            $percent = array();
+            if($temp){
+                foreach ($temp as $order_count_key=>$item_order_count) {
+                    if($order_count_key != 0){
+                        $percent[] = bcdiv(($temp[$order_count_key]['count'] - $temp[$order_count_key-1]['count']), $temp[$order_count_key-1]['count'],2) * 100;
+                    }else{
+                        $percent[] = 0;
+                    }
+                }
+            }
+            if(empty($percent)){
+                $percent = ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
+            }
+            $returnList['max_order_counts'] = max($temp);
+            $returnList['min_order_counts'] = min($temp);
+            $returnList['order_counts'] = $temp;
+            $returnList['max_percent'] = max($percent);
+            $returnList['min_percent'] = min($percent);
+            $returnList['max'] = ($returnList['max_order_counts']>$returnList['max_percent'])?$returnList['max_order_counts']:$returnList['max_percent'];
+            $returnList['min'] = ($returnList['min_order_counts']<$returnList['min_percent'])?$returnList['min_order_counts']:$returnList['min_percent'];
+            $returnList['percent'] = $percent;
+        }
+        return $returnList;
+    }
+
+    /**
+     * 上周和本周的订单对比
+     */
+    public function weekOrderContrast(){
+        $lastTimeList = $this->getTimeByType('betweenLastWeek');
+        $thisTimeList = $this->getTimeByType('beginThisWeek');
+        $table = 'Shop\Models\BaiyangOrder';
+        $where = "where add_time >= '{$lastTimeList['beginLastWeek']}' and add_time <='{$thisTimeList['now']}'";
+        $where.=" and is_dummy <> 1";
+        $fields = "id,add_time";
+//        $fields.=",FROM_UNIXTIME(add_time,'%Y-%m-%d') as day";
+        $orderList = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $where
+        ]);
+        $return = array();
+        if($orderList){
+            $return['last']['order_count'] = 0;
+            $return['this']['order_count'] = 0;
+            foreach ($orderList as $item) {
+                if(($item['add_time'] >= $lastTimeList['beginLastWeek']) && ($item['add_time']) <= $lastTimeList['endLastWeek']){
+                    $return['last']['order_count']++;
+                }
+                if(($item['add_time'] >= $thisTimeList['beginThisWeek']) && ($item['add_time']) <= $thisTimeList['now']){
+                    $return['this']['order_count']++;
+                }
+            }
+            $return['last']['average'] = ceil($return['last']['order_count']/7);
+            $return['this']['average'] = ceil($return['this']['order_count']/7);
+        }
+        return $return;
+    }
+
+    /**
+     * 渠道订单对比
+     * @return array
+     */
+    public function channelOrderContrast(){
+        $timeList = $this->getTimeByType('sevenDays');
+        $table = 'Shop\Models\BaiyangOrder';
+        $whereBase = "where add_time >= '{$timeList['begin']}' and add_time <='{$timeList['now']}'";
+        $whereBase.=" and is_dummy <> 1 and channel_subid = ";
+        $whereStr = "'85'";
+        $where = $whereBase.$whereStr;
+        $fields = "count('id') as count";
+        $fields.=",FROM_UNIXTIME(add_time,'%Y-%m-%d') as day";
+        $order = "order by day";
+        $group = 'group by day';
+        $orderListWechat = $this->getDataList($fields,$table,$where,$order,$group);
+        $whereStr = "'89'";
+        $where = $whereBase.$whereStr;
+        $orderListIOS = $this->getDataList($fields,$table,$where,$order,$group);
+        $whereStr = "'90'";
+        $where = $whereBase.$whereStr;
+        $orderListAndroid = $this->getDataList($fields,$table,$where,$order,$group);
+        $whereStr = "'95'";
+        $where = $whereBase.$whereStr;
+        $orderListPC = $this->getDataList($fields,$table,$where,$order,$group);
+        $begin = $timeList['begin'];
+        $now   = $timeList['now'];
+        $returnList = array();
+        $days = array();
+        $returnList['days'] = array();
+        $temp = array();
+        for($i = $begin; $i<$now; $i += 86400){
+            array_push($days,date('Y-m-d',$i));
+            array_push($returnList['days'],date('m-d',$i));
+        }
+        $false_wechat = false;
+        $false_ios = false;
+        $false_android = false;
+        $false_pc = false;
+        foreach ($days as $itemTemp) {
+            if($orderListWechat) {
+                foreach ($orderListWechat as $item) {
+                    if ($item['day'] == $itemTemp) {
+                        $temp['wechat'][] = $item['count'];
+                        $false_wechat = true;
+                        break;
+                    }
+                }
+            }
+            if($orderListIOS) {
+                foreach ($orderListIOS as $item) {
+                    if ($item['day'] == $itemTemp) {
+                        $temp['ios'][] = $item['count'];
+                        $false_ios = true;
+                        break;
+                    }
+                }
+            }
+            if($orderListAndroid) {
+                foreach ($orderListAndroid as $item) {
+                    if ($item['day'] == $itemTemp) {
+                        $temp['android'][] = $item['count'];
+                        $false_android = true;
+                        break;
+                    }
+                }
+            }
+            if($orderListPC) {
+                foreach ($orderListPC as $item) {
+                    if ($item['day'] == $itemTemp) {
+                        $temp['pc'][] = $item['count'];
+                        $false_pc = true;
+                        break;
+                    }
+                }
+            }
+            if(!$false_wechat) $temp['wechat'][] = 0;
+            if(!$false_ios) $temp['ios'][] = 0;
+            if(!$false_android) $temp['android'][] = 0;
+            if(!$false_pc) $temp['pc'][] = 0;
+
+            $false_wechat = false;
+            $false_ios = false;
+            $false_android = false;
+            $false_pc = false;
+        }
+        $returnList['channel'] = $temp;
+        return $returnList;
+    }
+
+    /**
+     * 获取数据
+     * @param $fields
+     * @param $table
+     * @param $where
+     * @param $order
+     * @param $group
+     * @return mixed
+     */
+    public function getDataList($fields,$table,$where,$order,$group){
+        return BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $where,
+            'order'     =>  $order,
+            'group'     =>  $group
+        ]);
+    }
+
+    /**
+     * 上一周日用户日均注册
+     * @return mixed
+     */
+    public function lastWeekUserAverageDailyRegisterCount(){
+        $timeList = $this->getTimeByType('LastWeekFormNow');
+        $table = 'Shop\Models\BaiyangUser';
+        $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}'";
+        $fields = "count(id)";
+        $count = BaseData::getInstance()->getData([
+            'column'    =>  $fields,
+            'table'     =>  $table,
+            'where'     =>  $where
+        ],true);
+        $count = ceil($count/7);
+        return $count;
+    }
+
+    /**
+     * 获取时间戳
+     * @param $type
+     * @return bool
+     */
+    public function getTimeByType($type){
+        $resultList = false;
+        switch ($type){
+            // 今日起止时间
+            case 'beginToday':
+                $resultList['begin'] = mktime(0,0,0,date('m'),date('d'),date('y'));
+                $resultList['now'] = time();
+                break;
+            case 'sevenDays':
+                $resultList['begin'] = mktime(0,0,0,date('m'),date('d')-6,date('y'));
+                $resultList['now'] = time();
+                break;
+            //15天时间
+            case 'fifteenDays':
+                $resultList['begin'] = mktime(0,0,0,date('m'),date('d')-15,date('y'));
+                $resultList['now'] = time();
+                break;
+            //昨天起至时间
+            case 'betweenYesterday':
+                $resultList['beginYesterday'] = mktime(0,0,0,date('m'),date('d')-1,date('y'));
+                $resultList['endYesterday'] = mktime(0,0,0,date('m'),date('d'),date('y'))-1;
+                break;
+            //本周起止时间
+            case 'beginThisWeek':
+                $resultList['beginThisWeek'] = mktime(0,0,0,date('m'),date('d')-date('w')+1,date('y'));
+                $resultList['now'] = time();
+                break;
+            //上一周起止时间
+            case 'betweenLastWeek':
+                $resultList['beginLastWeek'] = mktime(0,0,0,date('m'),date('d')-date('w')-6,date('y'));
+                $resultList['endLastWeek'] = mktime(23,59,59,date('m'),date('d')-date('w'),date('y'));
+                break;
+            //上一周日期间时间
+            case 'LastWeekFormNow':
+                $resultList['beginLastWeek'] = mktime(0,0,0,date('m'),date('d')-7,date('y'));
+                $resultList['endLastWeek'] = mktime(0,0,0,date('m'),date('d'),date('y'));
+                break;
+            //本月时间
+            case 'beginThisMonth':
+                $resultList['beginThisMonth'] = mktime(0,0,0,date('m'),1,date('y'));
+                $resultList['now'] = mktime(0,0,0,date('m'),date('d'),date('y'))-1;
+                break;
+            //近三个月起止时间
+            case 'beginLastThreeMonth':
+                $resultList['beginLastThreeMonth'] = mktime(0,0,0,date('m'),date('d')-1,date('y'));
+                $resultList['now'] = time();
+                break;
+        }
+        return $resultList;
+    }
+
+    /**
      * 时间戳数组
      * @return array
      */
