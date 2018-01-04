@@ -25,7 +25,7 @@ class SupplierService extends BaseService
     {
         //查询条件
         $table = '\Shop\Models\BaiyangSkuSupplier';
-        $where = ' 1';
+        $where = ' 1=1';
         $data   =   array();
         //组织where语句
         if(isset($param['name']) && $param['name'] != ''){
