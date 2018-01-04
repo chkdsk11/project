@@ -21,7 +21,7 @@ class BaiyangUserSinceShopData extends BaseData
      */
     public function getSinceShopList() {
         return $this->getData([
-            'column'=>'id,trade_name,address',
+            'column'=>'*',
             'table'=>'\Shop\Models\BaiyangUserSinceShop'
         ]);
     }

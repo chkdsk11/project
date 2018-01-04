@@ -6,6 +6,8 @@
  */
 namespace Shop\Home\Datas;
 
+use Shop\Models\CacheKey;
+
 class BaiyangUserConsigneeData extends BaseData
 {
     protected static $instance=null;
@@ -122,17 +124,30 @@ class BaiyangUserConsigneeData extends BaseData
 
     /**
      * @desc 获取所有地区列表信息
+     * @param bool $allName 是否只返回所有地区名（ID为KEY name为值）
      * @return array [] 所有地区列表信息
      * @author 吴俊华
      */
-    public function getAllRegionList()
+    public function getAllRegionList($allName = false)
     {
-        $condition = [
-            'table' => '\Shop\Models\BaiyangRegion',
-            'column' => 'id,pid,region_name',
-            'where' => "where id > 1",
-        ];
-        return $this->getData($condition);
+        $allRegion = [];
+        if ($allName) {
+            $this->cache->selectDb(0);
+            $allRegion = $this->cache->getValue(CacheKey::ALL_Region);
+        }
+        if (!$allRegion) {
+            $condition = [
+                'table' => '\Shop\Models\BaiyangRegion',
+                'column' => 'id,pid,region_name',
+                'where' => "where id > 1",
+            ];
+            $allRegion = $this->getData($condition);
+            if ($allName) {
+                $allRegion = array_column($allRegion, "region_name", "id");
+                $this->cache->setValue(CacheKey::ALL_Region,$allRegion);
+            }
+        }
+        return $allRegion;
     }
 
 }
