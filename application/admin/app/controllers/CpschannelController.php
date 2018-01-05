@@ -515,9 +515,9 @@ end_time,no_include,is_cancel' ;
                 }
                 $table = '\Shop\Models\BaiyangCpsBackActivity';
                // $result = $this->_get_same_activity_condition($act_id,$data['type_id'], $data['channel_id'], $data['start_time'], $data['end_time'], $item_list);
-                if($result){
+                /*if($result){
                     return $this->response->setJsonContent(BaseService::getInstance()->arrayData($result['error_msg'], '', '', 'error'));
-                }
+                }*/
                 $result = $data;
                 $data['username'] = $_SESSION['admin']['admin_account'];
 
@@ -603,7 +603,7 @@ end_time,no_include,is_cancel' ;
                 if($data['channel_id']){
                     $p['column'] = 'channel_id';
                     $p['table']  = '\Shop\Models\BaiyangCpsBackActivity';
-                    $p['where'] = " where channel_id = {$data['channel_id']} and act_id = {$act_id} ";
+                    $p['where'] = " where channel_id = {$data['channel_id']} and act_id = {$act_id} and (" . time() . " between start_time and end_time)";
                     $c =  $base->getData($p,true);
                     if($c){
                         return $this->response->setJsonContent(BaseService::getInstance()->arrayData('该渠道已存在该活动，请重选渠道', '', '', 'error'));
