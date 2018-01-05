@@ -51,12 +51,14 @@
     <div id="goods_area" style="width: 100%;margin-bottom: 5px;">
         <div style="width: 45%;height: 350px;float: left;">
             <label><h4 style="font-weight: 600;">商品动销</h4></label>
-            <table class="table table-striped table-bordered table-hover">
-                <tr>
-                    <th>动销商品</th>
-                    <th>动销数量</th>
-                </tr>
-            </table>
+            <div style="height: 350px;float: left;overflow-y: auto">
+                <table class="table table-striped table-bordered table-hover">
+                    <tr>
+                        <th>动销商品</th>
+                        <th>动销数量</th>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
