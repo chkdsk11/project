@@ -16,12 +16,12 @@
     <meta name="apple-mobile-web-app-capable" content="no"/>
     <meta name="screen-orientation" content="portrait">
     <meta name="x5-orientation" content="portrait">
-    <link href="{{config_domain}}/images/icon-download.png" rel="apple-touch-icon">
-    <link href="{{config_domain}}/images/icon-download.png" rel="apple-touch-icon-precomposed">
-    <link rel="shortcut icon" type="image/ico" href="{{config_domain}}/favicon.ico"/>
-    <link rel="stylesheet" href="{{config_domain}}/css/normalize.css"/>
-    <link rel="stylesheet" href="{{config_domain}}/css/layout.css"/>
-    <link rel="stylesheet" href="{{config_domain}}/css/widget.css"/>
+    <link href="{{config_domain}}images/icon-download.png" rel="apple-touch-icon">
+    <link href="{{config_domain}}images/icon-download.png" rel="apple-touch-icon-precomposed">
+    <link rel="shortcut icon" type="image/ico" href="{{config_domain}}favicon.ico"/>
+    <link rel="stylesheet" href="{{config_domain}}css/normalize.css"/>
+    <link rel="stylesheet" href="{{config_domain}}css/layout.css"/>
+    <link rel="stylesheet" href="{{config_domain}}css/widget.css"/>
     <title>{{title}}</title>
     <style>
         body, html {
@@ -34,8 +34,8 @@
 </head>
 <body>
 {{html}}
-<script src="{{config_domain}}/js/plugin/react.min.js"></script>
-<script src="{{config_domain}}/js/plugin/react-dom.min.js"></script>
+<script src="{{config_domain}}js/plugin/react.min.js"></script>
+<script src="{{config_domain}}js/plugin/react-dom.min.js"></script>
 <script>
     (function() {
         // var style = document.documentElement.style;
@@ -96,7 +96,7 @@
 
     })();
 </script>
-<script src="{{config_domain}}/js/config.js"></script>
+<script src="{{config_domain}}js/config.js"></script>
 <script>
     seajs.use(['shareSpecial'],function(Share){
         //微信内绑定分享
@@ -106,10 +106,10 @@
             if( shareEle ){
                 img_url = shareEle.getAttribute('content');
             } else {
-                img_url = 'http://172.16.40.250:8086/images/icon-download.png';
+                img_url = '{{config_domain}}images/icon-download.png';
             }
             var shareObject = new Share({
-                title: document.title || document.querySelector("meta[name='share_title']").getAttribute('content'),
+                title: document.querySelector("meta[name='share_title']").getAttribute('content') || document.title,
                 description: document.querySelector("meta[name='description']").getAttribute('content'),
                 img: img_url,
                 url: document.querySelector("meta[name='shareUrl']").getAttribute('content') || String(window.location).replace(/(isband|token|unionid)=([^&]*)(&|$)/ig, ''),
