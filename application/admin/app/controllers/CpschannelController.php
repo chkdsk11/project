@@ -1461,8 +1461,8 @@ end_time,no_include,is_cancel' ;
             return false;
         }
 
-        $data['column'] = " act_id,act_name,act_desc,channel_id,type_id,expire_day,  FROM_UNIXTIME(start_time,'%Y/%m/%d %h:%i:%s %x') as start_time ,
-FROM_UNIXTIME(end_time,'%Y/%m/%d %h:%i:%s %x') as end_time   ,no_include,is_cancel,sort,act_share_title,act_share_content,act_share_link,act_logo,act_image,for_users ";
+        $data['column'] = " act_id,act_name,act_desc,channel_id,type_id,expire_day,  FROM_UNIXTIME(start_time,'%Y/%m/%d %h:%i:%s') as start_time ,
+FROM_UNIXTIME(end_time,'%Y/%m/%d %h:%i:%s') as end_time   ,no_include,is_cancel,sort,act_share_title,act_share_content,act_share_link,act_logo,act_image,for_users ";
         $data['table'] =  '\Shop\Models\BaiyangCpsBackActivity ';
         $data['where'] = " where  act_id={$act_id} " ;
         return $activity_list =  $base->getData($data,true);
