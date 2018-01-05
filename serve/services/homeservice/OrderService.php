@@ -3684,11 +3684,12 @@ class OrderService extends BaseService
         if($serviceData){
             $orderDetailData = BaiyangOrderDetailData::getInstance();
             $return_type_text = ['取消','仅退款','退货退款'];
-            $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
+//            $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
             foreach($serviceData['list'] as &$row){
                 $row['return_type_text'] = $row['return_type']>=0?$return_type_text[$row['return_type']]:'';
                 $row['goodsList'] =  $orderDetailData->getOrderDetailByService($row['id']);
-                $row['is_show'] = $yxyShopId == $row['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+//                $row['is_show'] = $yxyShopId == $row['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+                $row['is_show'] = 1; //显示物流按钮
             }
             return  $this->uniteReturnResult(HttpStatus::SUCCESS,$serviceData);
         }else{
@@ -3732,8 +3733,9 @@ class OrderService extends BaseService
         $serviceRow['add_time'] = date('Y-m-d H:i:s',$serviceRow['add_time']);
         $orderDetailData = BaiyangOrderDetailData::getInstance();
         $serviceRow['goodsList'] = $orderDetailData->getOrderDetailByService($serviceRow['id']);
-        $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
-        $serviceRow['is_show'] = $yxyShopId == $serviceRow['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+//        $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
+//        $serviceRow['is_show'] = $yxyShopId == $serviceRow['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+        $serviceRow['is_show'] = 1; // 显示物流按钮
 
         return  $this->uniteReturnResult(HttpStatus::SUCCESS,$serviceRow);
     }
