@@ -87,7 +87,7 @@ class ProductsTypes extends BaseModel
 	public function initialize ()
 	{
 		parent::initialize();
-		$this->setConnectionService('dbWriteApp');
+		$this->setConnectionService('dbWrite');
 	}
     
     /**

@@ -7,7 +7,7 @@ class AppLimitTimeOffer extends BaseModel
     public function initialize()
     {
         parent::initialize();
-        $this->setConnectionService('dbWriteApp');
+        $this->setConnectionService('dbWrite');
     }
 
     public $limit_id;
