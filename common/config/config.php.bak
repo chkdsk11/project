@@ -42,19 +42,19 @@ return new \Phalcon\Config(array(
             'host' => '172.16.40.250',
             'port' => 6379,
             'auth' => '',
-            'select_db' => 3,
+            'select_db' => 5,
         ),
         'tencent'=>array(
             'host' => '172.16.40.250',
             'port' => 6379,
             'auth' => '',
-            'select_db' => 3,
+            'select_db' => 5,
         ),
         'app'=>array(
             'host' => '172.16.40.250',
             'port' => 6379,
             'auth' => '3edc#RFV',
-            'select_db' => 3,
+            'select_db' => 5,
         )
     ),
 
