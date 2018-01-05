@@ -2,6 +2,17 @@
 defined('APP_PATH') || define('APP_PATH', realpath(__DIR__.'/../../'));
 date_default_timezone_set('Asia/ShangHai');
 
+define('DOMAIN_BASE','.51qiyao.com');  //COOKE域名 .51qiyao.com
+define('DOMAIN_PC','zzjpc.51qiyao.com');  //PC域名
+define('DOMAIN_WAP','zzjh5.51qiyao.com');  //WAP域名
+define('DOMAIN_SERVICE','zzjh5service.51qiyao.com');  //WAP接口域名
+define('DOMAIN_ADMIN','zzjadmin.51qiyao.com');  //统一后台域名
+define('DOMAIN_SOA','zzjsoa.51qiyao.com');  //SOA接口域名
+define('DOMAIN_IMG','img.51qiyao.com');  //fdfs域名
+define('DOMAIN_STATIC','zzjstatic.51qiyao.com');  //后台静态域名
+define('SEARCH_URL','http://119.29.68.243:8480/');  //搜索地址
+define('APP_IMG_PATH','http://zzjh5.51qiyao.com/uploads/');  //移动端图片路径
+
 return new \Phalcon\Config(array(
     'debug'=>true,
     //58服务器
@@ -26,6 +37,29 @@ return new \Phalcon\Config(array(
         ),
     ),
 
+    'redis' => array(
+        'baiyang'=>array(
+            'host' => '172.16.40.250',
+            'port' => 6379,
+            'auth' => '',
+            'select_db' => 3,
+        ),
+        'tencent'=>array(
+            'host' => '172.16.40.250',
+            'port' => 6379,
+            'auth' => '',
+            'select_db' => 3,
+        ),
+        'app'=>array(
+            'host' => '172.16.40.250',
+            'port' => 6379,
+            'auth' => '3edc#RFV',
+            'select_db' => 3,
+        )
+    ),
+
+    'gearman_host' => '127.0.0.1:4374',
+
     'application' => array(
         'modelsDir'     => APP_PATH . '/serve/models/shopmodel',
         'libsDir'    => APP_PATH . '/common/libs/',
@@ -40,38 +74,18 @@ return new \Phalcon\Config(array(
 
     'cookie' => array(
         'path'=>'/',
-        'domain'=>'qiyao.com'
+        'domain'=>DOMAIN_BASE,
     ),
 
     'domain' => array(
-        'home'  =>'www.qiyao.com',
-        'admin' =>'demo.qiyao.com',
-        'static'=>'demo.qiyao.com',
-        'img'=> 'http://172.16.40.252/',
-        'updateEsSearch'=> 'http://172.16.40.252:8380/',
-        'appImg'=>'http://172.16.40.250:8087/upload/',
+        'home'  =>DOMAIN_ADMIN,
+        'admin' =>DOMAIN_ADMIN,
+        'static'=>DOMAIN_STATIC,
+        'img'=> DOMAIN_IMG,
+        'updateEsSearch'=> SEARCH_URL,
+        'appImg'=> APP_IMG_PATH,
     ),
 
-    'redis' => array(
-        'baiyang'=>array(
-            'host' => '172.16.40.250',
-            'port' => 6379,
-            'auth' => '',
-            'select_db' => 3,
-        ),
-        'tencent'=>array(
-            'host' => '172.16.40.250',
-            'port' => 6379,
-            'auth' => '',
-            'select_db' => 3,
-        ),
-		'app'=>array(
-            'host' => '172.16.40.250',
-            'port' => 6379,
-            'auth' => '3edc#RFV',
-            'select_db' => 3,
-        )
-    ),
 
     'keys'=>array(
         'aesKey' => 'baiy123456789123', // aes加密密钥
@@ -89,45 +103,35 @@ return new \Phalcon\Config(array(
     ),
 
     // 环境变量 dev,stg,pro
-    'environment' => 'dev',
+    'environment' => 'stg',
     'soa' => [
-        'host' => 'http://soa.qiyao.com'
+        'host' => 'http://'.DOMAIN_SOA,
     ],
-	'mongo'=>[
-        'master' => 'mongodb://gzdeveloper:baiyang@172.16.40.251:27017/syslog',
-        'slave'  => 'mongodb://gzdeveloper:baiyang@172.16.40.251:27017/syslog'
-    ],
-    'gearman_host' => '127.0.0.1:4374',
+
     // wap前端地址（暂时用于app发红包后跳到wap页抢）
     'wap_base_url' => [
-        'dev' => 'http://172.16.40.250:8086/',
-        'stg' => 'https://mtest.baiyangwang.com/',
-        'pro' => 'https://m.baiyangwang.com/',
+        'dev' => 'http://'.DOMAIN_WAP.'/',
+        'stg' => 'http://'.DOMAIN_WAP.'/',
+        'pro' => 'http://'.DOMAIN_WAP.'/',
     ],
     // 是否使用快递100wap端，直接抓取数据
     'used_logistics_wap_api' => 0,
     // 物流接口url
     'app_url' => [
-        'dev'   =>  'http://172.16.40.250:8087',
-        'stg'   =>  'http://app.baiyangwang.com',
-        'pro'   =>  'http://mallapp.baiyjk.com',
+        'dev'   =>  'http://'.DOMAIN_WAP_SERVICE.'/index_app.php',
+        'stg'   =>  'http://'.DOMAIN_WAP_SERVICE.'/index_app.php',
+        'pro'   =>  'http://'.DOMAIN_WAP_SERVICE.'/index_app.php',
     ],
     'pc_url' => [
-        'dev'   =>  'http://172.16.40.250:8088',
-        'stg'   =>  'http://stg.baiyangwang.com',
-        'pro'   =>  'http://www.baiyangwang.com',
+        'dev'   =>  'http://'.DOMAIN_PC,
+        'stg'   =>  'http://'.DOMAIN_PC,
+        'pro'   =>  'http://'.DOMAIN_PC,
     ],
     // wap后端接口url
     'wap_url' => [
-        'dev'   =>  'http://172.16.40.250:8087',
-        'stg'   =>  'http://mstest.baiyangwang.com',
-        'pro'   =>  'http://mservice.baiyjk.com',
-    ],
-    // wap前端接口url
-    'wap_home_url' => [
-        'dev'   =>  'http://172.16.40.250:8086',
-        'stg'   =>  'http://mstest.baiyangwang.com',
-        'pro'   =>  'http://mservice.baiyjk.com',
+        'dev'   =>  'http://'.DOMAIN_WAP_SERVICE,
+        'stg'   =>  'http://'.DOMAIN_WAP_SERVICE,
+        'pro'   =>  'http://'.DOMAIN_WAP_SERVICE,
     ],
     // 中民返利网
     'zm_rebate' => [
@@ -152,17 +156,17 @@ return new \Phalcon\Config(array(
     ],
 	//es配置地址
 	'es' => [
-        'pcUrl' => 'http://172.16.40.252:8380/',
-        'appUrl' => 'http://172.16.40.252:8380/',
-        'wapUrl' => 'http://172.16.40.252:8380/',
-        'wechatUrl' => 'http://172.16.40.252:8380/'
+        'pcUrl' => SEARCH_URL,
+        'appUrl' => SEARCH_URL,
+        'wapUrl' => SEARCH_URL,
+        'wechatUrl' => SEARCH_URL
     ],
     'max_upload_img' => 5, // 上传图片的最大数
     'order_effective_time'       => 2*24, //订单支付有效时间 /小时
     'o2o_order_effective_time'   => 0.5, //O2O的订单支付有效时间 /小时
     'ec'=>false,//是否允许导入
     // 自提门店地址
-    'since_shop_address' => ['奇药科技园','奇药健康科技园','开封路88号'],
+    'since_shop_address' => ['张仲景大药房'],
 	//相关资讯地址
     'infoUrl' => '',
 	// 海关支付公司代码
@@ -171,9 +175,9 @@ return new \Phalcon\Config(array(
         'wechat' => 'ZF14120401'
     ),
 	'pc_admin_url' =>[
-        'dev' => 'http://172.16.40.250:8088/Admin',
-        'stg' => 'http://stg.baiyangwang.com/Admin',
-        'pro' => 'http://www.baiyangwang.com/Admin',
+        'dev' => 'http://'.DOMAIN_PC.'/Admin',
+        'stg' => 'http://'.DOMAIN_PC.'/Admin',
+        'pro' => 'http://'.DOMAIN_PC.'/Admin',
     ],
     // 标准版 Api erp订单对接地址
     'erp_url' => [
@@ -198,11 +202,11 @@ return new \Phalcon\Config(array(
     'subject_file' => [
         'dir' => APP_PATH . '/static/',             //静态文件存放地址
         'dir_url' => [                                    //静态文件访问地址
-            'dev' => 'http://demo.qiyao.com/subject/',
-            'stg' => 'http://stgsource2.baiyangwang.com',
-            'pro' => 'http://source.baiyangwang.com',
+            'dev' => 'http://'.DOAMIN_WAP.'/subject/',
+            'stg' => 'http://'.DOAMIN_WAP.'/subject/',
+            'pro' => 'http://'.DOAMIN_WAP.'/subject/',
         ],
     ],
     //自营商城名称
-    'company_name' => '奇药'
+    'company_name' => '张仲景'
 ));
