@@ -372,7 +372,7 @@ class StatisticsService extends BaseService
             //paying-待付款，shipping-待发货，shipped-待收货, evaluating-待评价, refund-退款/售后, canceled-取消订单 , finished-订单完成, draw-待抽奖 , await-待成团,  all-所有',
             $return['order_paid_count'] = 0;
             $return['order_canceled_count'] = 0;
-            $paid_array = array('shipping','shipped','evaluating','finished');
+            $paid_array = array('shipping','shipped','evaluating','finished','refund');
             $tempArray = array();
             $areaArray = array();
             foreach ($orderList as $item) {
