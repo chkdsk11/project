@@ -579,7 +579,7 @@ class SkuService extends BaseService
      */
     public function getSkuOneByErp($erp_id,$id=0)
     {
-        if( !isset($erp_id) || $erp_id <= 0 ){
+        if( !isset($erp_id)){
             return $this->arrayData('参数错误','','','error');
         }
         if($id){
