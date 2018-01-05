@@ -202,7 +202,7 @@ class SkuController extends ControllerBase
             if(count($sku)>1){
                 return $this->response->setJsonContent([
                     'res'  => 'error_info',
-                    'info' => '商品id跟erp编码都已经存在'
+                    'info' => '商品id跟erp编码都已经存在'.print_r($sku,1)
                 ]);
             }
             //商品不存在自增一条记录
