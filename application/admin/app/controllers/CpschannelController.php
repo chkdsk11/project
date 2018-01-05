@@ -1006,7 +1006,7 @@ end_time,no_include,is_cancel' ;
         //统计订单信息
 
         $data = array();
-        $data['column'] = " cu.invite_code,count(col.order_sn) as order_count,sum(col.real_pay) as price_count,FROM_UNIXTIME(col.order_time,'%Y-%m-%d %H:%i:%S') as order_time";
+        $data['column'] = " cu.invite_code,count(col.order_sn) as order_count,sum(col.real_pay) as price_count,FROM_UNIXTIME(col.order_time,'%Y-%m-%d %H:%i:%s') as order_time";
         $data['table'] =  '\Shop\Models\BaiyangCpsUser as cu';
         $data['where'] = " where cu.channel_id={$channel_id} and col.order_status IN ('shipping','shipped','evaluating','finished') group by cu.invite_code order by cu.add_time";
         $BaiyangCpsOrderLog =    '\Shop\Models\BaiyangCpsOrderLog as col';
