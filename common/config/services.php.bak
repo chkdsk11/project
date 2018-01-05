@@ -55,28 +55,6 @@ $di->setShared('url', function (){
     return $url;
 });
 /**
- * app库
- */
-$di->set('dbWriteApp', function ()  {
-    $config=$this->getConfig();
-    $dbConfig = $config->appdatabase->write->toArray();
-    $adapter = $dbConfig['adapter'];
-    unset($dbConfig['adapter']);
-    $class = 'Phalcon\Db\Adapter\Pdo\\' . $adapter;
-    $dbWrite=new $class($dbConfig);
-    if ($config->debug) {
-        $eventsManager = new EventsManager();
-        $logger = new FileLogger(APP_PATH. '/common/logs/mysql.log');
-        $eventsManager->attach('dbWriteApp', function ($event, $dbWrite) use ($logger) {
-            if ($event->getType() == 'beforeQuery') {
-                $logger->log($dbWrite->getSQLStatement(), Logger::INFO);
-            }
-        });
-        $dbWrite->setEventsManager($eventsManager);
-    }
-    return $dbWrite;
-},true);
-/**
  * 写库
  */
 $di->set('dbWrite', function ()  {

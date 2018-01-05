@@ -25,25 +25,6 @@ return new \Phalcon\Config(array(
 	    'port'  => '3306',
         ),
     ),
-	//app库
-	'appdatabase' => array(
-		'read' => array(
-		 'adapter'  => 'Mysql',
-		'host'     => '172.16.40.250',
-		'username' => 'root',
-		'password' => '3edc#RFV',
-		'dbname'   => 'qiyao_byjk',
-		'charset'  => 'utf8',
-		),
-        'write' => array(
-            'adapter'  => 'Mysql',
-            'host'     => '172.16.40.250',
-            'username' => 'root',
-            'password' => '3edc#RFV',
-            'dbname'   => 'byjk',
-            'charset'  => 'utf8',
-        ),
-	),
 
     'application' => array(
         'modelsDir'     => APP_PATH . '/serve/models/shopmodel',
