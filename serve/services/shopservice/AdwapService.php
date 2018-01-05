@@ -76,7 +76,7 @@ class AdwapService extends BaseService
 //        ));
 
         $sql = "select {$field} from wap_advertisements as ad left join wap_ad_position as p ON ad.adp_id = p.id {$where}";
-        $stmt = $this->dbWriteApp->prepare($sql);
+        $stmt = $this->dbWrite->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchall(\PDO::FETCH_ASSOC);
 
@@ -225,7 +225,7 @@ class AdwapService extends BaseService
         }
         $feilds = $this->arrayTostr($conditions);
         $sql     = "UPDATE wap_advertisements SET {$feilds} WHERE {$where}";
-        if($this->dbWriteApp->execute($sql)){
+        if($this->dbWrite->execute($sql)){
             $this->clearCache();
             return $this->arrayData('修改成功！');
         }
