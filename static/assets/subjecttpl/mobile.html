@@ -16,12 +16,12 @@
     <meta name="apple-mobile-web-app-capable" content="no"/>
     <meta name="screen-orientation" content="portrait">
     <meta name="x5-orientation" content="portrait">
-    <link href="http://172.16.40.250:8086/images/icon-download.png" rel="apple-touch-icon">
-    <link href="http://172.16.40.250:8086/images/icon-download.png" rel="apple-touch-icon-precomposed">
-    <link rel="shortcut icon" type="image/ico" href="http://172.16.40.250:8086/favicon.ico"/>
-    <link rel="stylesheet" href="http://172.16.40.250:8086/css/normalize.css"/>
-    <link rel="stylesheet" href="http://172.16.40.250:8086/css/layout.css"/>
-    <link rel="stylesheet" href="http://172.16.40.250:8086/css/widget.css"/>
+    <link href="{{config_domain}}/images/icon-download.png" rel="apple-touch-icon">
+    <link href="{{config_domain}}/images/icon-download.png" rel="apple-touch-icon-precomposed">
+    <link rel="shortcut icon" type="image/ico" href="{{config_domain}}/favicon.ico"/>
+    <link rel="stylesheet" href="{{config_domain}}/css/normalize.css"/>
+    <link rel="stylesheet" href="{{config_domain}}/css/layout.css"/>
+    <link rel="stylesheet" href="{{config_domain}}/css/widget.css"/>
     <title>{{title}}</title>
     <style>
         body, html {
@@ -33,10 +33,9 @@
     {{style}}
 </head>
 <body>
-<div style="display: none;">{{config_domain}}</div>
 {{html}}
-<script src="http://172.16.40.250:8086/js/plugin/react.min.js"></script>
-<script src="http://172.16.40.250:8086/js/plugin/react-dom.min.js"></script>
+<script src="{{config_domain}}/js/plugin/react.min.js"></script>
+<script src="{{config_domain}}/js/plugin/react-dom.min.js"></script>
 <script>
     (function() {
         // var style = document.documentElement.style;
@@ -97,7 +96,7 @@
 
     })();
 </script>
-<script src="http://172.16.40.250:8086/js/config.js"></script>
+<script src="{{config_domain}}/js/config.js"></script>
 <script>
     seajs.use(['shareSpecial'],function(Share){
         //微信内绑定分享
