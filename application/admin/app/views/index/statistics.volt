@@ -49,9 +49,9 @@
         <div id="week_login_user" style="width: 45%;height: 350px;float: right;"></div>
     </div>
     <div id="goods_area" style="width: 100%;margin-bottom: 5px;">
-        <div style="width: 45%;height: 350px;float: left;">
+        <div style="width: 45%;height: 350px;float: left;margin-bottom:100px;">
             <label><h4 style="font-weight: 600;">商品动销</h4></label>
-            <div style="height: 350px;float: left;overflow-y: auto">
+            <div style="height: 350px;float: left;overflow-y: auto;">
                 <table class="table table-striped table-bordered table-hover">
                     <tr>
                         <th>动销商品</th>
@@ -297,7 +297,8 @@
                         }
                     },
                     legend: {
-                        data: ['微信商城', 'IOS', 'Android', 'PC'],
+//                        data: ['微商城', 'IOS', 'Android', 'WAP', 'PC'],
+                        data: ['微商城', 'WAP'],
                         x:'right'
                     },
                     grid: {
@@ -315,7 +316,7 @@
                     },
                     series: [
                         {
-                            name: '微信商城',
+                            name: '微商城',
                             type: 'bar',
                             stack: '总量',
                             itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
@@ -327,8 +328,34 @@
                             },
                             data: info.channelOrderContrast.channel.wechat
                         },
+//                        {
+//                            name: 'IOS',
+//                            type: 'bar',
+//                            stack: '总量',
+//                            itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
+//                            label: {
+//                                normal: {
+//                                    show: true,
+//                                    position: 'insideRight'
+//                                }
+//                            },
+//                            data: info.channelOrderContrast.channel.ios
+//                        },
+//                        {
+//                            name: 'Android',
+//                            type: 'bar',
+//                            stack: '总量',
+//                            itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
+//                            label: {
+//                                normal: {
+//                                    show: true,
+//                                    position: 'insideRight'
+//                                }
+//                            },
+//                            data: info.channelOrderContrast.channel.android
+//                        },
                         {
-                            name: 'IOS',
+                            name: 'WAP',
                             type: 'bar',
                             stack: '总量',
                             itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
@@ -338,34 +365,21 @@
                                     position: 'insideRight'
                                 }
                             },
-                            data: info.channelOrderContrast.channel.ios
+                            data: info.channelOrderContrast.channel.wap
                         },
-                        {
-                            name: 'Android',
-                            type: 'bar',
-                            stack: '总量',
-                            itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
-                            label: {
-                                normal: {
-                                    show: true,
-                                    position: 'insideRight'
-                                }
-                            },
-                            data: info.channelOrderContrast.channel.android
-                        },
-                        {
-                            name: 'PC',
-                            type: 'bar',
-                            stack: '总量',
-                            itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
-                            label: {
-                                normal: {
-                                    show: true,
-                                    position: 'insideRight'
-                                }
-                            },
-                            data: info.channelOrderContrast.channel.pc
-                        },
+//                        {
+//                            name: 'PC',
+//                            type: 'bar',
+//                            stack: '总量',
+//                            itemStyle: {normal: {label: {show: true, position: 'insideRight'}}},
+//                            label: {
+//                                normal: {
+//                                    show: true,
+//                                    position: 'insideRight'
+//                                }
+//                            },
+//                            data: info.channelOrderContrast.channel.pc
+//                        },
                     ]
                 };
                 //省区域订单分布

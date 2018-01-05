@@ -506,8 +506,6 @@ end_time,no_include,is_cancel' ;
 
         $act_id = $_GET['act_id'];
         if(isset($_GET['act_id'])&&$_GET['act_id']){
-            $item_list = isset($data['item_list']) ? $data['item_list'] : array();
-
             if($_POST){
                 $data = $this->_check_cps_data($_POST);
                 if(isset($data['error_msg'])&&$data['error_msg']){

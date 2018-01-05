@@ -666,9 +666,9 @@ class StatisticsService extends BaseService
      * @return array
      */
     public function channelOrderContrast(){
-        $timeList = $this->getTimeByType('sevenDays');
+        $timeList = $this->getTimeByType('beginThisWeek');
         $table = 'Shop\Models\BaiyangOrder';
-        $whereBase = "where add_time >= '{$timeList['begin']}' and add_time <='{$timeList['now']}'";
+        $whereBase = "where add_time >= '{$timeList['beginThisWeek']}' and add_time <='{$timeList['now']}'";
         $whereBase.=" and is_dummy <> 1 and channel_subid = ";
         $whereStr = "'85'";
         $where = $whereBase.$whereStr;
@@ -677,16 +677,19 @@ class StatisticsService extends BaseService
         $order = "order by day";
         $group = 'group by day';
         $orderListWechat = $this->getDataList($fields,$table,$where,$order,$group);
-        $whereStr = "'89'";
+//        $whereStr = "'89'";
+//        $where = $whereBase.$whereStr;
+//        $orderListIOS = $this->getDataList($fields,$table,$where,$order,$group);
+//        $whereStr = "'90'";
+//        $where = $whereBase.$whereStr;
+//        $orderListAndroid = $this->getDataList($fields,$table,$where,$order,$group);
+        $whereStr = "'91'";
         $where = $whereBase.$whereStr;
-        $orderListIOS = $this->getDataList($fields,$table,$where,$order,$group);
-        $whereStr = "'90'";
-        $where = $whereBase.$whereStr;
-        $orderListAndroid = $this->getDataList($fields,$table,$where,$order,$group);
-        $whereStr = "'95'";
-        $where = $whereBase.$whereStr;
-        $orderListPC = $this->getDataList($fields,$table,$where,$order,$group);
-        $begin = $timeList['begin'];
+        $orderListWAP = $this->getDataList($fields,$table,$where,$order,$group);
+//        $whereStr = "'95'";
+//        $where = $whereBase.$whereStr;
+//        $orderListPC = $this->getDataList($fields,$table,$where,$order,$group);
+        $begin = $timeList['beginThisWeek'];
         $now   = $timeList['now'];
         $returnList = array();
         $days = array();
@@ -697,9 +700,10 @@ class StatisticsService extends BaseService
             array_push($returnList['days'],date('m-d',$i));
         }
         $false_wechat = false;
-        $false_ios = false;
-        $false_android = false;
-        $false_pc = false;
+//        $false_ios = false;
+//        $false_android = false;
+        $false_wap = false;
+//        $false_pc = false;
         foreach ($days as $itemTemp) {
             if($orderListWechat) {
                 foreach ($orderListWechat as $item) {
@@ -710,42 +714,53 @@ class StatisticsService extends BaseService
                     }
                 }
             }
-            if($orderListIOS) {
-                foreach ($orderListIOS as $item) {
+//            if($orderListIOS) {
+//                foreach ($orderListIOS as $item) {
+//                    if ($item['day'] == $itemTemp) {
+//                        $temp['ios'][] = $item['count'];
+//                        $false_ios = true;
+//                        break;
+//                    }
+//                }
+//            }
+//            if($orderListAndroid) {
+//                foreach ($orderListAndroid as $item) {
+//                    if ($item['day'] == $itemTemp) {
+//                        $temp['android'][] = $item['count'];
+//                        $false_android = true;
+//                        break;
+//                    }
+//                }
+//            }
+            if($orderListWAP) {
+                foreach ($orderListWAP as $item) {
                     if ($item['day'] == $itemTemp) {
-                        $temp['ios'][] = $item['count'];
-                        $false_ios = true;
+                        $temp['wap'][] = $item['count'];
+                        $false_wap = true;
                         break;
                     }
                 }
             }
-            if($orderListAndroid) {
-                foreach ($orderListAndroid as $item) {
-                    if ($item['day'] == $itemTemp) {
-                        $temp['android'][] = $item['count'];
-                        $false_android = true;
-                        break;
-                    }
-                }
-            }
-            if($orderListPC) {
-                foreach ($orderListPC as $item) {
-                    if ($item['day'] == $itemTemp) {
-                        $temp['pc'][] = $item['count'];
-                        $false_pc = true;
-                        break;
-                    }
-                }
-            }
+//            if($orderListPC) {
+//                foreach ($orderListPC as $item) {
+//                    if ($item['day'] == $itemTemp) {
+//                        $temp['pc'][] = $item['count'];
+//                        $false_pc = true;
+//                        break;
+//                    }
+//                }
+//            }
             if(!$false_wechat) $temp['wechat'][] = 0;
-            if(!$false_ios) $temp['ios'][] = 0;
-            if(!$false_android) $temp['android'][] = 0;
-            if(!$false_pc) $temp['pc'][] = 0;
+//            if(!$false_ios) $temp['ios'][] = 0;
+//            if(!$false_android) $temp['android'][] = 0;
+            if(!$false_wap) $temp['wap'][] = 0;
+//            if(!$false_pc) $temp['pc'][] = 0;
 
             $false_wechat = false;
-            $false_ios = false;
-            $false_android = false;
-            $false_pc = false;
+//            $false_ios = false;
+//            $false_android = false;
+            $false_wap = false;
+//            $false_pc = false;
         }
         $returnList['channel'] = $temp;
         return $returnList;
