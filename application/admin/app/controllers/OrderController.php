@@ -39,6 +39,8 @@ class OrderController extends ControllerBase
         $refundState = array_flip(RefundService::getInstance()->refundState);
         $refundState[7] = '待卖家退款';
         $this->view->setVar('refundState', $refundState);
+        //商品跳转地址
+        $this->view->setVar('jumpUrl', $this->config['wap_base_url'][$this->config->environment]);
     }
 
     /**

@@ -28,6 +28,8 @@ class RefundController extends ControllerBase
         $this->view->setVar('shops', $orderService->getShops());
         //订单状态
         $this->view->setVar('orderStat', $orderService->orderStat);
+        //商品跳转地址
+        $this->view->setVar('jumpUrl', $this->config['wap_base_url'][$this->config->environment]);
     }
 
     /**

@@ -60,7 +60,7 @@
 										</td>
 										<td>{{ val['goods_id'] }}</td>
 										<td>
-                                    		<a href="{{ config.pc_url[config.environment] }}/product/{{ val['goods_id'] }}.html" target="_blank">
+                                    		<a href="{{ jumpUrl }}/product/{{ val['goods_id'] }}.html" target="_blank">
 												{{ val['goods_name'] }}
 											</a>
 										</td>
