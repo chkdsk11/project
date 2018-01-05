@@ -26,7 +26,7 @@ class SearchController extends ControllerBase
         $SearchService = SearchService::getInstance();
         $result = $SearchService->getHotLinst($param);
         $this->view->setVar('list',$result['list']);
-        $this->view->setVar('pcurl',$this->config->wap_home_url[$this->config->environment]."/product-list.html");
+        $this->view->setVar('pcurl',$this->config->wap_base_url[$this->config->environment]."/product-list.html");
         $this->view->setVar('act',isset($param['act'])?$param['act']:'0');
         $this->view->setVar('dataAt',isset($param['dateAt']) ? $param['dateAt'] : date('Y-m-d',strtotime("-1 day")).'~'.date('Y-m-d',strtotime("-1 day")));
         $this->view->setVar('keywords',isset($param['keywords'])?$param['keywords']:'');
