@@ -154,7 +154,7 @@
                                                     <td>{{v['belong_id']}}</td>
                                                     <td>{{v['relation_name']}}</td>
                                                     <td>
-                                                        <div class="input-group" style="width: 132px;">
+                                                        <div class="input-group col-md-5">
                                                             <input value="{{v['belong_id']}}" name="item_list[]" type="hidden">
                                                             <input class="form-control" style="width:95px;" value="{{v['first_rebate']}}" disabled type="text">
                                                             <input name="first_rebates[]" value="{{v['first_rebate']}}" type="hidden">
@@ -162,7 +162,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div class="input-group" style="width: 132px;">
+                                                        <div class="input-group col-md-5">
                                                             <input value="{{v['relation_name']}}" name="name_arr[]" type="hidden">
                                                             <input class="form-control" style="width:95px;" value="{{v['back_percent']}}" disabled type="text">
                                                             <input name="back_percents[]" value="{{v['back_percent']}}" type="hidden">

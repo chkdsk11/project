@@ -514,7 +514,7 @@ end_time,no_include,is_cancel' ;
                     return $this->response->setJsonContent(BaseService::getInstance()->arrayData($data['error_msg'], '', '', 'error'));
                 }
                 $table = '\Shop\Models\BaiyangCpsBackActivity';
-                $result = $this->_get_same_activity_condition($act_id,$data['type_id'], $data['channel_id'], $data['start_time'], $data['end_time'], $item_list);
+               // $result = $this->_get_same_activity_condition($act_id,$data['type_id'], $data['channel_id'], $data['start_time'], $data['end_time'], $item_list);
                 if($result){
                     return $this->response->setJsonContent(BaseService::getInstance()->arrayData($result['error_msg'], '', '', 'error'));
                 }
