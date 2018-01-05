@@ -1601,9 +1601,10 @@ class BaiyangSkuData extends BaseData
      */
     public function getCommentCount(array $param)
     {
-        $phql = "SELECT star FROM \Shop\Models\BaiyangGoodsComment WHERE goods_id = :goods_id:";
+        $phql = "SELECT star FROM \Shop\Models\BaiyangGoodsComment WHERE goods_id = :goods_id: and is_delete = :is_delete:";
         $bind = [
             'goods_id' => $param['goods_id'],
+            'is_delete' => 0,
         ];
         $ret = $this->modelsManager->executeQuery($phql, $bind);
         if(count($ret)){

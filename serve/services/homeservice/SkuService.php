@@ -1990,9 +1990,10 @@ class SkuService extends BaseService
         $imgCommentArr = $baseData->getData(array(
             'table' => '\Shop\Models\BaiyangGoodsComment',
             'column' => 'id',
-            'where' => 'where goods_id = :goods_id:',
+            'where' => 'where goods_id = :goods_id: and is_delete = :is_delete:',
             'bind' => array(
-                'goods_id' => $param['goods_id']
+                'goods_id' => $param['goods_id'],
+                'is_delete' => 0,
             )
         ));
         if(!empty($imgCommentArr)){
@@ -2011,8 +2012,8 @@ class SkuService extends BaseService
         $map['column'] = 'id,user_id,headimgurl,contain,star,is_anonymous,nickname,message_reply,serv_created_at,add_time';
         $map['order'] = 'order by add_time desc';
         if($param['type'] == 'image'){//图片评论
-            $map['where'] = 'where goods_id = :goods_id:';
-            $map['bind'] = ['goods_id' => $param['goods_id']];
+            $map['where'] = 'where goods_id = :goods_id: and is_delete = :is_delete:';
+            $map['bind'] = ['goods_id' => $param['goods_id'],'is_delete'=>0];
             $commnetList = $baseData->getData($map);
             if(!empty($commnetList)){
                 $commnetList = $this->forCommentVal($commnetList, $param, true);
@@ -2029,20 +2030,20 @@ class SkuService extends BaseService
         }else{
             switch($param['type']){
                 case 'all':
-                    $map['where'] = 'where goods_id = :goods_id:';
-                    $map['bind'] = ['goods_id' => $param['goods_id']];
+                    $map['where'] = 'where goods_id = :goods_id: and is_delete = :is_delete:';
+                    $map['bind'] = ['goods_id' => $param['goods_id'],'is_delete'=>0];
                     break;
                 case 'best':
-                    $map['where'] = 'where goods_id = :goods_id: and star > :star:';
-                    $map['bind'] = ['goods_id' => $param['goods_id'], 'star' => 3];
+                    $map['where'] = 'where goods_id = :goods_id: and star > :star: and is_delete = :is_delete:';
+                    $map['bind'] = ['goods_id' => $param['goods_id'], 'star' => 3,'is_delete'=>0];
                     break;
                 case 'middle':
-                    $map['where'] = 'where goods_id = :goods_id: and star = :star:';
-                    $map['bind'] = ['goods_id' => $param['goods_id'], 'star' => 3];
+                    $map['where'] = 'where goods_id = :goods_id: and star = :star: and is_delete = :is_delete:';
+                    $map['bind'] = ['goods_id' => $param['goods_id'], 'star' => 3,'is_delete'=>0];
                     break;
                 case 'bad':
-                    $map['where'] = 'where goods_id = :goods_id: and star < :star:';
-                    $map['bind'] = ['goods_id' => $param['goods_id'], 'star' => 3];
+                    $map['where'] = 'where goods_id = :goods_id: and star < :star: and is_delete = :is_delete:';
+                    $map['bind'] = ['goods_id' => $param['goods_id'], 'star' => 3,'is_delete'=>0];
                     break;
             }
             $pageNum = $baseData->countData($map);
