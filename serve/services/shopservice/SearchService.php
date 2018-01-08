@@ -201,4 +201,47 @@ class SearchService extends BaseService
         $res = json_decode($res,true);
         return $res['type'];
     }
+
+    /**
+     * 获取热门搜索关键词
+     */
+    public function getHotSearch()
+    {
+        $baseData = BaseData::getInstance();
+        $res = $baseData->getData([
+            'column' =>'*',
+            'table' => 'Shop\Models\BaiyangHotSearch',
+            'where' => 'where 1',
+        ]);
+        foreach($res as $k=>$v){
+            $result[$v['platform']] = $v['search_value'];
+        }
+        return $result;
+    }
+
+    /**
+     * 修改或添加热门搜索关键词
+     */
+    public function editHotSearch($param)
+    {
+        $baseData = BaseData::getInstance();
+        $table = 'Shop\Models\BaiyangHotSearch';
+        $data = $this->getHotSearch();
+        if(!$data){
+            $updata['platform'] = 'pc';
+            $baseData->insert($table,$updata);
+            $updata['platform'] = 'mobile';
+            $baseData->insert($table,$updata);
+        }
+        foreach($param as $k=>$v){
+            $param[$k] = preg_replace("/，/" ,',' ,$param[$k]);
+            $param[$k] = explode(',',$param[$k]);
+            $param[$k] = array_slice($param[$k],0,9);
+            $param[$k] = implode(',',$param[$k]);
+            $whereStr = "platform='{$k}'";
+            $columStr = "search_value='{$param[$k]}'";
+            $baseData->update($columStr,$table,[],$whereStr);
+        }
+        return $this->arrayData('修改成功','','','success');
+    }
 }
