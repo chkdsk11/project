@@ -171,6 +171,9 @@
                         {
                             type: 'category',
                             data: info.daysOrder.days,
+                            axisLabel :{
+                                interval:0
+                            },
                             axisPointer: {
                                 type: 'shadow'
                             }

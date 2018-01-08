@@ -603,7 +603,11 @@ class StatisticsService extends BaseService
             if($temp){
                 foreach ($temp as $order_count_key=>$item_order_count) {
                     if($order_count_key != 0){
-                        $percent[] = bcdiv((bcsub($temp[$order_count_key],$temp[$order_count_key-1])), $temp[$order_count_key-1],2) * 100;
+                        if($temp[$order_count_key-1] == 0){
+                            $percent[] = '-';
+                        }else{
+                            $percent[] = bcdiv((bcsub($temp[$order_count_key],$temp[$order_count_key-1])), $temp[$order_count_key-1],2) * 100;
+                        }
                     }else{
                         $percent[] = 0;
                     }
