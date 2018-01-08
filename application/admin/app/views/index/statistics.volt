@@ -142,7 +142,7 @@
                 var channel_order_chart = ec.init(document.getElementById('channel_order'),'macarons');
                 var area_order_chart = ec.init(document.getElementById('area_order'),'macarons');
                 var week_register_user_chart = ec.init(document.getElementById('week_register_user'),'macarons');
-                var week_login_user_chart = ec.init(document.getElementById('week_login_user'),'macarons');
+//                var week_login_user_chart = ec.init(document.getElementById('week_login_user'),'macarons');
 
                 // 指定图表的配置项和数据
                 //每日订单量（15天内）
@@ -482,56 +482,56 @@
                     ]
                 };
 
-                week_login_user_option = {
-                    title: {
-                        text: '过去一周每日登录用户数',
-                        subtext:info.weekUserLogin.sum,
-                        x: 'left'
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data: ['每日登录用户数'],
-                        x: 'right'
-                    },
-                    toolbox: {
-                        show: false,
-                        feature: {
-                            mark: {show: true},
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
-                    calculable: true,
-                    xAxis: [
-                        {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: info.weekUserLogin.days
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }
-                    ],
-                    series: [
-                        {
-                            name: '每日登录用户数',
-                            type: 'line',
-                            stack: '总量',
-                            data: info.weekUserLogin.counts,
-                            markLine : {
-                                data : [
-                                    {type : 'average', name : '平均值'}
-                                ]
-                            }
-                        }
-                    ]
-                };
+//                week_login_user_option = {
+//                    title: {
+//                        text: '过去一周每日登录用户数',
+//                        subtext:info.weekUserLogin.sum,
+//                        x: 'left'
+//                    },
+//                    tooltip: {
+//                        trigger: 'axis'
+//                    },
+//                    legend: {
+//                        data: ['每日登录用户数'],
+//                        x: 'right'
+//                    },
+//                    toolbox: {
+//                        show: false,
+//                        feature: {
+//                            mark: {show: true},
+//                            dataView: {show: true, readOnly: false},
+//                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+//                            restore: {show: true},
+//                            saveAsImage: {show: true}
+//                        }
+//                    },
+//                    calculable: true,
+//                    xAxis: [
+//                        {
+//                            type: 'category',
+//                            boundaryGap: false,
+//                            data: info.weekUserLogin.days
+//                        }
+//                    ],
+//                    yAxis: [
+//                        {
+//                            type: 'value'
+//                        }
+//                    ],
+//                    series: [
+//                        {
+//                            name: '每日登录用户数',
+//                            type: 'line',
+//                            stack: '总量',
+//                            data: info.weekUserLogin.counts,
+//                            markLine : {
+//                                data : [
+//                                    {type : 'average', name : '平均值'}
+//                                ]
+//                            }
+//                        }
+//                    ]
+//                };
 
                 // 使用刚指定的配置项和数据显示图表。
                 data_order_chart.setOption(data_order_option);
@@ -539,7 +539,7 @@
                 channel_order_chart.setOption(channel_order_option);
                 area_order_chart.setOption(area_order_option);
                 week_register_user_chart.setOption(week_register_user_option);
-                week_login_user_chart.setOption(week_login_user_option);
+//                week_login_user_chart.setOption(week_login_user_option);
             }
         );
     }

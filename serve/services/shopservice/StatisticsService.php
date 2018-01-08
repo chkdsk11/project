@@ -395,8 +395,7 @@ class StatisticsService extends BaseService
         $return['daysOrder'] = $this->daysOrder();
         $return['weekOrderContrast'] = $this->weekOrderContrast();
         $return['channelOrderContrast'] = $this->channelOrderContrast();
-        $return['weekUserLogin'] = $this->weekUserLogin();
-        $return['weekUserRegister'] = $this->weekUserRegister();
+//        $return['weekUserLogin'] = $this->weekUserLogin();
         $return['weekUserRegister'] = $this->weekUserRegister();
         return $return;
     }
