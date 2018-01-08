@@ -388,7 +388,7 @@ class StatisticsService extends BaseService
                 $areaArray[$item['region_name']] = 1;
             }
         }
-        $return['orderList'] = $orderList;
+        $return['orderList'] = ($orderList)?$orderList:array();
         $return['areaOrder'] = $this->convertData($areaArray);
         $return['goodMoveList'] = $this->goodMoveList();
         $return['user_average_daily_count'] = $this->lastWeekUserAverageDailyRegisterCount();
@@ -411,6 +411,7 @@ class StatisticsService extends BaseService
         $fields = "count(od.goods_id) as count,od.goods_name as name";
         $group = "group by od.goods_id";
         $join = "inner join Shop\Models\BaiyangOrderDetail as od on od.order_sn = o.order_sn";
+        $return = array();
         $orderList = BaseData::getInstance()->getData([
             'column'    =>  $fields,
             'table'     =>  $table,
@@ -418,7 +419,8 @@ class StatisticsService extends BaseService
             'group'     =>  $group,
             'join'      =>  $join,
         ]);
-        return $orderList;
+        if($orderList) $return = $orderList;
+        return $return;
     }
 
     /**
@@ -582,48 +584,45 @@ class StatisticsService extends BaseService
             array_push($days,date('Y-m-d',$i));
             array_push($returnList['days'],date('m-d',$i));
         }
-
-        if($orderListFifteenDays){
+        $percent = array();
+        $false = false;
+        foreach ($days as $itemTemp) {
+            foreach ($orderListFifteenDays as $item) {
+                if($item['day'] == $itemTemp){
+                    $temp[] = $item['count'];
+                    $false = true;
+                    break;
+                }
+            }
+            if(!$false){
+                $temp[] = 0;
+            }
             $false = false;
-            foreach ($days as $itemTemp) {
-                foreach ($orderListFifteenDays as $item) {
-                    if($item['day'] == $itemTemp){
-                        $temp[] = $item['count'];
-                        $false = true;
-                        break;
-                    }
-                }
-                if(!$false){
-                    $temp[] = 0;
-                }
-                $false = false;
-            }
-            $percent = array();
-            if($temp){
-                foreach ($temp as $order_count_key=>$item_order_count) {
-                    if($order_count_key != 0){
-                        if($temp[$order_count_key-1] == 0){
-                            $percent[] = '-';
-                        }else{
-                            $percent[] = bcdiv((bcsub($temp[$order_count_key],$temp[$order_count_key-1])), $temp[$order_count_key-1],2) * 100;
-                        }
-                    }else{
-                        $percent[] = 0;
-                    }
-                }
-            }
-            if(empty($percent)){
-                $percent = ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
-            }
-            $returnList['max_order_counts'] = max($temp);
-            $returnList['min_order_counts'] = min($temp);
-            $returnList['order_counts'] = $temp;
-            $returnList['max_percent'] = max($percent);
-            $returnList['min_percent'] = min($percent);
-            $returnList['max'] = ($returnList['max_order_counts']>$returnList['max_percent'])?$returnList['max_order_counts']:$returnList['max_percent'];
-            $returnList['min'] = ($returnList['min_order_counts']<$returnList['min_percent'])?$returnList['min_order_counts']:$returnList['min_percent'];
-            $returnList['percent'] = $percent;
         }
+        if($temp){
+            foreach ($temp as $order_count_key=>$item_order_count) {
+                if($order_count_key != 0){
+                    if($temp[$order_count_key-1] == 0){
+                        $percent[] = '-';
+                    }else{
+                        $percent[] = bcdiv((bcsub($temp[$order_count_key],$temp[$order_count_key-1])), $temp[$order_count_key-1],2) * 100;
+                    }
+                }else{
+                    $percent[] = 0;
+                }
+            }
+        }
+        if(empty($percent)){
+            $percent = ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
+        }
+        $returnList['max_order_counts'] = (max($temp))?max($temp):10;
+        $returnList['min_order_counts'] = (min($temp))?min($temp):0;
+        $returnList['order_counts'] = $temp;
+        $returnList['max_percent'] = (max($percent))?max($percent):10;
+        $returnList['min_percent'] = (min($percent))?min($percent):0;
+        $returnList['max'] = ($returnList['max_order_counts']>$returnList['max_percent'])?$returnList['max_order_counts']:$returnList['max_percent'];
+        $returnList['min'] = ($returnList['min_order_counts']<$returnList['min_percent'])?$returnList['min_order_counts']:$returnList['min_percent'];
+        $returnList['percent'] = $percent;
         return $returnList;
     }
 
@@ -644,9 +643,9 @@ class StatisticsService extends BaseService
             'where'     =>  $where
         ]);
         $return = array();
+        $return['last']['order_count'] = 0;
+        $return['this']['order_count'] = 0;
         if($orderList){
-            $return['last']['order_count'] = 0;
-            $return['this']['order_count'] = 0;
             foreach ($orderList as $item) {
                 if(($item['add_time'] >= $lastTimeList['beginLastWeek']) && ($item['add_time']) <= $lastTimeList['endLastWeek']){
                     $return['last']['order_count']++;
