@@ -86,24 +86,24 @@
                 data: {type: 'top'}
             })
                 .done(function (data) {
-                    if (data.code == '200') {
-                        info = data.data;
+                    if (data) {
+                        info = data;
                         $("#order_count").html(info.order_count);
                         $("#order_paid_count").html(info.order_paid_count);
                         $("#order_canceled_count").html(info.order_canceled_count);
                         $("#user_average_daily_count").html(info.user_average_daily_count);
                         var goodsCountListTrs = '';
-                        $.each(info.goodMoveList, function (index, value) {
-                            goodsCountListTrs += '<tr>' +
-                                '<td>' + value.name + '</td>' +
-                                '<td>' + value.count + '</td>' +
-                                '</tr>';
-                        });
-                        $('#goods_area table').append(goodsCountListTrs);
-                        show();
-                    }else{
-                        alert(data.msg);
+                        if(info.goodMoveList) {
+                            $.each(info.goodMoveList, function (index, value) {
+                                goodsCountListTrs += '<tr>' +
+                                    '<td>' + value.name + '</td>' +
+                                    '<td>' + value.count + '</td>' +
+                                    '</tr>';
+                            });
+                            $('#goods_area table').append(goodsCountListTrs);
+                        }
                     }
+                    show();
                 })
         }
         showTopTable();
