@@ -561,7 +561,7 @@ class StatisticsService extends BaseService
      * @return array
      */
     public function daysOrder(){
-        $timeList = $this->getTimeByType('fifteenDays');
+        $timeList = $this->getTimeByType('tenDays');
         $table = 'Shop\Models\BaiyangOrder as o';
         $orderWhere = "where o.add_time >= '{$timeList['begin']}' and o.add_time <='{$timeList['now']}'";
         $fields = "count(o.id) as count,o.status,FROM_UNIXTIME(o.add_time,'%Y-%m-%d') as day";
@@ -819,6 +819,11 @@ class StatisticsService extends BaseService
                 break;
             case 'sevenDays':
                 $resultList['begin'] = mktime(0,0,0,date('m'),date('d')-6,date('y'));
+                $resultList['now'] = time();
+                break;
+            //10时间
+            case 'tenDays':
+                $resultList['begin'] = mktime(0,0,0,date('m'),date('d')-10,date('y'));
                 $resultList['now'] = time();
                 break;
             //15天时间
