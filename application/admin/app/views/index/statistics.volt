@@ -49,9 +49,9 @@
         <div id="week_login_user" style="width: 45%;height: 350px;float: right;"></div>
     </div>
     <div id="goods_area" style="width: 100%;margin-bottom: 5px;">
-        <div style="width: 45%;height: 350px;float: left;margin-bottom:100px;">
+        <div style="width: 45%;height: 350px;float: left;">
             <label><h4 style="font-weight: 600;">商品动销</h4></label>
-            <div style="height: 350px;float: left;overflow-y: auto;">
+            <div style="height: 350px;float: left;overflow-y: auto">
                 <table class="table table-striped table-bordered table-hover">
                     <tr>
                         <th>动销商品</th>
@@ -86,8 +86,8 @@
                 data: {type: 'top'}
             })
                 .done(function (data) {
-                    if (data) {
-                        info = data;
+                    if (data.code == '200') {
+                        info = data.data;
                         $("#order_count").html(info.order_count);
                         $("#order_paid_count").html(info.order_paid_count);
                         $("#order_canceled_count").html(info.order_canceled_count);
@@ -100,8 +100,10 @@
                                 '</tr>';
                         });
                         $('#goods_area table').append(goodsCountListTrs);
+                        show();
+                    }else{
+                        alert(data.msg);
                     }
-                    show();
                 })
         }
         showTopTable();

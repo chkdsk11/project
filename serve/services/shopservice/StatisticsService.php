@@ -360,7 +360,7 @@ class StatisticsService extends BaseService
         $join = 'inner join Shop\Models\BaiyangRegion as r on o.province = r.id';
         $orderWhere = "where o.add_time >= '{$timeList['beginThisWeek']}' and o.add_time <='{$timeList['now']}' and is_dummy <> 1 ";
         $fields = "o.id,o.province,o.status,r.region_name";
-        $return = array();
+        $return = array('data'=>'','code'=>200,'msg'=>'操作成功');
         $orderList = BaseData::getInstance()->getData([
             'column'    =>  $fields,
             'table'     =>  $table,
@@ -368,19 +368,20 @@ class StatisticsService extends BaseService
             'join'      =>  $join
         ]);
         if($orderList){
-            $return['order_count'] = count($orderList);
+            $return_temp = array();
+            $return_temp['order_count'] = count($orderList);
             //paying-待付款，shipping-待发货，shipped-待收货, evaluating-待评价, refund-退款/售后, canceled-取消订单 , finished-订单完成, draw-待抽奖 , await-待成团,  all-所有',
-            $return['order_paid_count'] = 0;
-            $return['order_canceled_count'] = 0;
+            $return_temp['order_paid_count'] = 0;
+            $return_temp['order_canceled_count'] = 0;
             $paid_array = array('shipping','shipped','evaluating','finished','refund');
             $tempArray = array();
             $areaArray = array();
             foreach ($orderList as $item) {
                 if(in_array($item['status'],$paid_array)){
-                    $return['order_paid_count'] ++;
+                    $return_temp['order_paid_count'] ++;
                 }
                 if($item['status'] == 'canceled'){
-                    $return['order_canceled_count'] ++;
+                    $return_temp['order_canceled_count'] ++;
                 }
                 if(in_array($item['region_name'],$tempArray)){
                     $areaArray[$item['region_name']] ++;
@@ -389,17 +390,20 @@ class StatisticsService extends BaseService
                     $areaArray[$item['region_name']] = 1;
                 }
             }
-            $return['orderList'] = $orderList;
-            $return['areaOrder'] = $this->convertData($areaArray);
-            $return['goodMoveList'] = $this->goodMoveList();
-            $return['user_average_daily_count'] = $this->lastWeekUserAverageDailyRegisterCount();
-            $return['daysOrder'] = $this->daysOrder();
-            $return['weekOrderContrast'] = $this->weekOrderContrast();
-            $return['channelOrderContrast'] = $this->channelOrderContrast();
-            $return['weekUserLogin'] = $this->weekUserLogin();
-            $return['weekUserRegister'] = $this->weekUserRegister();
-            $return['weekUserRegister'] = $this->weekUserRegister();
-
+            $return_temp['orderList'] = $orderList;
+            $return_temp['areaOrder'] = $this->convertData($areaArray);
+            $return_temp['goodMoveList'] = $this->goodMoveList();
+            $return_temp['user_average_daily_count'] = $this->lastWeekUserAverageDailyRegisterCount();
+            $return_temp['daysOrder'] = $this->daysOrder();
+            $return_temp['weekOrderContrast'] = $this->weekOrderContrast();
+            $return_temp['channelOrderContrast'] = $this->channelOrderContrast();
+            $return_temp['weekUserLogin'] = $this->weekUserLogin();
+            $return_temp['weekUserRegister'] = $this->weekUserRegister();
+            $return_temp['weekUserRegister'] = $this->weekUserRegister();
+            $return['data'] = $return_temp;
+        }else{
+            $return['code'] = '0';
+            $return['msg'] = '暂时无数据';
         }
         return $return;
     }
