@@ -425,7 +425,7 @@ class StatisticsService extends BaseService
             $goods_id = 0;
             $count = 0;
             foreach ($orderList as $item) {
-                if($goods_id == $item){
+                if($goods_id == $item['goods_id']){
                     $temp[$item['goods_id']]['count'] = array('count'=> $count +1);
                     $count = $temp[$item['goods_id']]['count'];
                 }else{
