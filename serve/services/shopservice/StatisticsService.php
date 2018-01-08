@@ -408,15 +408,13 @@ class StatisticsService extends BaseService
         $timeList = $this->getTimeByType('beginThisMonth');
         $table = 'Shop\Models\BaiyangOrder as o';
         $orderWhere = "where o.add_time >= '{$timeList['beginThisMonth']}' and o.add_time <='{$timeList['now']}'";
-        $fields = "od.goods_id,od.goods_name as name";
-        $group = "group by od.goods_id";
+        $fields = "od.goods_id,goods_number,od.goods_name as name";
         $join = "inner join Shop\Models\BaiyangOrderDetail as od on od.order_sn = o.order_sn";
         $return = array();
         $orderList = BaseData::getInstance()->getData([
             'column'    =>  $fields,
             'table'     =>  $table,
             'where'     =>  $orderWhere,
-            'group'     =>  $group,
             'join'      =>  $join,
         ]);
         if($orderList){
@@ -426,12 +424,12 @@ class StatisticsService extends BaseService
             $count = 0;
             foreach ($orderList as $item) {
                 if($goods_id == $item['goods_id']){
-                    $temp[$item['goods_id']]['count'] = array('count'=> $count +1);
+                    $temp[$item['goods_id']]['count'] = $count + $item['goods_number'];
                     $count = $temp[$item['goods_id']]['count'];
                 }else{
                     $goods_id = $item['goods_id'];
                     $count = 1;
-                    $temp[$item['goods_id']] = array('count'=>1,'name'=>$item['name']);
+                    $temp[$item['goods_id']] = array('count'=>$item['goods_number'],'name'=>$item['name']);
                 }
             }
             $return = $temp;
