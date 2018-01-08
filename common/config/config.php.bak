@@ -58,7 +58,7 @@ return new \Phalcon\Config(array(
         )
     ),
 
-    'gearman_host' => '127.0.0.1:4374',
+    'gearman_host' => '127.0.0.1:4734',
 
     'application' => array(
         'modelsDir'     => APP_PATH . '/serve/models/shopmodel',
