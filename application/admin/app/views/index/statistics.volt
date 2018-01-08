@@ -46,7 +46,7 @@
     </div>
     <div id="user_area" style="width:100%;margin-bottom: 5px;">
         <div id="week_register_user" style="width: 45%;height: 350px;float: left;"></div>
-        <!--<div id="week_login_user" style="width: 45%;height: 350px;float: right;"></div>-->
+        <div id="week_login_user" style="width: 45%;height: 350px;float: right;"></div>
     </div>
     <div id="goods_area" style="width: 100%;margin-bottom: 5px;">
         <div style="width: 45%;height: 350px;float: left;margin-bottom: 100px;">
