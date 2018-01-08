@@ -408,7 +408,7 @@ class StatisticsService extends BaseService
         $timeList = $this->getTimeByType('beginThisMonth');
         $table = 'Shop\Models\BaiyangOrder as o';
         $orderWhere = "where o.add_time >= '{$timeList['beginThisMonth']}' and o.add_time <='{$timeList['now']}'";
-        $fields = "count(od.goods_id) as count,od.goods_name as name";
+        $fields = "od.goods_id,od.goods_name as name";
         $group = "group by od.goods_id";
         $join = "inner join Shop\Models\BaiyangOrderDetail as od on od.order_sn = o.order_sn";
         $return = array();
@@ -419,7 +419,23 @@ class StatisticsService extends BaseService
             'group'     =>  $group,
             'join'      =>  $join,
         ]);
-        if($orderList) $return = $orderList;
+        if($orderList){
+            array_multisort(array_column($orderList,'goods_id'),SORT_DESC,$orderList);
+            $temp = array();
+            $goods_id = 0;
+            $count = 0;
+            foreach ($orderList as $item) {
+                if($goods_id == $item){
+                    $temp[$item['goods_id']]['count'] = array('count'=> $count +1);
+                    $count = $temp[$item['goods_id']]['count'];
+                }else{
+                    $goods_id = $item['goods_id'];
+                    $count = 1;
+                    $temp[$item['goods_id']] = array('count'=>1,'name'=>$item['name']);
+                }
+            }
+            $return = $temp;
+        }
         return $return;
     }
 
