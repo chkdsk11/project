@@ -860,8 +860,8 @@ class StatisticsService extends BaseService
                 break;
             //上一周日期间时间
             case 'LastWeekFormNow':
-                $resultList['beginLastWeek'] = mktime(0,0,0,date('m'),date('d')-7,date('y'));
-                $resultList['endLastWeek'] = mktime(0,0,0,date('m'),date('d'),date('y'));
+                $resultList['beginLastWeek'] = mktime(0,0,0,date('m'),date('d')-date('w')+1-7,date('y'));
+                $resultList['endLastWeek'] = mktime(23,59,59,date('m'),date('d')-date('w')+7-7,date('y'));
                 break;
             //本月时间
             case 'beginThisMonth':
