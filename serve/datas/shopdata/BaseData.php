@@ -63,7 +63,10 @@ class BaseData extends Component
             if (isset($param['limit']) && !empty($param['limit'])) {
                 $phql .= " {$param['limit']}";
             }
-
+            //test
+            if($_SESSION['admin_account'] == 'zhengwenzhong'){
+                var_dump($phql);
+            }
             //数据绑定
             if (isset($param['bind']) && !empty($param['bind'])) {
                 $ret = $this->modelsManager->executeQuery($phql, $param['bind']);
