@@ -441,7 +441,7 @@ class StatisticsService extends BaseService
      * 过去一周用户注册
      * @return array
      */
-    public function weekUserRegister(){
+    public function weekUserLogin(){
         $timeList = $this->getTimeByType('LastWeekFormNow');
         $beginDate = date('Y-m-d',$timeList['beginLastWeek']);
         $endDate = date('Y-m-d',$timeList['endLastWeek']);
@@ -495,7 +495,7 @@ class StatisticsService extends BaseService
      * 过去一周用户登录
      * @return array
      */
-    public function weekUserLogin(){
+    public function weekUserRegister(){
         $timeList = $this->getTimeByType('LastWeekFormNow');
         $table = 'Shop\Models\BaiyangUser';
         $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}'";
@@ -669,7 +669,7 @@ class StatisticsService extends BaseService
                 }
             }
             $return['last']['average'] = ceil($return['last']['order_count']/7);
-            $return['this']['average'] = ceil($return['this']['order_count']/7);
+            $return['this']['average'] = ceil($return['this']['order_count']/ceil(($thisTimeList['now']-$thisTimeList['beginThisWeek'])/86400));
         }
         return $return;
     }
