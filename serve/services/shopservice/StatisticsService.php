@@ -866,7 +866,7 @@ class StatisticsService extends BaseService
             //本月时间
             case 'beginThisMonth':
                 $resultList['beginThisMonth'] = mktime(0,0,0,date('m'),1,date('y'));
-                $resultList['now'] = mktime(0,0,0,date('m'),date('d'),date('y'))-1;
+                $resultList['now'] = mktime(23,59,59,date('m'),date('t'),date('y'));
                 break;
             //近三个月起止时间
             case 'beginLastThreeMonth':
