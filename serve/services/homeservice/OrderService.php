@@ -213,6 +213,7 @@ class OrderService extends BaseService
 		// 验证用户信息
 		$userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'default_consignee');
 		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, ['param' => $param]); }
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
 		// 收货地址
 		$result['consigneeList'] = BaiyangUserConsigneeData::getInstance()->getUserConsigneeList($param['user_id']);
 		$param['address_id'] = isset($param['address_id']) ? (int)$param['address_id'] : 0;
