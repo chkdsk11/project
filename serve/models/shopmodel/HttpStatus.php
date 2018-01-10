@@ -244,7 +244,6 @@ class HttpStatus
         self::NOT_SAME_PASSWORD         => '两个密码不一致',
         self::PHONE_ERROR               => '电话号码不正确',
         self::USERID_ERROR              => '用户id不能为空',
-        self::USER_FREEZE_ERROR         => '该用户已冻结',
         self::PLATFORM_ERROR            => '平台标识不能为空',
         self::PWD_CONTINUE_ERROR        => '密码连续输错',
         self::VERIFY_CODE_ERROR         => '验证码错误',
@@ -289,6 +288,7 @@ class HttpStatus
 
         self::EMPTY_RESULT           => '结果为空',
         self::ACCOUNT_HAVE_EXISTED   => '账号已存在！',
+        self::ACCOUNT_FREEZE         => '该账号已冻结',
         self::ACCOUNT_NOT_EXISTED    => '账号不存在！',
         self::ACCOUNT_OR_PWD_ERROR   => '账号或密码错误！',
         self::NOT_SALE_OR_NOT_EXISTED => '??商品已下架或不存在！',

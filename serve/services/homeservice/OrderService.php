@@ -119,7 +119,7 @@ class OrderService extends BaseService
 		// 验证用户信息
 		$userInfo = BaiyangUserData::getInstance()->getUserInfo($result['userId'], '*');
 		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result); }
-//        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::USER_FREEZE_ERROR, $result); }
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
 		$result['userId'] = $userInfo['id'];
 		$result['unionUserId'] = $userInfo['union_user_id'];
 		$result['phone'] = !empty($userInfo['phone']) ? $userInfo['phone'] : $userInfo['user_id'];
