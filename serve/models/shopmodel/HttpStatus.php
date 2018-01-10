@@ -197,6 +197,7 @@ class HttpStatus
 
     //移动端状态码(不会使用，仅供参考)
     const EMPTY_RESULT              = 30001; //结果为空
+    const ACCOUNT_FREEZE            = 31000; //该账号已冻结！
     const ACCOUNT_HAVE_EXISTED      = 31001; //账号已存在！
     const ACCOUNT_NOT_EXISTED       = 31002; //账号不存在！
     const ACCOUNT_OR_PWD_ERROR      = 31003; //账号或密码错误！

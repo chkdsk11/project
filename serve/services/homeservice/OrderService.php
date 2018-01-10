@@ -467,7 +467,7 @@ class OrderService extends BaseService
         }
         // 验证用户信息
         $userInfo = BaiyangUserData::getInstance()->getUserInfo($result['userId'], '*');
-        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, ['param'=> $param]); }
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
         if (empty($userInfo)) {
             return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result);
         }
