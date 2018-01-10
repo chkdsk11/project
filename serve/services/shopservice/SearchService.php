@@ -228,8 +228,8 @@ class SearchService extends BaseService
         $table = 'Shop\Models\BaiyangHotSearch';
         $data = $this->getHotSearch();
         if(!$data){
-            $updata['platform'] = 'pc';
-            $baseData->insert($table,$updata);
+//            $updata['platform'] = 'pc';
+//            $baseData->insert($table,$updata);
             $updata['platform'] = 'mobile';
             $baseData->insert($table,$updata);
         }

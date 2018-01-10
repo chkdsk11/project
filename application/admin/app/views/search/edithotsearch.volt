@@ -18,7 +18,8 @@
             <!-- PAGE CONTENT BEGINS -->
             <form id="form" class="form-horizontal" action="/search/editHotSearch" method="post">
                     <div class="space-6"></div>
-                    <div class="middle-header">PC热门搜索</div>
+               <!--
+               <div class="middle-header">PC热门搜索</div>
                           <div class="form-group">
                               <label class="col-sm-2 control-label no-padding-right">关键词</label>
                               <div class="col-sm-9">
@@ -27,6 +28,7 @@
                                   </div>
                               </div>
                           </div>
+                -->
                 <div class="space-6"></div>
                 <div class="middle-header">移动端热门搜索</div>
                 <div class="form-group">
