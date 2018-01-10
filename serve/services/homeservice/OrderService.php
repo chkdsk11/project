@@ -118,8 +118,8 @@ class OrderService extends BaseService
 		}
 		// 验证用户信息
 		$userInfo = BaiyangUserData::getInstance()->getUserInfo($result['userId'], '*');
-		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result); }
         if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
+		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result); }
 		$result['userId'] = $userInfo['id'];
 		$result['unionUserId'] = $userInfo['union_user_id'];
 		$result['phone'] = !empty($userInfo['phone']) ? $userInfo['phone'] : $userInfo['user_id'];
@@ -211,9 +211,9 @@ class OrderService extends BaseService
 		if ($ret['status'] != HttpStatus::SUCCESS) { return $ret; }
 		$result = $ret['data'];
 		// 验证用户信息
-		$userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'default_consignee');
+		$userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'default_consignee,status');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, ['param' => $param]); }
 		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, ['param' => $param]); }
-        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
 		// 收货地址
 		$result['consigneeList'] = BaiyangUserConsigneeData::getInstance()->getUserConsigneeList($param['user_id']);
 		$param['address_id'] = isset($param['address_id']) ? (int)$param['address_id'] : 0;
@@ -269,7 +269,8 @@ class OrderService extends BaseService
         }
         $result = $ret['data'];
         // 验证用户信息
-        $userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'balance,pay_password,default_consignee');
+        $userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'balance,pay_password,default_consignee,status');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, ['param' => $param]); }
         if (empty($userInfo)) {
             return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, ['param' => $param]);
         }
@@ -466,6 +467,7 @@ class OrderService extends BaseService
         }
         // 验证用户信息
         $userInfo = BaiyangUserData::getInstance()->getUserInfo($result['userId'], '*');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
         if (empty($userInfo)) {
             return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result);
         }
