@@ -10,7 +10,7 @@
 <!--放页面内容-->
 <div>
     <div>
-        <h1>统计</h1>
+        <h1>仪表盘</h1>
         <div class="pagedesc" style="float: right;margin-right: 40px;height: 60px;">
             <span style="float: left;margin-right: 40px;line-height: 30px;">数据缓存一小时，也可手动刷新缓存</span>
             <input type="button" class="btn btn-primary" value="刷新" onclick="clearCatch()"/>
