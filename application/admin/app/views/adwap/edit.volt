@@ -98,7 +98,6 @@
                                         <input type="hidden" name="first_image" />
                                     </div>
                                 </div>
-                                <!--
                                 <div class="form-group navimg" {% if info['adp_id'] == 42 or info['adp_id'] == 43  %} style="display: block;"{% else %} style="display: none;" {% endif%}>
                                     <label class="col-sm-3 control-label no-padding-right"> 变换图图片： </label>
                                     <div class="col-xs-12 col-sm-9">
@@ -107,21 +106,18 @@
                                         <input type="hidden" value="{{info['change_img_url']}}" name="change_image" />
                                     </div>
                                 </div>
-                                -->
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right">或图片url </label>
                                     <div class="col-xs-12 col-sm-9">
                                         <input value="{{info['image_url']}}"  class="col-xs-10 col-sm-5" type="text" name="second_image" id="second_image" style="width:80%" placeholder="上传或填写URL二选一"/>
                                     </div>
                                 </div>
-                                <!--
                                 <div class="form-group navimg" {% if info['adp_id'] == 42 or info['adp_id'] == 43 %} style="display: block;"{% else %} style="display: none;" {% endif%}>
                                     <label class="col-sm-3 control-label no-padding-right">或变换图图片url </label>
                                     <div class="col-xs-12 col-sm-9">
                                         <input class="col-xs-10 col-sm-5" value="{{info['change_img_url']}}"  type="text" name="changet_second_image" id="changet_second_image" style="width:80%" placeholder="上传或填写URL二选一"/>
                                     </div>
                                 </div>
-                                -->
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label no-padding-right" for="member_tag"> 背景色： </label>
                                     <div class="col-xs-12 col-sm-9">
