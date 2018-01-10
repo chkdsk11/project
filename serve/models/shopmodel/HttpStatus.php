@@ -244,6 +244,7 @@ class HttpStatus
         self::NOT_SAME_PASSWORD         => '两个密码不一致',
         self::PHONE_ERROR               => '电话号码不正确',
         self::USERID_ERROR              => '用户id不能为空',
+        self::USER_FREEZE_ERROR         => '该用户已冻结',
         self::PLATFORM_ERROR            => '平台标识不能为空',
         self::PWD_CONTINUE_ERROR        => '密码连续输错',
         self::VERIFY_CODE_ERROR         => '验证码错误',
