@@ -202,9 +202,9 @@ return new \Phalcon\Config(array(
     'subject_file' => [
         'dir' => APP_PATH . '/static/',             //静态文件存放地址
         'dir_url' => [                                    //静态文件访问地址
-            'dev' => 'http://'.DOAMIN_WAP.'/subject/',
-            'stg' => 'http://'.DOAMIN_WAP.'/subject/',
-            'pro' => 'http://'.DOAMIN_WAP.'/subject/',
+            'dev' => 'http://'.DOMAIN_WAP.'/subject/',
+            'stg' => 'http://'.DOMAIN_WAP.'/subject/',
+            'pro' => 'http://'.DOMAIN_WAP.'/subject/',
         ],
     ],
     //自营商城名称
