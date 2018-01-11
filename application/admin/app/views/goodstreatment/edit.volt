@@ -14,22 +14,15 @@
             <div class="tools-box">
                 <label class="clearfix">
                     <span><span style="color: #ff0000">*</span>活动平台：</span>
-                    <label>
-                        <input name="platform_pc" type="checkbox" {% if data['data'][0]['platform_pc'] == 1 %}checked{% endif %} class="ace">
-                        <span class="lbl">&nbsp;PC</span>
-                    </label>
-                    <label>
-                        <input name="platform_app" type="checkbox" {% if data['data'][0]['platform_app'] == 1 %}checked{% endif %} class="ace">
-                        <span class="lbl">&nbsp;APP</span>
-                    </label>
-                    <label>
-                        <input name="platform_wap" type="checkbox" {% if data['data'][0]['platform_wap'] == 1 %}checked{% endif %} class="ace">
-                        <span class="lbl">&nbsp;WAP</span>
-                    </label>
-                    <label style="display: none">
-                        <input name="platform_wechat" type="checkbox" {% if data['data'][0]['platform_wechat'] == 1 %}checked{% endif %} class="ace" value="1">
-                        <span class="lbl">&nbsp;微商城</span>
-                    </label>
+                    {% if shopPlatform is defined and shopPlatform is not empty %}
+                        {% for key,platform in shopPlatform %}
+							{% set promotionKey = 'platform_'~key %}
+                            <label>
+                                <input name="platform_{{ key }}" type="checkbox" class="ace" value="1" {% if data['data'][0][promotionKey] == 1 %}checked{% endif %} >
+                                <span class="lbl">&nbsp;{{ platform }}</span>
+                            </label>
+                        {% endfor %}
+                    {% endif %}
                 </label><br/>
                 <label class="clearfix">
                     <span>互斥活动：</span>

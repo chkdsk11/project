@@ -36,11 +36,12 @@
                         <span>适用平台：</span>
                         <span>
                             <select name="platform_status">
-                                <option value="0" {% if platform is defined and platform == 0 %}selected{%endif%}>全部</option>
-                                <option value="1" {% if platform is defined and platform == 1 %}selected{%endif%}>PC</option>
-                                <option value="2" {% if platform is defined and platform == 2 %}selected{%endif%}>APP</option>
-                                <option value="3" {% if platform is defined and platform == 3 %}selected{%endif%}>WAP</option>
-                                <!--<option value="4" {% if platform is defined and platform == 4 %}selected{%endif%}>微商城</option>-->
+                                <option value="0">全部</option>
+                                {% if shopPlatform is defined and shopPlatform is not empty %}
+                                    {% for key,channel in shopPlatform %}
+                                        <option value="{{ key }}" {% if platform is defined and platform == key  %}selected{% endif %}>{{ channel }}</option>
+                                    {% endfor %}
+                                {% endif %}
                             </select>
                         </span>
                     </label>

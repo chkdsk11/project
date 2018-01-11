@@ -28,10 +28,12 @@
                                     <span>适用平台：</span>
                                     <select name="platform" class="tools-txt">
                                         <option value="">全部</option>
-                                        <option value="platform_pc" {% if seaData['platform'] == 'platform_pc'  %}selected{% endif %}>PC</option>
-                                        <option value="platform_app" {% if seaData['platform'] == 'platform_app' %}selected{% endif %}>APP</option>
-                                        <option value="platform_wap" {% if seaData['platform'] == 'platform_wap' %}selected{% endif %}>WAP</option>
-                                        <!--<option value="platform_wechat" {% if seaData['platform'] == 'platform_wechat' %}selected{% endif %}>微商城</option>-->
+                                        {% if shopPlatform is defined and shopPlatform is not empty %}
+                                            {% for key,platform in shopPlatform %}
+                                                {% set sel = 'platform_'~key %}
+                                                <option value="platform_{{ key }}" {% if seaData['platform'] == sel  %}selected{% endif %}>{{ platform }}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                     <button class="btn btn-primary" type="submit">搜索</button>
                                 </label>

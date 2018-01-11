@@ -26,7 +26,21 @@ class OrderController extends ControllerBase
         //发货商家
         $this->view->setVar('shops', $list->getShops());
         //下单终端
-        $this->view->setVar('terminal', $list->orderTerminal);
+        $terminal = $list->orderTerminal;
+        $configPlatform = $this->config['shop_platform'] ? (array)$this->config['shop_platform']: ['wap' => 'WAP'];
+        if (!isset($configPlatform['wechat'])) {
+            unset($terminal[85]);
+        }
+        if (!isset($configPlatform['pc'])) {
+            unset($terminal[95]);
+        }
+        if (!isset($configPlatform['wap'])) {
+            unset($terminal[91]);
+        }
+        if (!isset($configPlatform['app'])) {
+            unset($terminal[89],$terminal[90]);
+        }
+        $this->view->setVar('terminal', $terminal);
         //付款方式
         $this->view->setVar('payment', $list->orderPayment);
         //配送方式

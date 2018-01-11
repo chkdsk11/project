@@ -209,4 +209,11 @@ return new \Phalcon\Config(array(
     ],
     //自营商城名称
     'company_name' => '张仲景'
+    //商城各端
+    'shop_platform' => [
+//        'pc' => 'PC',
+//        'app' => 'APP',
+      'wap' => 'WAP',
+//        'wechat' => '微商城'
+    ],
 ));

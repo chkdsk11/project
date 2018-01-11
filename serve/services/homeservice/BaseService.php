@@ -67,20 +67,19 @@ class BaseService extends Component
     public function responseResult($status, $explain = '', $data = [], $tipsData = [], $line = null)
     {
         $data = empty($data) ? null : $data;
-        if (empty($tipsData)) {
-            if(is_null($line)){
-                return ['status' => $status, 'explain' => $explain, 'data' => $data];
-            }else{
-                return ['status' => $status, 'explain' => $explain, 'line'=> $line, 'data' => $data];
-            }
-
-        }
         $this->regularReplace($explain, $tipsData);
-        if(is_null($line)) {
-            return ['status' => $status, 'explain' => $explain, 'data' => $data, 'tipsData' => $tipsData];
-        }else{
-            return ['status' => $status, 'explain' => $explain, 'line'=> $line, 'data' => $data, 'tipsData' => $tipsData];
+        $result = [
+            'status' => $status,
+            'explain' => $explain,
+            'data' => $data
+        ];
+        if (!is_null($line)) {
+            $result['line'] = $line;
         }
+        if ($tipsData) {
+            $result['tipsData'] = $tipsData;
+        }
+        return $result;
     }
     
     /**
@@ -115,10 +114,15 @@ class BaseService extends Component
      */
     public function regularReplace(&$explain, $tipsData)
     {
-        $par = "/\?\?/";
-        foreach($tipsData as $val){
-            $explain = preg_replace($par,$val,$explain,1);
+        if ($tipsData && is_array($tipsData)) {
+            $par = "/\?\?/";
+            foreach($tipsData as $val){
+                $explain = preg_replace($par,$val,$explain,1);
+            }
         }
+        $companyName = $this->config['company_name'];
+        $companyName = $companyName ? $companyName : '自营';
+        $explain = str_replace("{{companyName}}",$companyName,$explain);
     }
 
     /**

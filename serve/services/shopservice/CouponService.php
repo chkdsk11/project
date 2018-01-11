@@ -132,7 +132,7 @@ class CouponService extends BaseService
         $data["pc_platform"] = $platform_value['pc_platform'];
         $data["app_platform"] = $platform_value['app_platform'];
         $data["wap_platform"] = $platform_value['wap_platform'];
-        $data["wechat_platform"] = 0;
+        $data["wechat_platform"] = $platform_value['wechat_platform'];
         $data["coupon_description"] = $param["coupon_description"];
         $data["provide_type"] = $param["provide_type"];
         $data["coupon_type"] = $param["coupon_type"];
@@ -404,7 +404,7 @@ class CouponService extends BaseService
         $data["pc_platform"] = $platform_value['pc_platform'];
         $data["app_platform"] = $platform_value['app_platform'];
         $data["wap_platform"] = $platform_value['wap_platform'];
-        $data["wechat_platform"] = 0;
+        $data["wechat_platform"] = $platform_value['wechat_platform'];
         $data["coupon_description"] = $param["coupon_description"];
         $data["provide_type"] = $param["provide_type"];
         $data["coupon_type"] = $param["coupon_type"];
@@ -1816,6 +1816,13 @@ class CouponService extends BaseService
         $couponEnum['forScope'] = \Shop\Models\BaiyangCouponEnum::$ForScope;
         //适用平台
         $couponEnum['forPlatform'] = \Shop\Models\BaiyangCouponEnum::$ForPlatform;
+        $configPlatform = (array)$this->config['shop_platform'];
+	$configPlatform = $configPlatform ? array_values($configPlatform): ['WAP'];
+        foreach ($couponEnum['forPlatform'] as $k => $platform) {
+            if (!in_array($platform, $configPlatform)) {
+                unset($couponEnum['forPlatform'][$k]);
+            }
+        }
         //活动状态
         $couponEnum['couponStatus'] = \Shop\Models\BaiyangCouponEnum::$CouponStatus;
         //药物类型

@@ -20,22 +20,14 @@
                     <!--<span class="text-red">*</span>-->
 
                     <span><span style="color: #ff0000">*</span>活动平台：</span>
-                    <label>
-                        <input name="platform_pc" type="checkbox" class="ace" value="1" checked>
-                        <span class="lbl">&nbsp;PC</span>
-                    </label>
-                    <label>
-                        <input name="platform_app" type="checkbox" class="ace" value="1" checked>
-                        <span class="lbl">&nbsp;APP</span>
-                    </label>
-                    <label>
-                        <input name="platform_wap" type="checkbox" class="ace" value="1" checked>
-                        <span class="lbl">&nbsp;WAP</span>
-                    </label>
-                    <label style="display: none">
-                        <input name="platform_wechat" type="checkbox" class="ace" value="0">
-                        <span class="lbl">&nbsp;微商城</span>
-                    </label>
+                    {% if shopPlatform is defined and shopPlatform is not empty %}
+                        {% for key,platform in shopPlatform %}
+                            <label>
+                                <input name="platform_{{ key }}" type="checkbox" class="ace" value="1" checked>
+                                <span class="lbl">&nbsp;{{ platform }}</span>
+                            </label>
+                        {% endfor %}
+                    {% endif %}
                 </label><br/>
                 <label class="clearfix">
                     <span>互斥活动：</span>

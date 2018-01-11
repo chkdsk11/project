@@ -106,7 +106,7 @@ class OrderService extends BaseService
     public $excel_header = [
         'order_sn'=>['text'=>'订单编号','field'=>'o.order_sn','join'=>''],
         'total_sn'=>['text'=>'订单编号','field'=>'o.total_sn','join'=>''],
-        'order_source'=>['text'=>'订单来源','field'=>"if(ISNULL(p.prescription_id),if(o.more_platform_sign = 'yukon','育学院','诚仁堂商城'),'易复诊') as order_source",'join'=>'LEFT JOIN baiyang_prescription p ON o.total_sn = p.order_id','table'=>'baiyang_prescription'],
+        'order_source'=>['text'=>'订单来源','field'=>"if(ISNULL(p.prescription_id),if(o.more_platform_sign = 'yukon','育学院','" . $this->config['company_name'] . "商城'),'易复诊') as order_source",'join'=>'LEFT JOIN baiyang_prescription p ON o.total_sn = p.order_id','table'=>'baiyang_prescription'],
         'shop_id'=>['text'=>'店铺','field'=>"sku_supplier.name as shop_id",'join'=>'LEFT JOIN baiyang_sku_supplier as sku_supplier on sku_supplier.id=o.shop_id','table'=>'baiyang_sku_supplier'],
 
         'searchType'=>['text'=>'订单状态','field'=>"CASE o.`status`
@@ -868,7 +868,7 @@ class OrderService extends BaseService
         if ($orderSn && BaiyangOrderData::getInstance()->isPrescriptionOrder($orderSn)) {
             return '易复诊';
         }
-        return '诚仁堂商城';
+        return $this->config['company_name'] . '商城';
     }
 
     /**

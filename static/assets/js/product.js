@@ -107,7 +107,7 @@ $(document).ready(function(){
                     //return;
                     if( msg.info != null && msg.res != 'error' && msg.status != 'error' && msg.res != 'error_info'){
                         document.location.reload();return;
-                        popup_add_product.addClass('hide');
+                        /*popup_add_product.addClass('hide');
                         var str= '' ;
                         str += '<tr id="product_list_'+ msg['id'] +'"> ' +
                             '<td class="center"> ' +
@@ -304,7 +304,7 @@ $(document).ready(function(){
                             '</tr>' ;
                         $('#product_table tbody').append(str);
                         $('#product_id').val('');
-                        /************************追加属性**************************/
+                        /!************************追加属性**************************!/
                         var setimg_ary = msg['img'] ;
                         var img_str = '',
                             godds_color = $('#product_list_'+ id +' .rule_value_1').val() ,
@@ -474,7 +474,7 @@ $(document).ready(function(){
                             '</div>';
                         $('.chose-goods-shelves1').append(goods_shelves1) ;
                         $('.chose-goods-shelves2').append(goods_shelves2) ;
-                        $('.chose-goods-shelves3').append(goods_shelves3) ;
+                        $('.chose-goods-shelves3').append(goods_shelves3) ;*/
                     }else{
                         if( msg.res == 'error_info' ){
                             popup_add_product_html = $('#popup_add_product .popup-content').html();
@@ -513,7 +513,7 @@ $(document).ready(function(){
             success: function(msg){
                 if( msg != null && msg.res != 'error' && msg.status != 'error' ){
                     document.location.reload();return;
-                    var tmp_id = $("#product_list_"+id).html();
+                    /*var tmp_id = $("#product_list_"+id).html();
                     if( tmp_id != undefined){
                         $('#popup_add_product .popup-content').html(popup_add_product_html);
                         $('#popup_add_product').addClass('hide');
@@ -714,7 +714,7 @@ $(document).ready(function(){
                         '</tr>' ;
                     $('#product_table tbody').append(str);
                     $('#product_id').val('');
-                    /************************追加属性**************************/
+                    /!************************追加属性**************************!/
                     var setimg_ary = msg['img'] ;
                     var img_str = '',
                         godds_color = $('#product_list_'+ id +' .rule_value_1').val() ,
@@ -888,7 +888,7 @@ $(document).ready(function(){
                     $('#popup_add_product').addClass('hide');
                     if( popup_add_product_html != '' && popup_add_product_html != undefined){
                         $('#popup_add_product .popup-content').html(popup_add_product_html);
-                    }
+                    }*/
                 }else{
                     if( msg != null ){
                         layer_required(msg.info);
@@ -926,7 +926,7 @@ $(document).ready(function(){
                 $(this).parents('tr').find('.is_gift').addClass('hide');
                 $(this).parents('tr').find('.gift-all').removeClass('hide');
                 $(this).siblings('.set_whether_is_gift').val('1');
-                $(this).text('统一设置');
+                $(this).text('设置默认');
             }else {
                 $(this).parents('tr').find('.is_gift').removeClass('hide');
                 $(this).parents('tr').find('.gift-all').addClass('hide');
@@ -955,10 +955,18 @@ $(document).ready(function(){
                             $('.pdc-id').val(pdc_id);
                             $('.pdc-stock-default').val(msg['virtual_stock_default']);
                             $('.stock-real-k').text(msg['v_stock']);
-                            $('.pdc-stock-pc').val(msg['virtual_stock_pc']);
-                            $('.pdc-stock-wap').val(msg['virtual_stock_wap']);
-                            $('.pdc-stock-app').val(msg['virtual_stock_app']);
-                            $('.pdc-stock-wechat').val(msg['virtual_stock_wechat']);
+                            if (shopPlatform.pc){
+                                $('.pdc-stock-pc').val(msg['virtual_stock_pc']);
+                            }
+                            if (shopPlatform.wap){
+                                $('.pdc-stock-wap').val(msg['virtual_stock_wap']);
+                            }
+                            if (shopPlatform.app){
+                                $('.pdc-stock-app').val(msg['virtual_stock_app']);
+                            }
+                            if (shopPlatform.wechat){
+                                $('.pdc-stock-wechat').val(msg['virtual_stock_wechat']);
+                            }
                             //判断商品是否为虚拟商品
                             //var type = $('#product_kind').val();
                             //if(type == 5 && msg['is_use_stock'] == 1){
@@ -1104,25 +1112,33 @@ $(document).ready(function(){
                 return;
             }
         }else if(stock == 3){
-            var virtual_stock_pc = $this.parent().siblings().find('input[name="virtual_stock_pc"]').val();
-            var virtual_stock_app = $this.parent().siblings().find('input[name="virtual_stock_app"]').val();
-            var virtual_stock_wap = $this.parent().siblings().find('input[name="virtual_stock_wap"]').val();
-            var virtual_stock_wechat = $this.parent().siblings().find('input[name="virtual_stock_wechat"]').val();
-            if (!regNumber.test(virtual_stock_pc)) {
-                layer_required('虚拟PC库存必须为大于等于0的整数！');
-                return;
+            if (shopPlatform.pc){
+                var virtual_stock_pc = $this.parent().siblings().find('input[name="virtual_stock_pc"]').val();
+                if (!regNumber.test(virtual_stock_pc)) {
+                    layer_required('虚拟PC库存必须为大于等于0的整数！');
+                    return;
+                }
             }
-            if (!regNumber.test(virtual_stock_app)) {
-                layer_required('虚拟APP库存必须为大于等于0的整数！');
-                return;
+            if (shopPlatform.app){
+                var virtual_stock_app = $this.parent().siblings().find('input[name="virtual_stock_app"]').val();
+                if (!regNumber.test(virtual_stock_app)) {
+                    layer_required('虚拟APP库存必须为大于等于0的整数！');
+                    return;
+                }
             }
-            if (!regNumber.test(virtual_stock_wap)) {
-                layer_required('虚拟WAP库存必须为大于等于0的整数！');
-                return;
+            if (shopPlatform.wap){
+                var virtual_stock_wap = $this.parent().siblings().find('input[name="virtual_stock_wap"]').val();
+                if (!regNumber.test(virtual_stock_wap)) {
+                    layer_required('虚拟WAP库存必须为大于等于0的整数！');
+                    return;
+                }
             }
-            if (!regNumber.test(virtual_stock_wechat)) {
-                layer_required('虚拟WAP库存必须为大于等于0的整数！');
-                return;
+            if (shopPlatform.wechat){
+                var virtual_stock_wechat = $this.parent().siblings().find('input[name="virtual_stock_wechat"]').val();
+                if (!regNumber.test(virtual_stock_wechat)) {
+                    layer_required('虚拟WAP库存必须为大于等于0的整数！');
+                    return;
+                }
             }
         }else{
             return;
@@ -1149,11 +1165,20 @@ $(document).ready(function(){
                     }else if(typeId==2){
                         $('#product_list_'+pcd_id+' .product_real_stock ').html('公共虚拟库存：'+ msg['data']['virtual_stock_default']+'件');
                     }else {
-                        $('#product_list_'+pcd_id+' .product_real_stock ').html(
-                            '<div>PC虚拟库存: '+ msg['data']['virtual_stock_pc']+'件 </div>'+
-                            '<div>APP虚拟库存: '+ msg['data']['virtual_stock_app']+'件 </div>'+
-                            '<div>WAP虚拟库存: '+ msg['data']['virtual_stock_wap']+'件</div>'+
-                            '<div>微商城虚拟库存: '+ msg['data']['virtual_stock_wechat']+'件</div>');
+                        var real_stock = '';
+                        if (shopPlatform.pc){
+                            real_stock += '<div>PC虚拟库存: '+ msg['data']['virtual_stock_pc']+'件 </div>';
+                        }
+                        if (shopPlatform.app){
+                            real_stock += '<div>APP虚拟库存: '+ msg['data']['virtual_stock_app']+'件 </div>';
+                        }
+                        if (shopPlatform.wap){
+                            real_stock += '<div>WAP虚拟库存: '+ msg['data']['virtual_stock_wap']+'件</div>';
+                        }
+                        if (shopPlatform.wechat){
+                            real_stock += '<div>微商城虚拟库存: '+ msg['data']['virtual_stock_wechat']+'件</div>';
+                        }
+                        $('#product_list_'+pcd_id+' .product_real_stock ').html(real_stock);
                     }
                 }else{
                     layer_required(msg['info']);
@@ -1744,31 +1769,38 @@ $(document).ready(function(){
                 if (!regMoney.test(goods_price)) { layer_required('统一销售价只能是数字且最多保留两位小数');return;}
                 if (!regMoney.test(market_price)) { layer_required('统一市场价只能是数字且最多保留两位小数');return;}
             }else if(is_unified_price == 1){
-                var goods_price_pc = $this.parent().siblings().find('input[name="goods_price_pc"]').val();
-                var goods_price_app = $this.parent().siblings().find('input[name="goods_price_app"]').val();
-                var goods_price_wap = $this.parent().siblings().find('input[name="goods_price_wap"]').val();
-                var goods_price_wechat = $this.parent().siblings().find('input[name="goods_price_wechat"]').val();
-                var market_price_pc = $this.parent().siblings().find('input[name="market_price_pc"]').val();
-                var market_price_app = $this.parent().siblings().find('input[name="market_price_app"]').val();
-                var market_price_wap = $this.parent().siblings().find('input[name="market_price_wap"]').val();
-                var market_price_wechat = $this.parent().siblings().find('input[name="market_price_wechat"]').val();
-                if(goods_price_pc=='' || goods_price_pc==0){layer_required('请输入正确的pc销售价');return;};
-                if(goods_price_app=='' || goods_price_app==0){layer_required('请输入正确的app销售价');return;};
-                if(goods_price_wap=='' || goods_price_wap==0){layer_required('请输入正确的wap销售价');return;};
-                if(market_price_pc=='' || market_price_pc==0){layer_required('请输入正确的pc市场价');return;};
-                if(market_price_app=='' || market_price_app==0){layer_required('请输入正确的app市场价');return;};
-                if(market_price_wap=='' || market_price_wap==0){layer_required('请输入正确的wap市场价');return;};
-                if(goods_price_wechat=='' || goods_price_wechat==0){layer_required('请输入正确的微商城市场价');return;};
-                if(market_price_wechat=='' || market_price_wechat==0){layer_required('请输入正确的统一市场价');return;};
-                if (!regMoney.test(goods_price_pc)) { layer_required('pc销售价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(goods_price_app)) { layer_required('app销售价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(goods_price_wap)) { layer_required('wap销售价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(market_price_pc)) { layer_required('pc市场价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(market_price_app)) { layer_required('app市场价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(market_price_wap)) { layer_required('wap市场价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(goods_price_wechat)) { layer_required('微商城销售价只能是数字且最多保留两位小数');return;}
-                if (!regMoney.test(market_price_wechat)) { layer_required('微商城市场价只能是数字且最多保留两位小数');return;}
-
+                if (shopPlatform.pc){
+                    var goods_price_pc = $this.parent().siblings().find('input[name="goods_price_pc"]').val();
+                    var market_price_pc = $this.parent().siblings().find('input[name="market_price_pc"]').val();
+                    if(goods_price_pc=='' || goods_price_pc==0){layer_required('请输入正确的pc销售价');return;};
+                    if(market_price_pc=='' || market_price_pc==0){layer_required('请输入正确的pc市场价');return;};
+                    if (!regMoney.test(goods_price_pc)) { layer_required('pc销售价只能是数字且最多保留两位小数');return;}
+                    if (!regMoney.test(market_price_pc)) { layer_required('pc市场价只能是数字且最多保留两位小数');return;}
+                }
+                if (shopPlatform.app){
+                    var market_price_app = $this.parent().siblings().find('input[name="market_price_app"]').val();
+                    var goods_price_app = $this.parent().siblings().find('input[name="goods_price_app"]').val();
+                    if(goods_price_app=='' || goods_price_app==0){layer_required('请输入正确的app销售价');return;};
+                    if(market_price_app=='' || market_price_app==0){layer_required('请输入正确的app市场价');return;};
+                    if (!regMoney.test(goods_price_app)) { layer_required('app销售价只能是数字且最多保留两位小数');return;}
+                    if (!regMoney.test(market_price_app)) { layer_required('app市场价只能是数字且最多保留两位小数');return;}
+                }
+                if (shopPlatform.wap){
+                    var goods_price_wap = $this.parent().siblings().find('input[name="goods_price_wap"]').val();
+                    var market_price_wap = $this.parent().siblings().find('input[name="market_price_wap"]').val();
+                    if(goods_price_wap=='' || goods_price_wap==0){layer_required('请输入正确的wap销售价');return;};
+                    if(market_price_wap=='' || market_price_wap==0){layer_required('请输入正确的wap市场价');return;};
+                    if (!regMoney.test(goods_price_wap)) { layer_required('wap销售价只能是数字且最多保留两位小数');return;}
+                    if (!regMoney.test(market_price_wap)) { layer_required('wap市场价只能是数字且最多保留两位小数');return;}
+                }
+                if (shopPlatform.wechat){
+                    var goods_price_wechat = $this.parent().siblings().find('input[name="goods_price_wechat"]').val();
+                    var market_price_wechat = $this.parent().siblings().find('input[name="market_price_wechat"]').val();
+                    if(goods_price_wechat=='' || goods_price_wechat==0){layer_required('请输入正确的微商城市场价');return;};
+                    if(market_price_wechat=='' || market_price_wechat==0){layer_required('请输入正确的统一市场价');return;};
+                    if (!regMoney.test(goods_price_wechat)) { layer_required('微商城销售价只能是数字且最多保留两位小数');return;}
+                    if (!regMoney.test(market_price_wechat)) { layer_required('微商城市场价只能是数字且最多保留两位小数');return;}
+                }
             }else{
                 return;
             }
@@ -2095,6 +2127,13 @@ $(document).ready(function(){
                             $(this).prop("selected",true);
                         }
                     });
+                    $('.select-sale-wechat-'+msg.data[i]['sku_id']).find("option").each(function(){
+                        if($(this).val() != msg.data[i]['sale']['sale_timing_wechat']){
+                            $(this).prop("selected",false);
+                        }else{
+                            $(this).prop("selected",true);
+                        }
+                    });
                     show += msg.data[i]['sku_id']+',';
                 }
                 if(!show){
@@ -2159,10 +2198,18 @@ $(document).ready(function(){
                         var i = 0;
                         var len = msg.length;
                         for (i; i < len; i++) {
-                            $('.select-sale-pc-' + msg[i][ids]).find('option[value=' + msg[i]['is_on_sale'] + ']').prop("selected", msg[i]['is_on_sale']);
-                            $('.select-sale-app-' + msg[i][ids]).find('option[value=' + msg[i]['sale_timing_app'] + ']').prop("selected", msg[i]['sale_timing_app']);
-                            $('.select-sale-wap-' + msg[i][ids]).find('option[value=' + msg[i]['sale_timing_wap'] + ']').prop("selected", msg[i]['sale_timing_wap']);
-                            $('.select-sale-wechat-' + msg[i][ids]).find('option[value=' + msg[i]['sale_timing_wechat'] + ']').prop("selected", msg[i]['sale_timing_wechat']);
+                            if (shopPlatform.pc) {
+                                $('.select-sale-pc-' + msg[i][ids]).find('option[value=' + msg[i]['is_on_sale'] + ']').prop("selected", msg[i]['is_on_sale']);
+                            }
+                            if (shopPlatform.app) {
+                                $('.select-sale-app-' + msg[i][ids]).find('option[value=' + msg[i]['sale_timing_app'] + ']').prop("selected", msg[i]['sale_timing_app']);
+                            }
+                            if (shopPlatform.wap) {
+                                $('.select-sale-wap-' + msg[i][ids]).find('option[value=' + msg[i]['sale_timing_wap'] + ']').prop("selected", msg[i]['sale_timing_wap']);
+                            }
+                            if (shopPlatform.wechat) {
+                                $('.select-sale-wechat-' + msg[i][ids]).find('option[value=' + msg[i]['sale_timing_wechat'] + ']').prop("selected", msg[i]['sale_timing_wechat']);
+                            }
                         }
                     }else{
                         //定时上下架
@@ -2170,55 +2217,57 @@ $(document).ready(function(){
                         var len = msg.sku.length;
                         var act = msg.time;
                         for (i; i < len; i++) {//layer_required(msg.sku[i]['is_on_sale']);
-                            var str = '<span class="allTime">所有端<em class="span_red">(PC端';
-                            if(msg.sku[i]['is_on_sale'] != undefined && msg.sku[i]['is_on_sale'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架'
+                            var str = '<span class="allTime">所有端<em class="span_red">(';
+                            var eachStr = '';
+                            if (shopPlatform.pc) {
+                                str += 'PC端';
+                                eachStr += '<span class="eachTime">PC端<em class="span_red">(';
+                                if(msg.sku[i]['is_on_sale'] != undefined && msg.sku[i]['is_on_sale'] == 1){
+                                    str += '已上架';
+                                    eachStr += '已上架';
+                                }else{
+                                    str += '未上架';
+                                    eachStr += '未上架';
+                                }
+                                eachStr += ')</em></span>';
                             }
-                            str += ',APP端';
-                            if(msg.sku[i]['sale_timing_app'] != undefined && msg.sku[i]['sale_timing_app'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架'
+                            if (shopPlatform.app) {
+                                str += ',APP端';
+                                eachStr += '<span class="eachTime">APP端<em class="span_red">(';
+                                if(msg.sku[i]['sale_timing_app'] != undefined && msg.sku[i]['sale_timing_app'] == 1){
+                                    str += '已上架';
+                                    eachStr += '已上架';
+                                }else{
+                                    str += '未上架';
+                                    eachStr += '未上架';
+                                }
+                                eachStr += ')</em></span>';
                             }
-                            str += ',WAP端';
-                            if(msg.sku[i]['sale_timing_wap'] != undefined && msg.sku[i]['sale_timing_wap'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架'
+                            if (shopPlatform.wap) {
+                                str += ',WAP端';
+                                eachStr += '<span class="eachTime">WAP端<em class="span_red">(';
+                                if(msg.sku[i]['sale_timing_wap'] != undefined && msg.sku[i]['sale_timing_wap'] == 1){
+                                    str += '已上架';
+                                    eachStr += '已上架';
+                                }else{
+                                    str += '未上架';
+                                    eachStr += '未上架';
+                                }
+                                eachStr += ')</em></span>';
                             }
-                            str += ',微商城';
-                            if(msg.sku[i]['sale_timing_wechat'] != undefined && msg.sku[i]['sale_timing_wechat'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架'
+                            if (shopPlatform.wechat) {
+                                str += ',微商城';
+                                eachStr += '<span class="eachTime">微商城<em class="span_red">(';
+                                if(msg.sku[i]['sale_timing_wechat'] != undefined && msg.sku[i]['sale_timing_wechat'] == 1){
+                                    str += '已上架';
+                                    eachStr += '已上架';
+                                }else{
+                                    str += '未上架';
+                                    eachStr += '未上架';
+                                }
+                                eachStr += ')</em></span>';
                             }
-                            str += ')</em></span><span class="eachTime">PC端<em class="span_red">(';
-                            if(msg.sku[i]['is_on_sale'] != undefined && msg.sku[i]['is_on_sale'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架';
-                            }
-                            str += ')</em></span><span class="eachTime">APP端<em class="span_red">(';
-                            if(msg.sku[i]['sale_timing_app'] != undefined && msg.sku[i]['sale_timing_app'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架';
-                            }
-                            str += ')</em></span><span class="eachTime">WAP端<em class="span_red">(';
-                            if(msg.sku[i]['sale_timing_wap'] != undefined && msg.sku[i]['sale_timing_wap'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架';
-                            }
-                            str += ')</em></span><span class="eachTime">微商城<em class="span_red">(';
-                            if(msg.sku[i]['sale_timing_wechat'] != undefined && msg.sku[i]['sale_timing_wechat'] == 1){
-                                str += '已上架';
-                            }else{
-                                str += '未上架';
-                            }
-                            str += ')</em></span>';
+                            str += ')</em></span>' + eachStr;
                             $('#time_goods_check_'+ msg.sku[i]['id'] + ' .show_sku_information .current_left').html(str);
                             if(act == false){
                                 msg.time = new Array();
@@ -2227,27 +2276,42 @@ $(document).ready(function(){
                                 msg.time[msg.sku[i]['id']] = new Array();
                                 msg.time[msg.sku[i]['id']]['time_start'] = false;
                                 msg.time[msg.sku[i]['id']]['time_end'] = false;
-                                msg.time[msg.sku[i]['id']]['time_start_pc'] = false;
-                                msg.time[msg.sku[i]['id']]['time_start_app'] = false;
-                                msg.time[msg.sku[i]['id']]['time_start_wap'] = false;
-                                msg.time[msg.sku[i]['id']]['time_start_wechat'] = false;
-                                msg.time[msg.sku[i]['id']]['time_end_pc'] = false;
-                                msg.time[msg.sku[i]['id']]['time_end_app'] = false;
-                                msg.time[msg.sku[i]['id']]['time_end_wap'] = false;
-                                msg.time[msg.sku[i]['id']]['time_end_wechat'] = false;
+                                if (shopPlatform.pc) {
+                                    msg.time[msg.sku[i]['id']]['time_start_pc'] = false;
+                                    msg.time[msg.sku[i]['id']]['time_end_pc'] = false;
+                                }
+                                if (shopPlatform.app) {
+                                    msg.time[msg.sku[i]['id']]['time_start_app'] = false;
+                                    msg.time[msg.sku[i]['id']]['time_end_app'] = false;
+                                }
+                                if (shopPlatform.wap) {
+                                    msg.time[msg.sku[i]['id']]['time_start_wap'] = false;
+                                    msg.time[msg.sku[i]['id']]['time_end_wap'] = false;
+                                }
+                                if (shopPlatform.wechat) {
+                                    msg.time[msg.sku[i]['id']]['time_start_wechat'] = false;
+                                    msg.time[msg.sku[i]['id']]['time_end_wechat'] = false;
+                                }
                             }
                             //修改定时上下架时间
                             $('#time_goods_check_' + msg.sku[i]['id'] + ' .allTime .time_start').val(msg.time[msg.sku[i]['id']]['time_start']?msg.time[msg.sku[i]['id']]['time_start']:'');
                             $('#time_goods_check_' + msg.sku[i]['id'] + ' .allTime .time_end').val(msg.time[msg.sku[i]['id']]['time_end']?msg.time[msg.sku[i]['id']]['time_end']:'');
-
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_pc').val(msg.time[msg.sku[i]['id']]['time_start_pc']?msg.time[msg.sku[i]['id']]['time_start_pc']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_app').val(msg.time[msg.sku[i]['id']]['time_start_app']?msg.time[msg.sku[i]['id']]['time_start_app']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_wap').val(msg.time[msg.sku[i]['id']]['time_start_wap']?msg.time[msg.sku[i]['id']]['time_start_wap']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_wechat').val(msg.time[msg.sku[i]['id']]['time_start_wechat']?msg.time[msg.sku[i]['id']]['time_start_wechat']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_pc').val(msg.time[msg.sku[i]['id']]['time_end_pc']?msg.time[msg.sku[i]['id']]['time_end_pc']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_app').val(msg.time[msg.sku[i]['id']]['time_end_app']?msg.time[msg.sku[i]['id']]['time_end_app']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_wap').val(msg.time[msg.sku[i]['id']]['time_end_wap']?msg.time[msg.sku[i]['id']]['time_end_wap']:'');
-                            $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_wechat').val(msg.time[msg.sku[i]['id']]['time_end_wechat']?msg.time[msg.sku[i]['id']]['time_end_wechat']:'');
+                            if (shopPlatform.pc) {
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_pc').val(msg.time[msg.sku[i]['id']]['time_start_pc']?msg.time[msg.sku[i]['id']]['time_start_pc']:'');
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_pc').val(msg.time[msg.sku[i]['id']]['time_end_pc']?msg.time[msg.sku[i]['id']]['time_end_pc']:'');
+                            }
+                            if (shopPlatform.app) {
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_app').val(msg.time[msg.sku[i]['id']]['time_start_app']?msg.time[msg.sku[i]['id']]['time_start_app']:'');
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_app').val(msg.time[msg.sku[i]['id']]['time_end_app']?msg.time[msg.sku[i]['id']]['time_end_app']:'');
+                            }
+                            if (shopPlatform.wap) {
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_wap').val(msg.time[msg.sku[i]['id']]['time_start_wap']?msg.time[msg.sku[i]['id']]['time_start_wap']:'');
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_wap').val(msg.time[msg.sku[i]['id']]['time_end_wap']?msg.time[msg.sku[i]['id']]['time_end_wap']:'');
+                            }
+                            if (shopPlatform.wechat) {
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_start_wechat').val(msg.time[msg.sku[i]['id']]['time_start_wechat']?msg.time[msg.sku[i]['id']]['time_start_wechat']:'');
+                                $('#time_goods_check_' + msg.sku[i]['id'] + ' .eachTime .time_end_wechat').val(msg.time[msg.sku[i]['id']]['time_end_wechat']?msg.time[msg.sku[i]['id']]['time_end_wechat']:'');
+                            }
                         }
                     }
 

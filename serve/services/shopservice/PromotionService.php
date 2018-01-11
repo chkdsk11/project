@@ -195,7 +195,7 @@ class PromotionService extends BaseService
         $promotion['promotion_platform_pc'] = isset($param['promotion_platform_pc']) ? (int)$param['promotion_platform_pc'] : 0;
         $promotion['promotion_platform_app'] = isset($param['promotion_platform_app']) ? (int)$param['promotion_platform_app'] : 0;
         $promotion['promotion_platform_wap'] = isset($param['promotion_platform_wap']) ? (int)$param['promotion_platform_wap'] : 0;
-        $promotion['promotion_platform_wechat'] = 0;
+        $promotion['promotion_platform_wechat'] = isset($param['promotion_platform_wechat']) ? (int)$param['promotion_platform_wechat'] : 0;
         //是否使用实付
         $promotion['promotion_is_real_pay'] = isset($param['promotion_is_real_pay']) ? (int)$param['promotion_is_real_pay'] : 0;
 
@@ -793,6 +793,13 @@ class PromotionService extends BaseService
         $promotionEnum['limitBuyForScope'] = BaiyangPromotionEnum::$LimitBuyForScope;
         //适用平台
         $promotionEnum['forPlatform'] = BaiyangPromotionEnum::$ForPlatform;
+        $configPlatform = (array)$this->config['shop_platform']);
+	$configPlatform = $configPlatform ? array_values($configPlatform): ['WAP'];
+        foreach ($promotionEnum['forPlatform'] as $k => $platform) {
+            if (!in_array($platform, $configPlatform)) {
+                unset($promotionEnum['forPlatform'][$k]);
+            }
+        }
         //活动状态
         $promotionEnum['promotionStatus'] = BaiyangPromotionEnum::$PromotionStatus;
 
@@ -870,7 +877,7 @@ class PromotionService extends BaseService
         $promotion['promotion_platform_pc'] = isset($param['promotion_platform_pc']) ? (int)$param['promotion_platform_pc'] : 0;
         $promotion['promotion_platform_app'] = isset($param['promotion_platform_app']) ? (int)$param['promotion_platform_app'] : 0;
         $promotion['promotion_platform_wap'] = isset($param['promotion_platform_wap']) ? (int)$param['promotion_platform_wap'] : 0;
-        $promotion['promotion_platform_wechat'] = 0;
+        $promotion['promotion_platform_wechat'] = isset($param['promotion_platform_wechat']) ? (int)$param['promotion_platform_wechat'] : 0;;
         //是否使用实付
         $promotion['promotion_is_real_pay'] = isset($param['promotion_is_real_pay']) ? (int)$param['promotion_is_real_pay'] : 0;
 

@@ -77,22 +77,14 @@
                     <label class="col-sm-2 control-label no-padding-right" > <span  class="text-red">*</span>活动平台</label>
                     <div class="col-sm-5">
                         <div class="checkbox">
-                            <label>
-                                <input name="use_platform[]" type="checkbox" class="ace" value="1" checked>
-                                <span class="lbl">&nbsp;Pc</span>
-                            </label>
-                            <label>
-                                <input name="use_platform[]" type="checkbox" class="ace" value="2" checked>
-                                <span class="lbl">&nbsp;App</span>
-                            </label>
-                            <label>
-                                <input name="use_platform[]" type="checkbox" class="ace" value="3" checked>
-                                <span class="lbl">&nbsp;Wap</span>
-                            </label>
-                            <label style="display: none">
-                                <input name="use_platform[]" type="checkbox" class="ace" value="4" checked>
-                                <span class="lbl">&nbsp;微商城</span>
-                            </label>
+                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                {% for key,platform in shopPlatform %}
+                                    <label>
+                                        <input name="use_platform[]" type="checkbox" class="ace" value="{% if key === 'pc' %}1{% elseif key === 'app' %}2{% elseif key === 'wechat' %}4{% else %}3{% endif %}" checked>
+                                        <span class="lbl">&nbsp;{{ platform }}</span>
+                                    </label>
+                                {% endfor %}
+                            {% endif %}
                         </div>
 
                     </div>
@@ -139,33 +131,33 @@
                 </div>
                 <div id="vt_area_a"></div>
 
-                <div class="form-group">
+                <div class="form-group {% if shopPlatform['app'] is not defined %}hide{% endif %}">
                     <label class="col-sm-2 control-label no-padding-right" for="app_url" > APP链接 </label>
                     <div class="col-sm-5">
-                        <input type="text" id="app_url" name="app_url" placeholder="此处输入APP链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:5px;">
+                        <input type="text" id="app_url" name="app_url" placeholder="此处输入APP链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:50px;">
                         <span  class="text-red">如:App://type=6&&&value=商品名称 </span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group {% if shopPlatform['wap'] is not defined %}hide{% endif %}">
                     <label class="col-sm-2 control-label no-padding-right" for="wap_url" > WAP链接 </label>
                     <div class="col-sm-5">
-                        <input type="text" id="wap_url" name="wap_url" placeholder="此处输入WAP链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:5px;">
+                        <input type="text" id="wap_url" name="wap_url" placeholder="此处输入WAP链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:50px;">
                         <span  class="text-red">如:http://www.baidu.com</span>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group {% if shopPlatform['pc'] is not defined %}hide{% endif %}">
                     <label class="col-sm-2 control-label no-padding-right" for="pc_url" > PC链接 </label>
                     <div class="col-sm-5">
-                        <input type="text" id="pc_url" name="pc_url" placeholder="此处输入PC链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:5px;">
+                        <input type="text" id="pc_url" name="pc_url" placeholder="此处输入PC链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:50px;">
                 <span  class="text-red">如:http://www.baidu.com</span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group {% if shopPlatform['wechat'] is not defined %}hide{% endif %}">
                     <label class="col-sm-2 control-label no-padding-right" for="pc_url" > 微商城链接 </label>
                     <div class="col-sm-5">
-                        <input type="text" id="wechat_url" name="wechat_url" placeholder="此处输入微商城链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:5px;">
-                        <span  class="text-red">暂不支持</span>
+                        <input type="text" id="wechat_url" name="wechat_url" placeholder="此处输入微商城链接" class="col-xs-10 col-sm-9 checkURL" style="margin-right:50px;">
+                        <span  class="text-red">如:http://www.baidu.com</span>
                     </div>
                 </div>
                 <div class="page-header">

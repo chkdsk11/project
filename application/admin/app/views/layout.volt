@@ -284,7 +284,10 @@
 <!--[if IE]>
 <script src="http://{{ config.domain.static }}/assets/js/jquery.1.11.1.min.js"></script>
 <![endif]-->
-
+<script type="text/javascript">
+    //商城各端，json格式（{"pc":"PC","app":"APP","wap":"WAP","wechat":"\u5fae\u5546\u57ce"}）
+    var shopPlatform = {{ shopPlatformJson }};
+</script>
 <!--[if !IE]> -->
 <script type="text/javascript">
     window.jQuery || document.write("<script src='http://{{ config.domain.static }}/assets/js/jquery.min.js'>"+"<"+"/script>");

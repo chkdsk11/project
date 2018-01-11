@@ -59,22 +59,15 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right"> <span  class="text-red">*</span>活动平台 </label>
                                 <div class="checkbox promotion_platform">
-                                    <label>
-                                        <input name="promotion_platform_pc" type="checkbox" class="ace" {% if limitPromotionDetail['promotion_platform_pc'] is defined %}value="{{ limitPromotionDetail['promotion_platform_pc'] }}" {% if limitPromotionDetail['promotion_platform_pc'] == 1 %}checked{% endif %}{% endif %}>
-                                        <span class="lbl">&nbsp;PC</span>
-                                    </label>
-                                    <label>
-                                        <input name="promotion_platform_app" type="checkbox" class="ace" {% if limitPromotionDetail['promotion_platform_app'] is defined %}value="{{ limitPromotionDetail['promotion_platform_app'] }}" {% if limitPromotionDetail['promotion_platform_app'] == 1 %}checked{% endif %}{% endif %}>
-                                        <span class="lbl">&nbsp;APP</span>
-                                    </label>
-                                    <label>
-                                        <input name="promotion_platform_wap" type="checkbox" class="ace" {% if limitPromotionDetail['promotion_platform_wap'] is defined %}value="{{ limitPromotionDetail['promotion_platform_wap'] }}" {% if limitPromotionDetail['promotion_platform_wap'] == 1 %}checked{% endif %}{% endif %}>
-                                        <span class="lbl">&nbsp;WAP</span>
-                                    </label>
-                                    <label style="display: none">
-                                        <input name="promotion_platform_wechat" type="checkbox" class="ace" {% if limitPromotionDetail['promotion_platform_wechat'] is defined %}value="{{ limitPromotionDetail['promotion_platform_wechat'] }}" {% if limitPromotionDetail['promotion_platform_wechat'] == 1 %}checked{% endif %}{% endif %}>
-                                        <span class="lbl">&nbsp;微商城</span>
-                                    </label>
+                                    {% if shopPlatform is defined and shopPlatform is not empty %}
+                                        {% for key,platform in shopPlatform %}
+                                            {% set promotionKey = 'promotion_platform_'~key %}
+                                            <label>
+                                                <input name="promotion_platform_{{ key }}" type="checkbox" class="ace" {% if limitPromotionDetail[promotionKey] is defined %}value="{{ limitPromotionDetail[promotionKey] }}" {% if limitPromotionDetail[promotionKey] == 1 %}checked{% endif %}{% endif %} >
+                                                <span class="lbl">&nbsp;{{ platform }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
 

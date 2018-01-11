@@ -1669,9 +1669,26 @@ class SkuService extends BaseService
             }
             $TDK = $categoryEnum[$cateParent][$level];
             $tdkArr = isset( $TDK )  ? $TDK : array() ;
-            $tdkArr['title'] = empty($catePath['meta_title']) && isset($tdkArr['title']) ? str_replace('xx', $catePath['category_name'], $tdkArr['title']) : $catePath['meta_title'];
-            $tdkArr['keyword'] = empty($catePath['meta_keyword']) && isset($tdkArr['keyword'])  ? str_replace('xx', $catePath['category_name'], $tdkArr['keyword']) : $catePath['meta_keyword'];
-            $tdkArr['description'] = empty($catePath['meta_description'])  && isset($tdkArr['description']) ? str_replace('xx', $catePath['category_name'], $tdkArr['description']) : $catePath['meta_description'];
+			$companyName = $this->config['company_name'];
+			$companyName = $companyName ? $companyName : '自营';
+			if (empty($catePath['meta_title']) && isset($tdkArr['title'])) {
+				$tdkArr['title'] = str_replace('xx', $catePath['category_name'], $tdkArr['title']);
+				$tdkArr['title'] = str_replace('{{companyName}}', $companyName, $tdkArr['title']);
+			} else {
+				$tdkArr['title'] = $catePath['meta_title'];
+			}
+			if (empty($catePath['meta_keyword']) && isset($tdkArr['keyword'])) {
+				$tdkArr['keyword'] = str_replace('xx', $catePath['category_name'], $tdkArr['keyword']);
+				$tdkArr['keyword'] = str_replace('{{companyName}}', $companyName, $tdkArr['keyword']);
+			} else {
+				$tdkArr['keyword'] = $catePath['meta_keyword'];
+			}
+			if (empty($catePath['meta_description'])  && isset($tdkArr['description'])) {
+				$tdkArr['description'] = str_replace('xx', $catePath['category_name'], $tdkArr['description']);
+				$tdkArr['description'] = str_replace('{{companyName}}', $companyName, $tdkArr['description']);
+			} else {
+				$tdkArr['description'] = $catePath['meta_description'];
+			}
         }
         $isSelect = $baseData->countData(array(
             'table' => '\Shop\Models\BaiyangCategory',
@@ -2540,30 +2557,30 @@ class SkuService extends BaseService
         switch($length) {
             case '2':
                 $data['otherList']['tdk'] = array(
-                    'title' => "({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}区别_价格对比_诚仁堂商城",
+                    'title' => "({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}区别_价格对比_" . $this->config['company_name'] . "商城",
                     'keyword' => "({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}区别，{$brand_name_common}{$prod_name_common}的价格",
-                    'description' => "{$prod_name_common}({$brand_name_common})和{$prod_name_common_two}({$brand_name_common_two})有什么区别，上诚仁堂商城药店查看({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}价格，适应病症，用法用量等药品信息区别，帮你找到最合适你的商品。",
+                    'description' => "{$prod_name_common}({$brand_name_common})和{$prod_name_common_two}({$brand_name_common_two})有什么区别，上" . $this->config['company_name'] . "商城药店查看({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}价格，适应病症，用法用量等药品信息区别，帮你找到最合适你的商品。",
                 );
         break;
             case '3':
                 $data['otherList']['tdk'] = array(
-                    'title' => "{$prod_name_common}({$brand_name_common})和({$brand_name_common_two}){$prod_name_common_two}哪个牌子好_作用对比_诚仁堂商城",
+                    'title' => "{$prod_name_common}({$brand_name_common})和({$brand_name_common_two}){$prod_name_common_two}哪个牌子好_作用对比_" . $this->config['company_name'] . "商城",
                     'keyword' => "{$prod_name_common}({$brand_name_common})和({$brand_name_common_two}){$prod_name_common_two}哪个牌子好，({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}作用对比",
-                    'description' => "{$prod_name_common}({$brand_name_common})和({$brand_name_common_two}){$prod_name_common_two}哪个牌子好，诚仁堂商城网上药店告诉你({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}哪个好，({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}作用对比,副作用,说明书,生产厂家比较。帮你找到最合适的商品。",
+                    'description' => "{$prod_name_common}({$brand_name_common})和({$brand_name_common_two}){$prod_name_common_two}哪个牌子好，" . $this->config['company_name'] . "商城网上药店告诉你({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}哪个好，({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}作用对比,副作用,说明书,生产厂家比较。帮你找到最合适的商品。",
                 );
                 break;
             case '4':
                 $data['otherList']['tdk'] = array(
-                    'title'=>"药品对比-诚仁堂商城-要健康到诚仁堂",
+                    'title'=>"药品对比-" . $this->config['company_name'] . "商城-要健康到" . $this->config['company_name'],
                     'keyword'=>'',
                     'description'=>'',
                 );
                 break;
             default:
                 $data['otherList']['tdk'] = array(
-                    'title' => "({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}_区别_价格对比_诚仁堂商城",
+                    'title' => "({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}_区别_价格对比_" . $this->config['company_name'] . "商城",
                     'keyword' => "({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}区别，{$brand_name_common}{$prod_name_common}的价格",
-                    'description' => "{$prod_name_common}({$brand_name_common})和{$prod_name_common_two}({$brand_name_common_two})有什么区别，上诚仁堂商城药店查看({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}价格，适应病症，用法用量等药品信息区别，帮你找到最合适你的商品。",
+                    'description' => "{$prod_name_common}({$brand_name_common})和{$prod_name_common_two}({$brand_name_common_two})有什么区别，上" . $this->config['company_name'] . "商城药店查看({$brand_name_common}){$prod_name_common}和({$brand_name_common_two}){$prod_name_common_two}价格，适应病症，用法用量等药品信息区别，帮你找到最合适你的商品。",
                 );
                 break;
         }
@@ -2655,7 +2672,7 @@ class SkuService extends BaseService
     }
 
     /**
-     * 匿名评论:账号显示为“诚仁堂会员”
+     * 匿名评论:账号显示为“XX会员”
      * 非匿名规则：
      *  1、昵称（除一个字外，两个字以上展示，取前后一个字展示，中间用三个***代替）：
      *          一个字：我***（后缀加3个***)

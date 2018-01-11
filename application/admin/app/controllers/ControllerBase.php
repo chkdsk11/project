@@ -56,6 +56,11 @@ class ControllerBase extends Controller
             $this->assignMenu($admin_role_id,$admin_is_super);
         }
         AdminService::getInstance()->addLog();
+        //商城各端
+        $shop_platform = (array)$this->config->shop_platform;
+        $shop_platform = $shop_platform ? $shop_platform : ['wap' => 'WAP'];
+        $this->view->setVar('shopPlatform', $shop_platform);
+        $this->view->setVar('shopPlatformJson', json_encode($shop_platform));
     }
 
     /**
@@ -215,8 +220,9 @@ class ControllerBase extends Controller
     /**
      * 设置title
      */
-    protected function setTitle($title='诚仁堂商城')
+    protected function setTitle($title='')
     {
+		$title = $title ? $title : $this->config['company_name'] . '商城';
         $this->view->setVar('title',$title);
     }
 
