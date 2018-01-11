@@ -89,7 +89,7 @@ class OrderService extends BaseService
     ];
     //订单来源
     //public $orderSource = [1 => '诚仁堂', 2 => '易复诊', 3 => '育学园'];
-    public $orderSource = [1 => '诚仁堂'];
+    public $orderSource = [1 => '自营'];
     //订单状态
     public $orderStat = [
         'paying' => '待付款',

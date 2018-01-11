@@ -45,7 +45,7 @@
 
                             
 
-                            <div class="form-group">
+                            <div class="form-group {% if shopPlatform['app'] is not defined %}hide{% endif %}">
                                 <label class="col-sm-3 control-label no-padding-right"> <span  class="text-red">*</span>APP注册返利 </label>
                                 <div class="col-sm-9">
                                         <input type="text" id="back_amount" name="back_amount" class="col-xs-10 col-sm-5"  value="{% if list['channel']['back_amount'] is defined %}{{list['channel']['back_amount'] }}{%endif%}" />&nbsp;&nbsp;&nbsp;
@@ -54,11 +54,11 @@
 
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group {% if shopPlatform['wap'] is not defined %}hide{% endif %}">
                                 <label class="col-sm-3 control-label no-padding-right" for="promotion_content"> <span  class="text-red">*</span>WAP注册返利 </label>
                                 <div class="col-sm-9">
                                    <input type="text" id="wap_back_amount" name="wap_back_amount" class="col-xs-10 col-sm-5"  value="{% if list['channel']['wap_back_amount'] is defined %}{{list['channel']['wap_back_amount'] }}{%endif%}"/>&nbsp;&nbsp;&nbsp;
-                                   <label class="control-label" style="color:red;">填写大于0的数字</label>
+                                   <label class="control-label" style="color:red;">填写大于0的数字{{ shopPlatform.wap }}</label>
                                 </div>
                             </div>
 

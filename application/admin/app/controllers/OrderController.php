@@ -46,7 +46,15 @@ class OrderController extends ControllerBase
         //配送方式
         $this->view->setVar('delivery', array_flip($list->orderDelivery));
         //订单来源
-        $this->view->setVar('source', $list->orderSource);
+        $source = $list->orderSource;
+        if ($source && $this->config['company_name']) {
+            foreach ($source as $key => $value) {
+                $source[$key] = str_replace("自营",$this->config['company_name'],$value);
+            }
+        } else {
+            $source = $this->config['company_name'] ? [1 => $this->config['company_name']] : [1 => '自营'];
+        }
+        $this->view->setVar('source', $source);
         //订单状态
         $this->view->setVar('orderStat', $list->orderStat);
         //退款状态

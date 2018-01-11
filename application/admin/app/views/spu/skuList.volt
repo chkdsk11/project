@@ -251,10 +251,15 @@
                                 <th class="center sku_menu_row5">
                                     <select class="change_sale">
                                         <option value="0">所有端</option>
-                                        <option value="pc">pc端</option>
+                                        {% if shopPlatform is defined and shopPlatform is not empty %}
+                                        {% for key,platform in shopPlatform %}
+                                            <option value="{{ key }}">{{ platform }}端</option>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <!--<option value="pc">pc端</option>
                                         <option value="app">app端</option>
                                         <option value="wap">wap端</option>
-                                        <option value="wechat">微商城端</option>
+                                        <option value="wechat">微商城端</option>-->
                                     </select>
                                 </th>
                                 <th class="center sku_menu_row5">
