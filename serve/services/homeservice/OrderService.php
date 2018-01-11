@@ -3557,18 +3557,15 @@ class OrderService extends BaseService
             return $this->uniteReturnResult(\Shop\Models\HttpStatus::PARAM_ERROR, ['param' => $param]);
         }
         $status = 5;
-        $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? (int)$this->config->yxy_shop_id[$this->config->environment] : 0;
         $orderData = BaiyangOrderData::getInstance();
         $update_service = $orderData->updateReturnService([
             'column' => 'express_no =:express_no:,express_company=:express_company:,status=:status:',
-            //'where' => 'service_sn = :service_sn:' ,
-            'where' => 'service_sn = :service_sn: AND shop_id <> :shop_id:' ,
+            'where' => 'service_sn = :service_sn:' ,
             'bind' => [
                 'express_no'=>$express_no,
                 'express_company'=>$express_company,
                 'service_sn'=>$service_sn,
                 'status'=>$status,
-                'shop_id'=> $yxyShopId, //育学园订单不能添加物流信息  秦亮 #7529
             ],
         ]);
 
