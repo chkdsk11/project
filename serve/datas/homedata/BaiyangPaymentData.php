@@ -45,6 +45,9 @@ class BaiyangPaymentData extends BaseData
                 'status' => 1,
             ]
         ], true);
+        if (isset($param['user_id']) && $param['user_id'] == 11020) {
+            echo '<pre>';print_r($result);exit;
+        }
         if ($result) {
             $other_guide = $result['other_guide'] ? json_decode($result['other_guide'], true) : [];
             if (!isset($other_guide['except_good_id'])) {
