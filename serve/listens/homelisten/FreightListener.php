@@ -421,6 +421,9 @@ class FreightListener extends BaseListen {
                 'selected' => $param['paymentId'] == 3 ? 1 : 0,
             ];
         }
+        if (isset($param['user_id']) && $param['user_id'] == 11020) {
+            echo '<pre>';print_r($param);exit;
+        }
         unset($param['o2oInfo']);
         return $param;
     }
