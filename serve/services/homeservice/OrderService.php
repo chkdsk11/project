@@ -340,6 +340,9 @@ class OrderService extends BaseService
                         'channel_subid' => isset($param['channel_subid']) ? $param['channel_subid'] : 95,
                         'goodsList' => isset($result['goodsList']) ? $result['goodsList'] : [],
                     ]) ? 1 : 0;
+                    if (isset($param['user_id']) && $param['user_id'] == 11020) {
+                        echo '<pre>';print_r($result['ifFacePay']);exit;
+                    }
                     // 极速配送
                     $o2oInfo = $this->_eventsManager->fire('order:getO2OExpressInfo', $this, ['consigneeInfo'=>$consigneeInfo]);
                     if ($o2oInfo['status'] == HttpStatus::SUCCESS) {
