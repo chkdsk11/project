@@ -341,9 +341,6 @@ class OrderService extends BaseService
                         'goodsList' => isset($result['goodsList']) ? $result['goodsList'] : [],
                         'user_id' => isset($param['user_id']) ? $param['user_id'] : 11,
                     ]) ? 1 : 0;
-                    if (isset($param['user_id']) && $param['user_id'] == 11020) {
-                        echo '<pre>';print_r($result['ifFacePay']);exit;
-                    }
                     // 极速配送
                     $o2oInfo = $this->_eventsManager->fire('order:getO2OExpressInfo', $this, ['consigneeInfo'=>$consigneeInfo]);
                     if ($o2oInfo['status'] == HttpStatus::SUCCESS) {
