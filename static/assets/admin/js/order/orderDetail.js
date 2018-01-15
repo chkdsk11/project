@@ -263,7 +263,7 @@ $(function(){
 					} else if (invoiceType == 2) {
 						tag += '单位';
 					} else if (invoiceType == 3) {
-						tag += '电子发票</p>';
+						tag += '纸质发票</p>';
 					}
 					tag += '</p>';
 					if (invoiceType != 0) {
