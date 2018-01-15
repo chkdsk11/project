@@ -854,6 +854,20 @@ class OrderService extends BaseService
         $info['operationLog'] = BaiyangOrderOperationLogData::getInstance()->getOperationLog([
             'orderSn'=>$orderSn
         ]);
+        //用户自提门店信息
+        $info['shopInfo'] = [];
+        if ($info['express_type'] == 1) {
+            $shopInfo = BaiyangOrderData::getInstance()->getOrderShopList($info['shop_id'], true);
+            if ($shopInfo) {
+                $regionName = $regionData->getRegionAll();
+                $shopInfo['province'] = is_numeric($shopInfo['province']) && isset($regionName[$shopInfo['province']]) ? $regionName[$shopInfo['province']] : $shopInfo['province'];
+                $shopInfo['city'] = is_numeric($shopInfo['city']) && isset($regionName[$shopInfo['city']]) ? $regionName[$shopInfo['city']] : $shopInfo['city'];
+                $shopInfo['county'] = is_numeric($shopInfo['county']) && isset($regionName[$shopInfo['county']]) ? $regionName[$shopInfo['county']] : $shopInfo['county'];
+                $shopInfo['address'] = $shopInfo['province'] . $shopInfo['city'] . $shopInfo['county'] .$shopInfo['address'];
+                $info['shopInfo'] = $shopInfo;
+            }
+            $info['shopInfo']['predictTime'] = $info['o2o_remark'];
+        }
         return $info;
     }
 
@@ -1158,6 +1172,7 @@ class OrderService extends BaseService
     /**
      * 获取所有子订单信息（含未拆分订单）
      * @param $totalSn array 母订单号
+     * @param $isTotal bool 是否根据母订单号查询
      * @return array
      * @author Chensonglu
      */
@@ -1171,6 +1186,9 @@ class OrderService extends BaseService
             $orderGoods = $this->getAllOrderGoods($totalSn, $isTotal);
             //获取子订单号
             $orderSn = array_column($result, 'order_sn');
+            //获取所有自提门店ID
+            $shopIdAll = array_column($result, 'shop_id');
+            $shopList = BaiyangOrderData::getInstance()->getOrderShopList($shopIdAll);
             //获取所有订单服务单信息
             $orderService = $this->getOrderService($orderSn);
             //获取地区信息
@@ -1219,6 +1237,12 @@ class OrderService extends BaseService
                         }
                     }
                 }
+                $info['shopInfo'] = [];
+                //自提门店信息
+                if ($info['express_type'] == 1) {
+                    $info['shopInfo'] = isset($shopList[$info['shop_id']]) ? $shopList[$info['shop_id']] : [];
+                    $info['shopInfo']['predictTime'] = $info['o2o_remark'];
+                }
                 if ($info['total_sn'] != $info['order_sn'] && $isTotal) {
                     $orderInfo[$info['total_sn']][] = $info;
                 } else {
@@ -1249,7 +1273,6 @@ class OrderService extends BaseService
         $getOrderInfo = $this->getOrderInfoAll($totalSn);
         foreach ($result['totalOrder'] as $key => $value) {
             //获取下单用户手机号
-            $user_id = 0;
             if (isset($getParentOrder[$value['total_sn']])) {
                 $value = $getParentOrder[$value['total_sn']];
                 $value['isTotal'] = 1;

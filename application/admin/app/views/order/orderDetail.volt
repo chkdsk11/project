@@ -197,22 +197,34 @@
 						0.00
 					{% endif %}
 				</p>
-				{% if orderInfo['express_sn'] is defined and orderInfo['express_sn'] != '' %}
-				<p>
-					物流公司：
-					{% if orderInfo['express'] is defined %}
-						{{ orderInfo['express'] }}
-					{% endif %}
-				</p>
-				<p>
-					物流单号：
-					{% if orderInfo['express_sn'] is defined %}
-						{{ orderInfo['express_sn'] }}
-					{% endif %}
-				</p>
+				{% if orderInfo['express_type'] is defined and orderInfo['express_type'] == 1 and orderInfo['shopInfo'] is defined and orderInfo['shopInfo'] is not empty %}
+					<p>
+						期望门店：{{ orderInfo['shopInfo']['trade_name'] }}
+					</p>
+					<p>
+						期望时间：{{ orderInfo['shopInfo']['predictTime'] }}
+					</p>
+					<p>
+						门店地址：{{ orderInfo['shopInfo']['address'] }}
+					</p>
 				{% else %}
-					<p>暂无物流信息</p>
-				{%endif%}
+					{% if orderInfo['express_sn'] is defined and orderInfo['express_sn'] != '' %}
+						<p>
+							物流公司：
+							{% if orderInfo['express'] is defined %}
+							{{ orderInfo['express'] }}
+							{% endif %}
+						</p>
+						<p>
+							物流单号：
+							{% if orderInfo['express_sn'] is defined %}
+							{{ orderInfo['express_sn'] }}
+							{% endif %}
+						</p>
+					{% else %}
+						<p>暂无物流信息</p>
+					{% endif %}
+				{% endif %}
 			</div>
 			<div class="col-xs-8 logistics-info">
 				<!-- 物流信息 -->
