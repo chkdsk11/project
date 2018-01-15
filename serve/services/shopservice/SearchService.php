@@ -76,7 +76,7 @@ class SearchService extends BaseService
         ]);
 		*/
 		$res = $baseData->getData([
-            'column' => $column,
+            'column' => "keywords",
             'table' => 'Shop\Models\BaiyangHistoricalOrigin',
             'where' => $where,
         ]);
