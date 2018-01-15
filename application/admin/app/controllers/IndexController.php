@@ -26,8 +26,8 @@ class IndexController extends ControllerBase
     {
         if($this->request->isPost()) {
             $post_type = $this->request->getPost('type');
+            $admin_id = $this->session->get('admin_id');
             if($post_type == 'clearCatch'){
-                $admin_id = $this->session->get('admin_id');
                 $this->cache->delete('statistics-'.$admin_id);
                 exit(json_encode(array('error'=>0,'msg'=>'清除缓存成功')));
             }else {
