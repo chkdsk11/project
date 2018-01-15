@@ -99,7 +99,7 @@ class HttpStatus
     const ORDER_NOT_REFUND_RECORD      = 510003; //没有该退款记录！
     const HAVE_REFUND_SERVICE_HANDLE   = 510004; //该订单还有服务单未处理完
     const NOT_REFUND_RULES             = 510005; //不符合退款规则
-    const REFUND_VESION_UPGRADE        = 510006; //系统升级中，您可到诚仁堂微信商城进行申请，带来不便深感歉意
+    const REFUND_VESION_UPGRADE        = 510006; //系统升级中，您可到{{companyName}}微信商城进行申请，带来不便深感歉意
     const REFUND_AUDITED               = 510007; // 退款申请已审核通过 不能撤销
 
     //收货地址(520001开始)
@@ -389,7 +389,7 @@ class HttpStatus
         self::HAVE_REFUND_SERVICE_HANDLE=>'该订单还有服务单未处理完',
         self::NOT_REFUND_RULES=>'不符合退款规则',
         self::PAY_MONEY_ERROR=>'支付金额不符',
-        self::REFUND_VESION_UPGRADE=>'系统升级中，您可到诚仁堂微信商城进行申请，带来不便深感歉意',
+        self::REFUND_VESION_UPGRADE=>'系统升级中，您可到{{companyName}}微信商城进行申请，带来不便深感歉意',
         self::GROUP_ID_ERROR => '拼团活动id有误',
         self::GROUP_PARAM_ERROR => '参数有误',
         self::GROUP_NOT_HAS => '拼团活动不存在',

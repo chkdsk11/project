@@ -160,111 +160,164 @@
                             {% for v in skuinfo %}
                             <tr id="product_list_{{ v['id'] }}">
                                 <form class="form-horizontal form_sku" action="/sku/edit" method="post" role="form" >
-                            <td class="center">
-                            <input type="text" name="sku_id" value="{{ v['id'] }}" readonly />
-                            </td>
-                            <td class="center">
-                            <input type="text" name="product_code" value="{{ v['product_code'] }}" readonly />
-                            </td>
-                            <td class="center">
-                            <input type="text" disabled="true" name="rule_value[]" class="rule_value_1" value="{% if v['rule'] is defined and v['rule'][0] is defined and productRule is defined and productRule['name_id'] is defined and v['rule'][0]['pid'] is productRule['name_id']['id'] %}{{ v['rule'][0]['name'] }}{% endif %}" {% if productRule is not defined or productRule['name_id'] is not defined %}readonly{% endif %}/>
-                            <input type="hidden" name="rule_pid[]" value="{% if productRule is defined and productRule['name_id'] is defined %}{{ productRule['name_id']['id'] }}{% else %}0{% endif %}">
-                            </td>
-                            <td class="center">
-                            <input type="text" disabled="true" name="rule_value[]" class="rule_value_2" value="{% if v['rule'] is defined and v['rule'][1] is defined and productRule is defined and productRule['name_id2'] is defined and v['rule'][1]['pid'] is productRule['name_id2']['id'] %}{{ v['rule'][1]['name'] }}{% endif %}" {% if productRule is not defined or productRule['name_id2'] is not defined %}readonly{% endif %}/>
-                                <input type="hidden" name="rule_pid[]" value="{% if productRule is defined and productRule['name_id2'] is defined %}{{ productRule['name_id2']['id'] }}{% else %}0{% endif %}">
-                            </td>
-                            <td class="center">
-                            <input type="text" disabled="true" name="rule_value[]" class="rule_value_3" value="{% if v['rule'] is defined and v['rule'][2] is defined and productRule is defined and productRule['name_id3'] is defined and v['rule'][2]['pid'] is productRule['name_id3']['id'] %}{{ v['rule'][2]['name'] }}{% endif %}" {% if productRule is not defined or productRule['name_id3'] is not defined %}readonly{% endif %}/>
-                                <input type="hidden" name="rule_pid[]" value="{% if productRule is defined and productRule['name_id3'] is defined %}{{ productRule['name_id3']['id'] }}{% else %}0{% endif %}">
-                            </td>
-                            <!--销售价-->
-                            <td class="center">
-                            <input type="text" disabled="true"  name="goods_price" value="{{ v['goods_price'] }}" class="product-price {% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}hide{% endif %}" />
-                            <div class="price-all {% if v['is_unified_price'] is defined and v['is_unified_price'] == 0 %}hide{% endif %}">
-                            <div>P C:  <input disabled="true" type="text" name="goods_price_pc" value="{{ v['info']['goods_price_pc'] }}" /> </div>
-                            <div>APP: <input disabled="true" type="text" name="goods_price_app" value="{{ v['info']['goods_price_app'] }}" /> </div>
-                            <div>WAP: <input disabled="true" type="text" name="goods_price_wap" value="{{ v['info']['goods_price_wap'] }}" /> </div>
-                            <div>微商城: <input disabled="true" type="text" name="goods_price_wechat" value="{{ v['info']['goods_price_wechat'] }}" /> </div>
-                            </div>
-                            <br/> <!--<button type="button" class="set_price">{% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}设置默认{% else %}设置不同端{% endif %}</button>-->
-                                {% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}<input type="hidden" name="is_unified_price" class="is_unified_price" value="1">{% else %}<input type="hidden" name="is_unified_price" class="is_unified_price" value="0">{% endif %}
-                            </td>
-                            <!--市场价-->
-                            <td class="center">
-                            <input type="text" disabled="true" name="market_price" value="{{ v['market_price'] }}"  class="product-price {% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}hide{% endif %}"  />
-                            <div class="price-all {% if v['is_unified_price'] is defined and v['is_unified_price'] == 0 %}hide{% endif %}">
-                            <div>P C: <input type="text" disabled="true" name="market_price_pc" value="{{ v['info']['market_price_pc'] }}" /> </div>
-                            <div>APP: <input type="text" disabled="true" name="market_price_app" value="{{ v['info']['market_price_app'] }}" /> </div>
-                            <div>WAP: <input type="text" disabled="true" name="market_price_wap" value="{{ v['info']['market_price_wap'] }}" /> </div>
-                            <div>微商城: <input type="text" disabled="true" name="market_price_wechat" value="{{ v['info']['market_price_wechat'] }}" /> </div>
-                            </div>
-                            </td>
+                                    <td class="center">
+                                    <input type="text" name="sku_id" value="{{ v['id'] }}" readonly />
+                                    </td>
+                                    <td class="center">
+                                    <input type="text" name="product_code" value="{{ v['product_code'] }}" readonly />
+                                    </td>
+                                    <td class="center">
+                                    <input type="text" disabled="true" name="rule_value[]" class="rule_value_1" value="{% if v['rule'] is defined and v['rule'][0] is defined and productRule is defined and productRule['name_id'] is defined and v['rule'][0]['pid'] is productRule['name_id']['id'] %}{{ v['rule'][0]['name'] }}{% endif %}" {% if productRule is not defined or productRule['name_id'] is not defined %}readonly{% endif %}/>
+                                    <input type="hidden" name="rule_pid[]" value="{% if productRule is defined and productRule['name_id'] is defined %}{{ productRule['name_id']['id'] }}{% else %}0{% endif %}">
+                                    </td>
+                                    <td class="center">
+                                    <input type="text" disabled="true" name="rule_value[]" class="rule_value_2" value="{% if v['rule'] is defined and v['rule'][1] is defined and productRule is defined and productRule['name_id2'] is defined and v['rule'][1]['pid'] is productRule['name_id2']['id'] %}{{ v['rule'][1]['name'] }}{% endif %}" {% if productRule is not defined or productRule['name_id2'] is not defined %}readonly{% endif %}/>
+                                        <input type="hidden" name="rule_pid[]" value="{% if productRule is defined and productRule['name_id2'] is defined %}{{ productRule['name_id2']['id'] }}{% else %}0{% endif %}">
+                                    </td>
+                                    <td class="center">
+                                    <input type="text" disabled="true" name="rule_value[]" class="rule_value_3" value="{% if v['rule'] is defined and v['rule'][2] is defined and productRule is defined and productRule['name_id3'] is defined and v['rule'][2]['pid'] is productRule['name_id3']['id'] %}{{ v['rule'][2]['name'] }}{% endif %}" {% if productRule is not defined or productRule['name_id3'] is not defined %}readonly{% endif %}/>
+                                        <input type="hidden" name="rule_pid[]" value="{% if productRule is defined and productRule['name_id3'] is defined %}{{ productRule['name_id3']['id'] }}{% else %}0{% endif %}">
+                                    </td>
+                                    <!--销售价-->
+                                    <td class="center">
+                                        <input type="text" disabled="true"  name="goods_price" value="{{ v['goods_price'] }}" class="product-price {% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}hide{% endif %}" />
+                                        <div class="price-all {% if v['is_unified_price'] is defined and v['is_unified_price'] == 0 %}hide{% endif %}">
+                                        {% if shopPlatform is defined and shopPlatform is not empty %}
+                                            {% set platformCount = shopPlatform|length %}
+                                            {% for lowerPlatform,platform in shopPlatform %}
+                                                {% set goodsPlatform = "goods_price_"~lowerPlatform %}
+                                                <div>{{ platform }}: <input disabled="true" type="text" name="goods_price_{{ lowerPlatform }}" value="{{ v['info'][goodsPlatform] }}" /> </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <!--<div>P C:  <input disabled="true" type="text" name="goods_price_pc" value="{{ v['info']['goods_price_pc'] }}" /> </div>
+                                        <div>APP: <input disabled="true" type="text" name="goods_price_app" value="{{ v['info']['goods_price_app'] }}" /> </div>
+                                        <div>WAP: <input disabled="true" type="text" name="goods_price_wap" value="{{ v['info']['goods_price_wap'] }}" /> </div>
+                                        <div>微商城: <input disabled="true" type="text" name="goods_price_wechat" value="{{ v['info']['goods_price_wechat'] }}" /> </div>-->
+                                        </div>
+                                        <br/>
+                                        {% if platformCount is defined and platformCount > 1 %}
+                                        <button type="button" class="set_price">{% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}设置默认{% else %}设置不同端{% endif %}</button>
+                                        {% elseif v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}
+                                            <button type="button" class="set_price">设置默认</button>
+                                        {% endif %}
+                                        <input type="hidden" name="is_unified_price" class="is_unified_price" value="{% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}1{% else %}0{% endif %}" />
+                                    </td>
+                                    <!--市场价-->
+                                    <td class="center">
+                                        <input type="text" disabled="true" name="market_price" value="{{ v['market_price'] }}"  class="product-price {% if v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}hide{% endif %}"  />
+                                        <div class="price-all {% if v['is_unified_price'] is defined and v['is_unified_price'] == 0 %}hide{% endif %}">
+                                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                {% for lowerPlatform,platform in shopPlatform %}
+                                                    {% set marketPlatform = 'market_price_'~ lowerPlatform %}
+                                                    <div>{{ platform }}: <input disabled="true" type="text" name="market_price_{{ lowerPlatform }}" value="{{ v['info'][marketPlatform] }}" /> </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        <!--<div>P C: <input type="text" disabled="true" name="market_price_pc" value="{{ v['info']['market_price_pc'] }}" /> </div>
+                                        <div>APP: <input type="text" disabled="true" name="market_price_app" value="{{ v['info']['market_price_app'] }}" /> </div>
+                                        <div>WAP: <input type="text" disabled="true" name="market_price_wap" value="{{ v['info']['market_price_wap'] }}" /> </div>
+                                        <div>微商城: <input type="text" disabled="true" name="market_price_wechat" value="{{ v['info']['market_price_wechat'] }}" /> </div>-->
+                                        </div>
+                                    </td>
 
-                            <td class="center">
-                            <select id="is_gift_change" name="is_gift" disabled="true" class="is_gift {% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 1 %}hide{% endif %}">
-                                <option  value="0" {% if v['product_type'] is defined and v['product_type'] == 0 %}selected{% endif %}>否</option>
-                                <option value="1" {% if v['product_type'] is defined and v['product_type'] == 1 %}selected{% endif %}>普通赠品</option>
-                                <option value="2" {% if v['info'] is defined and v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 2 %}selected{% endif %}>附属赠品</option>
-                            </select>
-                            <div class="gift-all {% if v['info']['whether_is_gift'] is not defined or v['info']['whether_is_gift'] != 1 %}hide{% endif %}">
-                                <div><span>P C:</span> <select name="gift_pc" disabled="true">
-                                                <option  value="0" {% if v['info']['gift_pc'] is not defined or v['info']['gift_pc'] != 1 %}selected{% endif %}>否</option>
-                                                <option value="1" {% if v['info']['gift_pc'] is defined and v['info']['gift_pc'] == 1 %}selected{% endif %}>普通赠品</option>
-                                            </select></div>
-                                <div><span>APP:</span> <select name="gift_app" disabled="true">
-                                                <option  value="0" {% if v['info']['gift_app'] is not defined or v['info']['gift_app'] != 1 %}selected{% endif %}>否</option>
-                                                <option value="1" {% if v['info']['gift_app'] is defined and v['info']['gift_app'] == 1 %}selected{% endif %}>普通赠品</option>
-                                            </select></div>
-                                <div><span>WAP:</span> <select name="gift_wap" disabled="true">
-                                                <option  value="0" {% if v['info']['gift_wap'] is not defined or v['info']['gift_wap'] != 1 %}selected{% endif %}>否</option>
-                                                <option value="1" {% if v['info']['gift_wap'] is defined and v['info']['gift_wap'] == 1 %}selected{% endif %}>普通赠品</option>
-                                            </select></div>
-                                <div><span>微商城:</span> <select name="gift_wechat" disabled="true">
-                                    <option  value="0" {% if v['info']['gift_wechat'] is not defined or v['info']['gift_wechat'] != 1 %}selected{% endif %}>否</option>
-                                    <option value="1" {% if v['info']['gift_wechat'] is defined and v['info']['gift_wechat'] == 1 %}selected{% endif %}>普通赠品</option>
-                                </select></div>
-                            </div>
-                            <br/> <!--<button type="button" class="set_whether_is_gift {% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 2 %}hide{% endif %}">{% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 1 %}统一设置{% else %}设置不同端{% endif %}</button>-->
-                                {% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 1 %}<input type="hidden" name="set_whether_is_gift" class="set_whether_is_gift" value="1">{% else %}<input type="hidden" name="set_whether_is_gift" class="set_whether_is_gift" value="0">{% endif %}
-                            </td>
+                                    <td class="center">
+                                        <select id="is_gift_change" name="is_gift" disabled="true" class="is_gift {% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 1 %}hide{% endif %}">
+                                            <option  value="0" {% if v['product_type'] is defined and v['product_type'] == 0 %}selected{% endif %}>否</option>
+                                            <option value="1" {% if v['product_type'] is defined and v['product_type'] == 1 %}selected{% endif %}>普通赠品</option>
+                                            <option value="2" {% if v['info'] is defined and v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 2 %}selected{% endif %}>附属赠品</option>
+                                        </select>
+                                        <div class="gift-all {% if v['info']['whether_is_gift'] is not defined or v['info']['whether_is_gift'] != 1 %}hide{% endif %}">
+                                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                {% for lowerPlatform,platform in shopPlatform %}
+                                                    {% set giftPlatform = 'gift_'~ lowerPlatform %}
+                                                    <div>
+                                                        <span>{{ platform }}:</span>
+                                                        <select name="gift_{{ lowerPlatform }}" disabled="true">
+                                                            <option  value="0" {% if v['info'][giftPlatform] is not defined or v['info'][giftPlatform] != 1 %}selected{% endif %}>否</option>
+                                                            <option value="1" {% if v['info'][giftPlatform] is defined and v['info'][giftPlatform] == 1 %}selected{% endif %}>普通赠品</option>
+                                                        </select>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <!--<div>
+                                                <span>P C:</span>
+                                                <select name="gift_pc" disabled="true">
+                                                    <option  value="0" {% if v['info']['gift_pc'] is not defined or v['info']['gift_pc'] != 1 %}selected{% endif %}>否</option>
+                                                    <option value="1" {% if v['info']['gift_pc'] is defined and v['info']['gift_pc'] == 1 %}selected{% endif %}>普通赠品</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span>APP:</span>
+                                                <select name="gift_app" disabled="true">
+                                                    <option  value="0" {% if v['info']['gift_app'] is not defined or v['info']['gift_app'] != 1 %}selected{% endif %}>否</option>
+                                                    <option value="1" {% if v['info']['gift_app'] is defined and v['info']['gift_app'] == 1 %}selected{% endif %}>普通赠品</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span>WAP:</span>
+                                                <select name="gift_wap" disabled="true">
+                                                    <option  value="0" {% if v['info']['gift_wap'] is not defined or v['info']['gift_wap'] != 1 %}selected{% endif %}>否</option>
+                                                    <option value="1" {% if v['info']['gift_wap'] is defined and v['info']['gift_wap'] == 1 %}selected{% endif %}>普通赠品</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span>微商城:</span>
+                                                <select name="gift_wechat" disabled="true">
+                                                    <option  value="0" {% if v['info']['gift_wechat'] is not defined or v['info']['gift_wechat'] != 1 %}selected{% endif %}>否</option>
+                                                    <option value="1" {% if v['info']['gift_wechat'] is defined and v['info']['gift_wechat'] == 1 %}selected{% endif %}>普通赠品</option>
+                                                </select>
+                                            </div>-->
+                                        </div>
+                                        <br/>
 
-                            <td class="center" data-id="{{ v['id'] }}">
-                                <div class="product_real_stock">
-                                    {% if v['is_use_stock'] is defined and v['is_use_stock'] == 1 %}
-                                        真实库存：{{ v['v_stock'] }}件
-                                    {% elseif v['is_use_stock'] is defined and v['is_use_stock'] == 2 %}
-                                        公共虚拟库存：{{ v['info']['virtual_stock_default'] }}件
-                                    {% elseif v['is_use_stock'] is defined and v['is_use_stock'] == 3 %}
-                                        <div>PC虚拟库存: {{ v['info']['virtual_stock_pc'] }}件 </div>
-                                        <div>APP虚拟库存: {{ v['info']['virtual_stock_app'] }}件 </div>
-                                        <div>WAP虚拟库存: {{ v['info']['virtual_stock_wap'] }}件</div>
-                                        <div>微商城虚拟库存: {{ v['info']['virtual_stock_wechat'] }}件</div>
-                                    {% endif %}
-                                    </div>
-                                <br><a href="javascript:;" class="modify-stock" >修改库存</a>
-                            </td>
-                            <td class="center">
-                                <select name="is_lock" disabled="true">
-                                    <option  value="0" {% if v['is_lock'] is defined and v['is_lock'] == 0 %}selected{% endif %}>否</option>
-                                    <option value="1" {% if v['is_lock'] is defined and v['is_lock'] == 1 %}selected{% endif %}>是</option>
-                                </select>
-                            </td>
-                            <td class="center">
-                                <input type="text" disabled="true" name="sort" style="width: 50px;text-align:center;" value="{{ v['sort'] }}">
-                            </td>
-                            <td class="center">
-                                {{ v['supplier_name'] }}
-                            </td>
-                            <td class="center">
-                            <button type="button" class="product-list-delect"> 删除</button>
-                            <br>
-                                <input type="hidden" name="spu_id" value="{{ spu['spu_id'] }}">
-                            <button type="button" class="save_msg"> 修改</button>
-                                <!--<br>-->
-                            <!--<button type="button" class="save_msg_cancel hide">取消</button>-->
-                            </td>
-                                    </form>
+                                        {% if platformCount is defined and platformCount > 1 %}
+                                        <button type="button" class="set_whether_is_gift">{% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 1 %}设置默认{% else %}设置不同端{% endif %}</button>
+                                        {% elseif v['is_unified_price'] is defined and v['is_unified_price'] == 1 %}
+                                        <button type="button" class="set_whether_is_gift">设置默认</button>
+                                        {% endif %}
+                                        <input type="hidden" name="set_whether_is_gift" class="set_whether_is_gift" value="{% if v['info']['whether_is_gift'] is defined and v['info']['whether_is_gift'] == 1 %}1{% else %}0{% endif %}">
+                                    </td>
+
+                                    <td class="center" data-id="{{ v['id'] }}">
+                                        <div class="product_real_stock">
+                                            {% if v['is_use_stock'] is defined and v['is_use_stock'] == 1 %}
+                                                真实库存：{{ v['v_stock'] }}件
+                                            {% elseif v['is_use_stock'] is defined and v['is_use_stock'] == 2 %}
+                                                公共虚拟库存：{{ v['info']['virtual_stock_default'] }}件
+                                            {% elseif v['is_use_stock'] is defined and v['is_use_stock'] == 3 %}
+                                                {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                    {% for lowerPlatform,platform in shopPlatform %}
+                                                        {% set stockPlatform = 'virtual_stock_'~ lowerPlatform %}
+                                                        <div>{{ platform }}虚拟库存: {{ v['info'][stockPlatform] }}件 </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <!--<div>APP虚拟库存: {{ v['info']['virtual_stock_app'] }}件 </div>
+                                                <div>WAP虚拟库存: {{ v['info']['virtual_stock_wap'] }}件</div>
+                                                <div>微商城虚拟库存: {{ v['info']['virtual_stock_wechat'] }}件</div>-->
+                                            {% endif %}
+                                            </div>
+                                        <br><a href="javascript:;" class="modify-stock" >修改库存</a>
+                                    </td>
+                                    <td class="center">
+                                        <select name="is_lock" disabled="true">
+                                            <option  value="0" {% if v['is_lock'] is defined and v['is_lock'] == 0 %}selected{% endif %}>否</option>
+                                            <option value="1" {% if v['is_lock'] is defined and v['is_lock'] == 1 %}selected{% endif %}>是</option>
+                                        </select>
+                                    </td>
+                                    <td class="center">
+                                        <input type="text" disabled="true" name="sort" style="width: 50px;text-align:center;" value="{{ v['sort'] }}">
+                                    </td>
+                                    <td class="center">
+                                        {{ v['supplier_name'] }}
+                                    </td>
+                                    <td class="center">
+                                        <button type="button" class="product-list-delect"> 删除</button>
+                                        <br>
+                                            <input type="hidden" name="spu_id" value="{{ spu['spu_id'] }}">
+                                        <button type="button" class="save_msg"> 修改</button>
+                                            <!--<br>-->
+                                        <!--<button type="button" class="save_msg_cancel hide">取消</button>-->
+                                    </td>
+                                </form>
                             </tr>
                             {% endfor %}
                             {% endif %}
@@ -290,13 +343,20 @@
                                     <div class="modal-body">
                                         <div id="real-stock"><label><input type="radio" name="stock" class="stock stock-real" value="1">真实库存：</label><span class="stock-real-k">2000</span>件</div>
                                         <div><label><input type="radio" name="stock" class="stock stock-public" value="2">公共虚拟库存：</label><input type="text" class="pdc-stock-default" name="virtual_stock_default" value="">件</div>
-                                        <!--<div>
+                                        <div>
                                             <label><input type="radio" name="stock" class="stock stock-virtual" value="3">虚拟库存:</label><br>
-                                            <label class="virtual_stock_value">PC虚拟库存：<input type="text" class="pdc-stock-pc" name="virtual_stock_pc" value="">件</label>
+                                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                {% for lowerPlatform,platform in shopPlatform %}
+                                                    {% set stockPlatform = 'virtual_stock_'~ lowerPlatform %}
+                                                    {% set pdc_stock = 'pdc-stock-'~ lowerPlatform %}
+                                                    <label class="virtual_stock_value">{{ platform }}虚拟库存：<input type="text" class="{{ pdc_stock }}" name="{{ stockPlatform }}" value="">件</label>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <!--<label class="virtual_stock_value">PC虚拟库存：<input type="text" class="pdc-stock-pc" name="virtual_stock_pc" value="">件</label>
                                             <label class="virtual_stock_value">WAP虚拟库存：<input type="text" class="pdc-stock-wap" name="virtual_stock_wap" value="">件</label>
                                             <label class="virtual_stock_value">APP虚拟库存：<input type="text" class="pdc-stock-app" name="virtual_stock_app" value="">件</label>
-                                            <label class="virtual_stock_value">微商城虚拟库存：<input type="text" class="pdc-stock-wechat" name="virtual_stock_wechat" value="">件</label>
-                                        </div>-->
+                                            <label class="virtual_stock_value">微商城虚拟库存：<input type="text" class="pdc-stock-wechat" name="virtual_stock_wechat" value="">件</label>-->
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -395,28 +455,36 @@
                                     </div>
                                 </div>
                                 <div class="space-4"></div>
-                                <div class="form-group">
+                                {% set pceShow = 'show' %}
+                                {% if shopPlatform['pc'] is not defined %}
+                                {% set pceShow = 'hide' %}
+                                {% endif %}
+                                <div class="form-group {{ pceShow }}">
                                     <label class="col-sm-2 control-label no-padding-right">商品名称PC端：</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="col-xs-10 col-sm-5" id="fp_name_pc1" name="sku_pc_name" value="{% if skuDefault['sku_pc_name'] is defined %}{{ skuDefault['sku_pc_name']}}{% endif %}" />
                                     </div>
                                 </div>
                                 <div class="space-4"></div>
-                                <div class="form-group">
+                                <div class="form-group {{ pceShow }}">
                                     <label class="col-sm-2 control-label no-padding-right">商品副标题PC端：</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="col-xs-10 col-sm-5" id="fp_name_pc2" name="sku_pc_subheading" value="{% if skuDefault['sku_pc_subheading'] is defined %}{{ skuDefault['sku_pc_subheading']}}{% endif %}" />
                                     </div>
                                 </div>
                                 <div class="space-4"></div>
-                                <div class="form-group">
+                                {% set mobileShow = 'show' %}
+                                {% if shopPlatform['wap'] is not defined and shopPlatform['app'] is not defined and shopPlatform['wechat'] is not defined %}
+                                    {% set mobileShow = 'hide' %}
+                                {% endif %}
+                                <div class="form-group {{ mobileShow }}">
                                     <label class="col-sm-2 control-label no-padding-right">商品名称移动端：</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="col-xs-10 col-sm-5" id="fp_name_mobile" name="sku_mobile_name" value="{% if skuDefault['sku_mobile_name'] is defined %}{{ skuDefault['sku_mobile_name']}}{% endif %}" />
                                     </div>
                                 </div>
                                 <div class="space-4"></div>
-                                <div class="form-group">
+                                <div class="form-group  {{ mobileShow }}">
                                     <label class="col-sm-2 control-label no-padding-right">商品副标题移动端：</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="col-xs-10 col-sm-5"  id="fp_name_mobile2" name="sku_mobile_subheading" value="{% if skuDefault['sku_mobile_subheading'] is defined %}{{ skuDefault['sku_mobile_subheading']}}{% endif %}"/>
@@ -812,8 +880,8 @@
                 <div class="title-prompt title-prompt1">详情管理</div>
                 <div class="product-panel edit-info-list">
                     <div class="goods-port">
-                        <a id="pc" class="active" href="javascript:;">PC</a>
-                        <a id="mobile" href="javascript:;">移动端</a>
+                        <a id="pc" class="active {{ pceShow }}" href="javascript:;">PC</a>
+                        <a id="mobile" class="{% if pceShow is defined and pceShow == 'hide'  %}active{% endif %} {{ mobileShow }}" href="javascript:;">移动端</a>
                     </div>
                         <div class="goods-nav">
                             <a id="model_0" class="active" href="javascript:;">默认</a>
@@ -825,7 +893,7 @@
                         </div>
                         <form  class="form-horizontal" action="/sku/editModel" role="form" id="save_product_model_form">
                             <!--判断点击的是pc 还是移动端-->
-                            <input type="hidden" name="is-pc" value="pc" id="is_port" />
+                            <input type="hidden" name="is-pc" value="{% if pceShow is defined and pceShow == 'hide'  %}mobile{% else %}pc{% endif %}" id="is_port" />
                             <!--点击的商品id-->
                             <input type="hidden" name="goods-id" value="0" id="goods_model_id" />
 
@@ -894,19 +962,19 @@
                                     <div id="goods_check_1_{{ v['id'] }}" class="checkbox-list">
                                         <label>
                                             <span class="lbl">{{ v['id'] }} {{ v['rule_value_id'] }}</span>
-                                            <select class="select-sale-pc-{{ v['id'] }}" name="is_on_sale[]">
+                                            <select class="select-sale-pc-{{ v['id'] }} {% if shopPlatform['pc'] is not defined %}hide{% endif %}" name="is_on_sale[]">
                                                 <option value="1" {% if v['is_on_sale'] is defined and v['is_on_sale'] == 1 %}selected{% endif %}>pc 上架</option>
                                                 <option value="0" {% if v['is_on_sale'] is defined and v['is_on_sale'] != 1 %}selected{% endif %}>pc 下架</option>
                                             </select>
-                                            <select class="select-sale-app-{{ v['id'] }}" name="sale_timing_app[]">
+                                            <select class="select-sale-app-{{ v['id'] }} {% if shopPlatform['app'] is not defined %}hide{% endif %}" name="sale_timing_app[]">
                                                 <option value="1" {% if v['sale_timing_app'] is defined and v['sale_timing_app'] == 1 %}selected{% endif %}>app 上架</option>
                                                 <option value="0" {% if v['sale_timing_app'] is defined and v['sale_timing_app'] != 1 %}selected{% endif %}>app 下架</option>
                                             </select>
-                                            <select class="select-sale-wap-{{ v['id'] }}" name="sale_timing_wap[]">
+                                            <select class="select-sale-wap-{{ v['id'] }} {% if shopPlatform['wap'] is not defined %}hide{% endif %}" name="sale_timing_wap[]">
                                                 <option value="1" {% if v['sale_timing_wap'] is defined and v['sale_timing_wap'] == 1 %}selected{% endif %}>wap 上架</option>
                                                 <option value="0" {% if v['sale_timing_wap'] is defined and v['sale_timing_wap'] != 1 %}selected{% endif %}>wap 下架</option>
                                             </select>
-                                            <select class="select-sale-wechat-{{ v['id'] }}" name="sale_timing_wechat[]">
+                                            <select class="select-sale-wechat-{{ v['id'] }} {% if shopPlatform['wechat'] is not defined %}hide{% endif %}" name="sale_timing_wechat[]">
                                                 <option value="1" {% if v['sale_timing_wechat'] is defined and v['sale_timing_wechat'] == 1 %}selected{% endif %}>微商城 上架</option>
                                                 <option value="0" {% if v['sale_timing_wechat'] is defined and v['sale_timing_wechat'] != 1 %}selected{% endif %}>微商城 下架</option>
                                             </select>
@@ -945,24 +1013,46 @@
                                         <span class="lbl">{{ v['id'] }} {{ v['rule_value_id'] }}</span>
                                         <div class="current_left">
                                             <!--当前上下架状态：-->
-                                                <span class="allTime">
-                                                    所有端<em class="span_red">(PC端{% if v['is_on_sale'] is defined and v['is_on_sale'] == 1 %}已上架{% else %}未上架{% endif %},
-                                                APP端{% if v['sale_timing_app'] is defined and v['sale_timing_app'] == 1 %}已上架{% else %}未上架{% endif %},
-                                                WAP端{% if v['sale_timing_wap'] is defined and v['sale_timing_wap'] == 1 %}已上架{% else %}未上架{% endif %},
-                                                微商城{% if v['sale_timing_wechat'] is defined and v['sale_timing_wechat'] == 1 %}已上架{% else %}未上架{% endif %})
-                                                </em></span>
+                                            <span class="allTime">
+                                                所有端
+                                                <em class="span_red">
+                                                    ({% if shopPlatform['pc'] is defined %}PC端{% if v['is_on_sale'] is defined and v['is_on_sale'] == 1 %}已上架{% else %}未上架{% endif %}{% endif %},
+                                                    {% if shopPlatform['app'] is defined %}APP端{% if v['sale_timing_app'] is defined and v['sale_timing_app'] == 1 %}已上架{% else %}未上架{% endif %}{% endif %},
+                                                    {% if shopPlatform['wap'] is defined %}WAP端{% if v['sale_timing_wap'] is defined and v['sale_timing_wap'] == 1 %}已上架{% else %}未上架{% endif %}{% endif %},
+                                                    {% if shopPlatform['wechat'] is defined %}微商城{% if v['sale_timing_wechat'] is defined and v['sale_timing_wechat'] == 1 %}已上架{% else %}未上架{% endif %}{% endif %})
+                                                </em>
+                                            </span>
+                                            {% if shopPlatform['pc'] is defined %}
                                                 <span class="eachTime">
-                                                    PC端<em class="span_red">({% if v['is_on_sale'] is defined and v['is_on_sale'] == 1 %}已上架{% else %}未上架{% endif %})
-                                                </em></span>
+                                                    PC端
+                                                    <em class="span_red">
+                                                        ({% if v['is_on_sale'] is defined and v['is_on_sale'] == 1 %}已上架{% else %}未上架{% endif %})
+                                                    </em>
+                                                </span>
+                                            {% endif %}
+                                            {% if shopPlatform['app'] is defined %}
                                                 <span class="eachTime">
-                                                APP端<em class="span_red">({% if v['sale_timing_app'] is defined and v['sale_timing_app'] == 1 %}已上架{% else %}未上架{% endif %})
-                                                </em></span>
+                                                    APP端
+                                                    <em class="span_red">
+                                                        ({% if v['sale_timing_app'] is defined and v['sale_timing_app'] == 1 %}已上架{% else %}未上架{% endif %})
+                                                    </em>
+                                                </span>
+                                            {% endif %}
+                                            {% if shopPlatform['wap'] is defined %}
                                                 <span class="eachTime">
-                                                WAP端<em class="span_red">({% if v['sale_timing_wap'] is defined and v['sale_timing_wap'] == 1 %}已上架{% else %}未上架{% endif %})
-                                                </em></span>
+                                                    WAP端
+                                                    <em class="span_red">
+                                                        ({% if v['sale_timing_wap'] is defined and v['sale_timing_wap'] == 1 %}已上架{% else %}未上架{% endif %})
+                                                    </em>
+                                                </span>
+                                            {% endif %}
+                                            {% if shopPlatform['wechat'] is defined %}
                                                 <span class="eachTime">
-                                                微商城<em class="span_red">({% if v['sale_timing_wechat'] is defined and v['sale_timing_wechat'] == 1 %}已上架{% else %}未上架{% endif %})
-                                                </em></span>
+                                                    微商城
+                                                    <em class="span_red">({% if v['sale_timing_wechat'] is defined and v['sale_timing_wechat'] == 1 %}已上架{% else %}未上架{% endif %})
+                                                    </em>
+                                                </span>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <!--<input name="sku_id_time[]" type="hidden" value="{{ v['id'] }}">-->
@@ -983,7 +1073,14 @@
                                     <div class="eachTime">
                                         <div class="row">
                                             <label class="col-sm-2 control-label" >定时上架</label>
-                                            <div class="col-sm-4 pr">
+                                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                {% for lowerPlatform,platform in shopPlatform %}
+                                                    <div class="col-sm-4 pr">
+                                                        <input placeholder="请选择上架时间" name="time_start_{{ lowerPlatform }}[]" class="laydate-icon time_start_{{ lowerPlatform }}" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss',laydate})">
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <!--<div class="col-sm-4 pr">
                                                 <input placeholder="请选择上架时间" name="time_start_pc[]" class="laydate-icon time_start_pc" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss',laydate})">
                                             </div>
                                             <div class="col-sm-4 pr">
@@ -994,11 +1091,18 @@
                                             </div>
                                             <div class="col-sm-4 pr">
                                                 <input placeholder="请选择上架时间" name="time_start_wechat[]" class="laydate-icon time_start_wechat" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss',laydate})">
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div class="row mt_10">
                                             <label class="col-sm-2 control-label " >定时下架</label>
-                                            <div class="col-sm-4">
+                                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                {% for lowerPlatform,platform in shopPlatform %}
+                                                    <div class="col-sm-4">
+                                                        <input placeholder="请选择下架时间" name="time_end_{{ lowerPlatform }}[]" class="laydate-icon time_end_{{ lowerPlatform }}" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <!--<div class="col-sm-4">
                                                 <input placeholder="请选择下架时间" name="time_end_pc[]" class="laydate-icon time_end_pc" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
                                             </div>
                                             <div class="col-sm-4">
@@ -1009,7 +1113,7 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <input placeholder="请选择下架时间" name="time_end_wechat[]" class="laydate-icon time_end_wechat" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -1145,6 +1249,17 @@
                 </label>
                 <input type="text" name="stock" class="stock-price" value="" />件
             </div>
+	    {% if shopPlatform is defined and shopPlatform is not empty %}
+                {% for lowerPlatform,platform in shopPlatform %}
+		    <div class="checkbox stock-checkbox">
+	                <label>
+	                    <input name="stock-checkbox" type="checkbox" class="ace"  value="{% if lowerPlatform == 'pc' %}1{% elseif lowerPlatform == 'app' %}2{% elseif lowerPlatform == 'wechat' %}4{% else %}3{% endif %}">
+	                    <span class="lbl">{{ platform }}虚拟公存</span>
+	                </label>
+	                <input type="text" name="stock" class="stock-price" value="" />件
+	            </div>
+                {% endfor %}
+            {% endif %}
             <!--<div class="checkbox stock-checkbox">
                 <label>
                     <input name="stock-checkbox" type="checkbox" class="ace"  value="1">

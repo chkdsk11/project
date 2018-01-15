@@ -26,22 +26,14 @@
                     <label class="col-sm-1 control-label no-padding-left" > 活动平台</label>
                     <div class="col-sm-5">
                         <div class="checkbox">
+                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                            {% for key,platform in shopPlatform %}
                             <label>
-                                <input name="use_platform[]" type="checkbox" class="ace" value="1" checked>
-                                <span class="lbl">&nbsp;Pc</span>
+                                <input name="use_platform[]" type="checkbox" class="ace" value="{% if key === 'pc' %}1{% elseif key === 'app' %}2{% elseif key === 'wechat' %}4{% else %}3{% endif %}" checked>
+                                <span class="lbl">&nbsp;{{ platform }}</span>
                             </label>
-                            <label>
-                                <input name="use_platform[]" type="checkbox" class="ace" value="2" checked>
-                                <span class="lbl">&nbsp;App</span>
-                            </label>
-                            <label>
-                                <input name="use_platform[]" type="checkbox" class="ace" value="3" checked>
-                                <span class="lbl">&nbsp;Wap</span>
-                            </label>
-                            <label style="display: none">
-                                <input name="use_platform[]" type="checkbox" class="ace" value="4" checked>
-                                <span class="lbl">&nbsp;微商城</span>
-                            </label>
+                            {% endfor %}
+                            {% endif %}
                         </div>
 
                     </div>

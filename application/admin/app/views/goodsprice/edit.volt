@@ -60,22 +60,15 @@
                             <div class="form-group" id="platform">
                                 <label class="col-sm-3 control-label no-padding-right"> 适用平台： </label>
                                 <div class="checkbox promotion_mutex">
-                                    <label>
-                                        <input name="platform_pc" type="checkbox" {% if info['platform_pc'] == 1 %}checked{% endif %} class="ace" value="1">
-                                        <span class="lbl">&nbsp;PC</span>
-                                    </label>
-                                    <label>
-                                        <input name="platform_app" type="checkbox" {% if info['platform_app'] == 1 %}checked{% endif %} class="ace" value="1">
-                                        <span class="lbl">&nbsp;APP</span>
-                                    </label>
-                                    <label>
-                                        <input name="platform_wap" type="checkbox" {% if info['platform_wap'] == 1 %}checked{% endif %} class="ace" value="1">
-                                        <span class="lbl">&nbsp;WAP</span>
-                                    </label>
-                                    <label style="display: none">
-                                        <input name="platform_wechat" type="checkbox" {% if info['platform_wechat'] == 1 %}checked{% endif %} class="ace" value="0">
-                                        <span class="lbl">&nbsp;微商城</span>
-                                    </label>
+                                    {% if shopPlatform is defined and shopPlatform is not empty %}
+                                        {% for key,platform in shopPlatform %}
+											{% set promotionKey = 'platform_'~key %}
+                                            <label>
+                                                <input name="platform_{{ key }}" type="checkbox" class="ace" value="1" {% if info[promotionKey] == 1 %}checked{% endif %} >
+                                                <span class="lbl">&nbsp;{{ platform }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="form-group">

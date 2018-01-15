@@ -339,6 +339,7 @@ class OrderService extends BaseService
                     $result['ifFacePay'] = BaiyangPaymentData::getInstance()->checkCashOnDelivery([
                         'channel_subid' => isset($param['channel_subid']) ? $param['channel_subid'] : 95,
                         'goodsList' => isset($result['goodsList']) ? $result['goodsList'] : [],
+                        'user_id' => isset($param['user_id']) ? $param['user_id'] : 11,
                     ]) ? 1 : 0;
                     // 极速配送
                     $o2oInfo = $this->_eventsManager->fire('order:getO2OExpressInfo', $this, ['consigneeInfo'=>$consigneeInfo]);
