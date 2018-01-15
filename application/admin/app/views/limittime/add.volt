@@ -53,22 +53,14 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right"> <span  class="text-red">*</span>活动平台 </label>
                                 <div class="checkbox promotion_platform">
-                                    <label>
-                                        <input name="promotion_platform_pc" type="checkbox" class="ace" value="1" checked>
-                                        <span class="lbl">&nbsp;PC</span>
-                                    </label>
-                                    <label>
-                                        <input name="promotion_platform_app" type="checkbox" class="ace" value="1" checked>
-                                        <span class="lbl">&nbsp;APP</span>
-                                    </label>
-                                    <label>
-                                        <input name="promotion_platform_wap" type="checkbox" class="ace" value="1" checked>
-                                        <span class="lbl">&nbsp;WAP</span>
-                                    </label>
-                                    <label style="display: none">
-                                        <input name="promotion_platform_wechat" type="checkbox" class="ace" value="0">
-                                        <span class="lbl">&nbsp;微商城</span>
-                                    </label>
+                                    {% if shopPlatform is defined and shopPlatform is not empty %}
+                                        {% for key,platform in shopPlatform %}
+                                            <label>
+                                                <input name="promotion_platform_{{ key }}" type="checkbox" class="ace" value="1" checked>
+                                                <span class="lbl">&nbsp;{{ platform }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
 

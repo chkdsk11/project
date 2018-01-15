@@ -179,14 +179,23 @@
                                         上下架状态:
                                         <select name="is_on_sale" class="sku_select">
                                             <option value="0">所有端</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 1 %}selected{% endif %} value="1">pc端上架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 2 %}selected{% endif %} value="2">pc端下架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 3 %}selected{% endif %} value="3">app端上架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 4 %}selected{% endif %} value="4">app端下架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 5 %}selected{% endif %} value="5">wap端上架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 6 %}selected{% endif %} value="6">wap端下架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 7 %}selected{% endif %} value="7">微商城端上架</option>
-                                            <option {% if is_on_sale is defined and is_on_sale == 8 %}selected{% endif %} value="8">微商城端下架</option>
+                                            {% if shopPlatform is defined and shopPlatform is not empty %}
+                                                {% for key,platform in shopPlatform %}
+                                                    {% if key === 'pc' %}
+                                                        <option {% if is_on_sale is defined and is_on_sale == 1 %}selected{% endif %} value="1">pc端上架</option>
+                                                        <option {% if is_on_sale is defined and is_on_sale == 2 %}selected{% endif %} value="2">pc端下架</option>
+                                                    {% elseif key === 'app' %}
+                                                        <option {% if is_on_sale is defined and is_on_sale == 3 %}selected{% endif %} value="3">app端上架</option>
+                                                        <option {% if is_on_sale is defined and is_on_sale == 4 %}selected{% endif %} value="4">app端下架</option>
+                                                    {% elseif key === 'wap' %}
+                                                        <option {% if is_on_sale is defined and is_on_sale == 5 %}selected{% endif %} value="5">wap端上架</option>
+                                                        <option {% if is_on_sale is defined and is_on_sale == 6 %}selected{% endif %} value="6">wap端下架</option>
+                                                    {% elseif key === 'wechat' %}
+                                                        <option {% if is_on_sale is defined and is_on_sale == 7 %}selected{% endif %} value="7">微商城端上架</option>
+                                                        <option {% if is_on_sale is defined and is_on_sale == 8 %}selected{% endif %} value="8">微商城端下架</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
                                         </select>
                                     </label>
                                 </div>
@@ -242,10 +251,15 @@
                                 <th class="center sku_menu_row5">
                                     <select class="change_sale">
                                         <option value="0">所有端</option>
-                                        <option value="pc">pc端</option>
+                                        {% if shopPlatform is defined and shopPlatform is not empty %}
+                                        {% for key,platform in shopPlatform %}
+                                            <option value="{{ key }}">{{ platform }}端</option>
+                                        {% endfor %}
+                                        {% endif %}
+                                        <!--<option value="pc">pc端</option>
                                         <option value="app">app端</option>
                                         <option value="wap">wap端</option>
-                                        <option value="wechat">微商城端</option>
+                                        <option value="wechat">微商城端</option>-->
                                     </select>
                                 </th>
                                 <th class="center sku_menu_row5">
@@ -369,6 +383,16 @@
     <div class="popup-content">
         <div class="title">请选择需要上架\下架的平台： <a id="close_popup_stock" href="javascript:;">&times;</a></div>
         <div class="radio stock-radio">
+            {% if shopPlatform is defined and shopPlatform is not empty %}
+                {% for key,platform in shopPlatform %}
+                    <div class="checkbox stock-checkbox">
+                        <label>
+                            <input name="stock_checkbox" type="checkbox" class="ace" value="{{ key }}" >
+                            <span class="lbl">{{ platform }} 端</span>
+                        </label>
+                    </div>
+                {% endfor %}
+            {% endif %}
             <!--<div class="checkbox stock-checkbox">
                 <label>
                     <input name="stock_checkbox" type="checkbox" class="ace" value="pc" >
@@ -380,7 +404,7 @@
                     <input name="stock_checkbox" type="checkbox" class="ace"  value="app">
                     <span class="lbl">app 端</span>
                 </label>
-            </div>-->
+            </div>
             <div class="checkbox stock-checkbox">
                 <label>
                     <input name="stock_checkbox" type="checkbox" class="ace" value='wap' >
@@ -392,7 +416,7 @@
                     <input name="stock_checkbox" type="checkbox" class="ace" value='wechat' >
                     <span class="lbl">微商城 端</span>
                 </label>
-            </div>
+            </div>-->
             <button	 id="save_stock" style="margin-left:230px;">保存</button>
             <input type="hidden" name="sale" value=""/>
         </div>

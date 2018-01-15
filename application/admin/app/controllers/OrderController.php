@@ -26,19 +26,43 @@ class OrderController extends ControllerBase
         //发货商家
         $this->view->setVar('shops', $list->getShops());
         //下单终端
-        $this->view->setVar('terminal', $list->orderTerminal);
+        $terminal = $list->orderTerminal;
+        $configPlatform = $this->config['shop_platform'] ? (array)$this->config['shop_platform']: ['wap' => 'WAP'];
+        if (!isset($configPlatform['wechat'])) {
+            unset($terminal[85]);
+        }
+        if (!isset($configPlatform['pc'])) {
+            unset($terminal[95]);
+        }
+        if (!isset($configPlatform['wap'])) {
+            unset($terminal[91]);
+        }
+        if (!isset($configPlatform['app'])) {
+            unset($terminal[89],$terminal[90]);
+        }
+        $this->view->setVar('terminal', $terminal);
         //付款方式
         $this->view->setVar('payment', $list->orderPayment);
         //配送方式
         $this->view->setVar('delivery', array_flip($list->orderDelivery));
         //订单来源
-        $this->view->setVar('source', $list->orderSource);
+        $source = $list->orderSource;
+        if ($source && $this->config['company_name']) {
+            foreach ($source as $key => $value) {
+                $source[$key] = str_replace("自营",$this->config['company_name'],$value);
+            }
+        } else {
+            $source = $this->config['company_name'] ? [1 => $this->config['company_name']] : [1 => '自营'];
+        }
+        $this->view->setVar('source', $source);
         //订单状态
         $this->view->setVar('orderStat', $list->orderStat);
         //退款状态
         $refundState = array_flip(RefundService::getInstance()->refundState);
         $refundState[7] = '待卖家退款';
         $this->view->setVar('refundState', $refundState);
+        //商品跳转地址
+        $this->view->setVar('jumpUrl', $this->config['wap_base_url'][$this->config->environment]);
     }
 
     /**

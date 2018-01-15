@@ -70,4 +70,20 @@ class SearchController extends ControllerBase
         $res = SearchService::getInstance()->appendToBlacklist($param);
         return $this->response->setJsonContent($res);
     }
+
+    /**
+     * 热门搜索
+     */
+    public function editHotSearchAction()
+    {
+        if($this->request->isPost()){
+            $param = $this->request->getPost();
+            $result = SearchService::getInstance()->editHotSearch($param);
+            return $this->response->setJsonContent($result);
+        }else{
+            $data = SearchService::getInstance()->getHotSearch();
+            $this->view->setVar('data',$data);
+            $this->view->pick('search/edithotsearch');
+        }
+    }
 }

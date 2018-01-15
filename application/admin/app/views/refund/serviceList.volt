@@ -256,7 +256,7 @@
 											{% if val['products'][0] is defined %}
 												{% for product in val['products'] %}
 													<div class="item">
-                                    					<a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                    					<a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
 															<img src="{{ product['goods_image'] }}">
 														</a>
 														<p class="pro-name">
@@ -267,7 +267,7 @@
 															{% elseif product['drug_type'] == 3 %}
 																<span class="icon-drug-green">OTC</span>
 															{% endif %}
-                                    						<a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                    						<a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
 																{{ product['goods_name'] }}
 															</a>
 														</p>
@@ -381,7 +381,7 @@
 {% block footer %}
 <!-- 弹框-阴影 -->
 <div class="pop-frame-shadow"></div>
-<input type="hidden" id="serviceSn" data-pcUrl="{{ config.pc_url[config.environment] }}" value="" />
+<input type="hidden" id="serviceSn" data-pcUrl="{{ jumpUrl }}" value="" />
 <!-- 审核-->
 <div class="pop-frame-content pop-verify">
 	<i class="ace-icon glyphicon glyphicon-remove"></i>

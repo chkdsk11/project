@@ -99,7 +99,7 @@ class HttpStatus
     const ORDER_NOT_REFUND_RECORD      = 510003; //没有该退款记录！
     const HAVE_REFUND_SERVICE_HANDLE   = 510004; //该订单还有服务单未处理完
     const NOT_REFUND_RULES             = 510005; //不符合退款规则
-    const REFUND_VESION_UPGRADE        = 510006; //系统升级中，您可到诚仁堂微信商城进行申请，带来不便深感歉意
+    const REFUND_VESION_UPGRADE        = 510006; //系统升级中，您可到{{companyName}}微信商城进行申请，带来不便深感歉意
     const REFUND_AUDITED               = 510007; // 退款申请已审核通过 不能撤销
 
     //收货地址(520001开始)
@@ -197,6 +197,7 @@ class HttpStatus
 
     //移动端状态码(不会使用，仅供参考)
     const EMPTY_RESULT              = 30001; //结果为空
+    const ACCOUNT_FREEZE            = 31000; //该账号已冻结！
     const ACCOUNT_HAVE_EXISTED      = 31001; //账号已存在！
     const ACCOUNT_NOT_EXISTED       = 31002; //账号不存在！
     const ACCOUNT_OR_PWD_ERROR      = 31003; //账号或密码错误！
@@ -288,6 +289,7 @@ class HttpStatus
 
         self::EMPTY_RESULT           => '结果为空',
         self::ACCOUNT_HAVE_EXISTED   => '账号已存在！',
+        self::ACCOUNT_FREEZE         => '该账号已冻结',
         self::ACCOUNT_NOT_EXISTED    => '账号不存在！',
         self::ACCOUNT_OR_PWD_ERROR   => '账号或密码错误！',
         self::NOT_SALE_OR_NOT_EXISTED => '??商品已下架或不存在！',
@@ -387,7 +389,7 @@ class HttpStatus
         self::HAVE_REFUND_SERVICE_HANDLE=>'该订单还有服务单未处理完',
         self::NOT_REFUND_RULES=>'不符合退款规则',
         self::PAY_MONEY_ERROR=>'支付金额不符',
-        self::REFUND_VESION_UPGRADE=>'系统升级中，您可到诚仁堂微信商城进行申请，带来不便深感歉意',
+        self::REFUND_VESION_UPGRADE=>'系统升级中，您可到{{companyName}}微信商城进行申请，带来不便深感歉意',
         self::GROUP_ID_ERROR => '拼团活动id有误',
         self::GROUP_PARAM_ERROR => '参数有误',
         self::GROUP_NOT_HAS => '拼团活动不存在',

@@ -122,17 +122,20 @@
                         <td>' + $(this).find("option:selected").attr('data') + '</td>\
                         <td width="16%" class="jk"><input type="text" style="width: 100px; float: left; margin-right: 5px;" name="gooddata[' + goods_id+ '][value]"><select style="float: left;" name="gooddata[' + goods_id + '][type]"><option value="1">元</option><option value="2">折</option></select></td>\
                         <td><select style="width: 100px;" id="' + goods_id + '" name="gooddata[' + goods_id + '][tag_id]" onchange="selectTag(this);"><option value="">--请选择--</option>{% for val in tagData %}<option value="{{ val['tag_id'] }}">{{ val['tag_name'] }}</option>{% endfor %}</select></td>\
-                        <td class="platform">\
-                        <label><input class="platform_checkbox ace" data-platform="pc" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_pc]" type="checkbox" value="1" checked><span class="lbl">&nbsp;PC</span></label>\
-                        <label>\
-                        <input class="platform_checkbox ace" data-platform="app" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_app]" type="checkbox" value="1" checked><span class="lbl">&nbsp;APP</span>\
-                        </label>\
-                        <label>\
-                        <input class="platform_checkbox ace" data-platform="wap" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_wap]" type="checkbox" value="1" checked><span class="lbl">&nbsp;WAP</span>\
-                        </label>\
-                        <label style="display: none">\
-                        <input class="platform_checkbox ace" data-platform="wechat" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_wechat]" type="checkbox" value="0"><span class="lbl">&nbsp;微商城</span>\
-                        </label></td>\
+                        <td class="platform">';
+        if (shopPlatform.pc) {
+            html += '<label><input class="platform_checkbox ace" data-platform="pc" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_pc]" type="checkbox" value="1" checked><span class="lbl">&nbsp;PC</span></label>';
+        }
+        if (shopPlatform.app) {
+            html += '<label><input class="platform_checkbox ace" data-platform="app" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_app]" type="checkbox" value="1" checked><span class="lbl">&nbsp;APP</span></label>';
+        }
+        if (shopPlatform.wap) {
+            html += '<label><input class="platform_checkbox ace" data-platform="wap" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_wap]" type="checkbox" value="1" checked><span class="lbl">&nbsp;WAP</span></label>';
+        }
+        if (shopPlatform.wechat) {
+            html += '<label><input class="platform_checkbox ace" data-platform="wechat" data-gid="' + goods_id + '" name="gooddata[' + goods_id + '][platform_wechat]" type="checkbox" value="1" checked><span class="lbl">&nbsp;微商城</span></label>';
+        }
+        html += '</td>\
                         <td> {% if goodsPriceEnum["mutexPromotion"] is defined %}{% for k,v in goodsPriceEnum["mutexPromotion"] %} <label> <input name="gooddata[' + goods_id + '][good_set_mutex][]" type="checkbox" class="ace" value="{{k}}"> <span class="lbl">&nbsp;{{v}}</span> </label>{% endfor %}{% endif %}</td>\
                         <td><input type="button" class="btn btn-xs btn-danger delete" data-id="" value="删除" /></td>\
                         </tr>';

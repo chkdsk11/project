@@ -325,7 +325,7 @@ class SpuController extends ControllerBase
                 if($v['product_type']==2 && $tmp[0]['whether_is_gift']==0){
                     $tmp[0]['whether_is_gift'] = 2;
                 }
-                $v['supplier_name'] = '诚仁堂商城';
+                $v['supplier_name'] = $this->config['company_name'] . '商城';
                 if($v['supplier_id']){
                     $supplier = $SkuService->getSupplier($v['supplier_id']);
                     if(!empty($supplier)) $v['supplier_name'] = $supplier[0]['name'];

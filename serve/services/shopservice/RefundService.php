@@ -1207,13 +1207,12 @@ class RefundService extends BaseService
             return false;
         }
         $column = "od.goods_id,od.goods_name,od.goods_image,od.price,od.unit_price,"
-            . "od.goods_number,od.goods_type,spu.drug_type,cpr.name_id,cpr.name_id2,cpr.name_id3,od.promotion_price,"
+            . "od.goods_number,od.goods_type,spu.drug_type,g.rule_value0 name_id,g.rule_value1 name_id2,g.rule_value2 name_id3,od.promotion_price,"
             . "od.promotion_total,od.is_return,od.refund_goods_number,ogr.refund_goods_number refundNum,ogr.order_goods_id";
         $join = " LEFT JOIN Shop\Models\BaiyangOrderGoodsReturnReason ogrr ON ogr.reason_id = ogrr.id"
             . " LEFT JOIN Shop\Models\BaiyangOrderDetail od ON od.id = ogr.order_goods_id AND od.order_sn = ogrr.order_sn"
             . " LEFT JOIN Shop\Models\BaiyangGoods g ON g.id = od.goods_id"
-            . " LEFT JOIN Shop\Models\BaiyangSpu spu ON spu.spu_id = g.spu_id"
-            . " LEFT JOIN Shop\Models\BaiyangCategoryProductRule cpr ON cpr.category_id = spu.category_id";
+            . " LEFT JOIN Shop\Models\BaiyangSpu spu ON spu.spu_id = g.spu_id";
         $goodsList = BaseData::getInstance()->getData([
             'column' => $column,
             'table' => 'Shop\Models\BaiyangOrderGoodsReturn ogr',

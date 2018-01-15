@@ -41,7 +41,7 @@ class BaiyangPaymentData extends BaseData
             'where' => 'WHERE alias = :alias: AND channel = :channel: AND status = :status:',
             'bind' => [
                 'alias' => 'cash',
-                'channel' => $param['channel_subid'] == 95 ? 95 : 1,
+                'channel' => in_array($param['channel_subid'],[85,89,90,91,95]) ? $param['channel_subid'] : 1,
                 'status' => 1,
             ]
         ], true);

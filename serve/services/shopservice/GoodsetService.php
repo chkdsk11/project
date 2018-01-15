@@ -81,7 +81,7 @@ class GoodsetService extends BaseService
             switch ($param['param']["platform_status"]){
                 case '0':
                     break;
-                case '1':
+                case 'pc':
                     if($whereStr == ""){
                         $whereStr.="pc_platform = :pc_platform:";
                     }else{
@@ -89,7 +89,7 @@ class GoodsetService extends BaseService
                     }
                     $binder["pc_platform"]=1;
                     break;
-                case '2':
+                case 'app':
                     if($whereStr == ""){
                         $whereStr.="app_platform = :app_platform:";
                     }else{
@@ -97,7 +97,7 @@ class GoodsetService extends BaseService
                     }
                     $binder["app_platform"]=1;
                     break;
-                case '3':
+                case 'wap':
                     if($whereStr == ""){
                         $whereStr.="wap_platform = :wap_platform:";
                     }else{
@@ -105,7 +105,7 @@ class GoodsetService extends BaseService
                     }
                     $binder["wap_platform"]=1;
                     break;
-                case '4':
+                case 'wechat':
                     if($whereStr == ""){
                         $whereStr.="wechat_platform = :wechat_platform:";
                     }else{

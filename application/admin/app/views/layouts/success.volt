@@ -2,7 +2,7 @@
     <meta http-equiv="Content-Language" content="zh-CN">
     <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
     <meta http-equiv="refresh" content="{{ time }};url={{ url }}">
-    <title>诚仁堂商城提示</title>
+    <title>{{ config.company_name }}城提示</title>
     <style>
         .
     </style>

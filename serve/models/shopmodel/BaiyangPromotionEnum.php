@@ -152,7 +152,7 @@ class BaiyangPromotionEnum
         self::SITE_PC     => 'PC',
         self::SITE_APP    => 'APP',
         self::SITE_WAP    => 'WAP',
-//        self::SITE_WeChat => '微商城',
+        self::SITE_WeChat => '微商城',
     ];
 
     /**

@@ -30,7 +30,8 @@ class FreightListener extends BaseListen {
         $region_id = $consigneeInfo['county'];
         $o2oDataInstance = BaiyangO2oData::getInstance();
         $type = $o2oDataInstance->getO2OType($region_id);
-        if ($type == 0 || $this->func->isZitiAddress($consigneeInfo)) {
+        // if ($type == 0 || $this->func->isZitiAddress($consigneeInfo)) {
+        if ($type == 0) {
             return $class->uniteReturnResult(HttpStatus::O2O_REGION_NOT_EXIST, ['param'=> $param]);
         }
         // 获取O2O运费模板

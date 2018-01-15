@@ -89,7 +89,7 @@ class OrderService extends BaseService
     ];
     //订单来源
     //public $orderSource = [1 => '诚仁堂', 2 => '易复诊', 3 => '育学园'];
-    public $orderSource = [1 => '诚仁堂'];
+    public $orderSource = [1 => '自营'];
     //订单状态
     public $orderStat = [
         'paying' => '待付款',
@@ -106,7 +106,7 @@ class OrderService extends BaseService
     public $excel_header = [
         'order_sn'=>['text'=>'订单编号','field'=>'o.order_sn','join'=>''],
         'total_sn'=>['text'=>'订单编号','field'=>'o.total_sn','join'=>''],
-        'order_source'=>['text'=>'订单来源','field'=>"if(ISNULL(p.prescription_id),if(o.more_platform_sign = 'yukon','育学院','诚仁堂商城'),'易复诊') as order_source",'join'=>'LEFT JOIN baiyang_prescription p ON o.total_sn = p.order_id','table'=>'baiyang_prescription'],
+        'order_source'=>['text'=>'订单来源','field'=>"if(ISNULL(p.prescription_id),if(o.more_platform_sign = 'yukon','育学院','自营商城'),'易复诊') as order_source",'join'=>'LEFT JOIN baiyang_prescription p ON o.total_sn = p.order_id','table'=>'baiyang_prescription'],
         'shop_id'=>['text'=>'店铺','field'=>"sku_supplier.name as shop_id",'join'=>'LEFT JOIN baiyang_sku_supplier as sku_supplier on sku_supplier.id=o.shop_id','table'=>'baiyang_sku_supplier'],
 
         'searchType'=>['text'=>'订单状态','field'=>"CASE o.`status`
@@ -868,7 +868,7 @@ class OrderService extends BaseService
         if ($orderSn && BaiyangOrderData::getInstance()->isPrescriptionOrder($orderSn)) {
             return '易复诊';
         }
-        return '诚仁堂商城';
+        return $this->config['company_name'] . '商城';
     }
 
     /**
@@ -1894,8 +1894,11 @@ class OrderService extends BaseService
                 $region = BaiyangRegionData::getInstance()->getRegionAll();
             }
 
-            if(in_array('invoice_info',$param['export_title']) || in_array('invoice_type',$param['export_title']) || $is_have_address || in_array('order_type', $param['export_title'])){
+            if(in_array('invoice_info',$param['export_title']) || in_array('invoice_type',$param['export_title']) || $is_have_address || in_array('order_source',$param['export_title']) || in_array('order_type', $param['export_title'])){
                 foreach($totalOrder as & $order){
+                    if (isset($order['order_source']) && $order['order_source'] && $this->config['company_name']) {
+                        $order['order_source'] = str_replace("自营",$this->config['company_name'],$order['order_source']);
+                    }
                     if (isset($order['callback_phone']) && $order['callback_phone']) {
                         $order['order_type'] = '处方订单';
                     }
@@ -1917,7 +1920,6 @@ class OrderService extends BaseService
                     }
                 }
             }
-
             $this->downExcel($totalOrder);
         }else{
             return $totalOrder;

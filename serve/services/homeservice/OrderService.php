@@ -118,6 +118,7 @@ class OrderService extends BaseService
 		}
 		// 验证用户信息
 		$userInfo = BaiyangUserData::getInstance()->getUserInfo($result['userId'], '*');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
 		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result); }
 		$result['userId'] = $userInfo['id'];
 		$result['unionUserId'] = $userInfo['union_user_id'];
@@ -210,7 +211,8 @@ class OrderService extends BaseService
 		if ($ret['status'] != HttpStatus::SUCCESS) { return $ret; }
 		$result = $ret['data'];
 		// 验证用户信息
-		$userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'default_consignee');
+		$userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'default_consignee,status');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, ['param' => $param]); }
 		if (empty($userInfo)) { return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, ['param' => $param]); }
 		// 收货地址
 		$result['consigneeList'] = BaiyangUserConsigneeData::getInstance()->getUserConsigneeList($param['user_id']);
@@ -261,13 +263,16 @@ class OrderService extends BaseService
         // 购物车和促销信息
         $param['is_first'] = isset($param['is_first']) ? (int)$param['is_first'] : 0;
         $param['action'] = $param['is_first'] == 0 ? "coupon" : "orderInfo";
+        $param['shop_id'] = isset($param['shop_id']) && (int)$param['shop_id'] > 0 ? (int)$param['shop_id'] : 0;
         $ret = $this->orderPromotionInfo($param);
         if ($ret['status'] != HttpStatus::SUCCESS) {
             return $ret;
         }
         $result = $ret['data'];
+        $result['expressType'] = isset($param['express_type']) && (int)$param['express_type'] > 0 ? (int)$param['express_type'] : 0;
         // 验证用户信息
-        $userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'balance,pay_password,default_consignee');
+        $userInfo = BaiyangUserData::getInstance()->getUserInfo($param['user_id'], 'balance,pay_password,default_consignee,status');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, ['param' => $param]); }
         if (empty($userInfo)) {
             return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, ['param' => $param]);
         }
@@ -326,16 +331,38 @@ class OrderService extends BaseService
         $result['paymentId'] = !$result['hasSupplier'] && isset($param['payment_id']) && $param['payment_id'] == 3 ? 3 : 0;
         if (!empty($consigneeInfo) && !$result['isDummy']) {
             if (!$result['hasSupplier']) {
-                // 自提地址只能【在线支付】【自提】
-                $ziTiAddressId = $this->func->isZitiAddress($consigneeInfo);
-                if ($ziTiAddressId) {
+                // 自提地址只能【在线支付】【自提】// 不匹配自提地址，用户下单时手动选择是否自提
+//                $ziTiAddressId = $this->func->isZitiAddress($consigneeInfo);
+                $ziTiAddressId = false;
+                if ($result['expressType'] == 1 && isset($param['shop_id']) && ($param['shop_id'] > 0)) {
+                    $ziTiAddressId = $param['shop_id'];
+                    $userConsigneeData = BaiyangUserConsigneeData::getInstance();
+                    $shopInfo = BaseData::getInstance()->getData([
+                        'table' => '\Shop\Models\BaiyangUserSinceShop',
+                        'column' => 'id,province,city,county,address,trade_name',
+                        'where' => 'where id = :id:',
+                        'bind' => [
+                            'id' => $ziTiAddressId
+                        ],
+                    ],true);
+                    if ($shopInfo) {
+                        $shopInfo['province'] = $userConsigneeData->getRegionName($shopInfo['province']);
+                        $shopInfo['city'] = $userConsigneeData->getRegionName($shopInfo['city']);
+                        $shopInfo['county'] = $userConsigneeData->getRegionName($shopInfo['county']);
+//                        $shopInfo['predict_time'] = isset($param['o2o_time']) && ((int)$param['o2o_time'] > strtotime(date('Y-m-d',time()))) ? date('Y-m-d', $param['o2o_time']) : date('Y-m-d',time()+24*60*60);
+                        $shopInfo['predict_time'] = isset($param['o2o_time']) && ((int)$param['o2o_time'] > 0) ? date('Y-m-d', $param['o2o_time']) : '';
+                        $result['sinceShopInfo'] = $shopInfo;
+                    }
+                }
+                /*if ($ziTiAddressId) {
                     $result['expressType'] = 1;
                     $result['paymentId'] = 0;
-                }else {
+                }else {*/
                     //货到付款控制
                     $result['ifFacePay'] = BaiyangPaymentData::getInstance()->checkCashOnDelivery([
                         'channel_subid' => isset($param['channel_subid']) ? $param['channel_subid'] : 95,
                         'goodsList' => isset($result['goodsList']) ? $result['goodsList'] : [],
+                        'user_id' => isset($param['user_id']) ? $param['user_id'] : 11,
                     ]) ? 1 : 0;
                     // 极速配送
                     $o2oInfo = $this->_eventsManager->fire('order:getO2OExpressInfo', $this, ['consigneeInfo'=>$consigneeInfo]);
@@ -378,7 +405,7 @@ class OrderService extends BaseService
                         'type' => 1,
                         'total' => $result['costPrice'],
                     ])['data']['tips'];
-                }
+//                }
             }
             // 包邮活动
             if ($result['isExpressFree'] && $result['expressType'] == 0 && $result['paymentId'] == 0) {
@@ -387,7 +414,8 @@ class OrderService extends BaseService
                 // 普通运费模板
                 $result['freightInfo'] = $this->_eventsManager->fire('order:getFreightFee', $this, [
                     'goods_ids' => $result['goodsIds'],
-                    'region_id' => $result['expressType'] == 1 ? $ziTiAddressId : $consigneeInfo['province'],
+//                    'region_id' => $result['expressType'] == 1 ? $ziTiAddressId : $consigneeInfo['province'],
+                    'region_id' => $result['expressType'] == 1 && $ziTiAddressId ? $ziTiAddressId : $consigneeInfo['province'],
                     'type'      => $result['expressType'] == 1 ? 2 : ($result['paymentId'] == 0 ? 0 : 1),
                     'total'     => $result['costPrice'],
                 ])['data'];
@@ -395,7 +423,8 @@ class OrderService extends BaseService
         }
         // 整理配送方式输出结构
         $result = $this->_eventsManager->fire('order:remakeExpress', $this, $result);
-        if ($result['expressType'] == 1) $result['expressType'] = 0;
+//        if ($result['expressType'] == 1) $result['expressType'] = 0;
+        if ($result['expressType'] == 1) $result['expressText'] = '';
         // 配送公告
         $result['announcement'] = BaiyangAnnouncementData::getInstance()->getAnnouncement($consigneeInfo);
         // 计算应付金额
@@ -446,6 +475,7 @@ class OrderService extends BaseService
         $result['addressId'] = isset($param['address_id']) ? (int)$param['address_id'] : 0;
         $result['paymentId'] = isset($param['payment_id']) ? (int)$param['payment_id'] : 0;
         $result['expressType'] = isset($param['express_type']) ? (int)$param['express_type'] : 0;
+        $result['shopId'] = isset($param['shop_id']) && $param['shop_id'] > 0 ? (int)$param['shop_id'] : 0;
         $result['o2oTime'] = isset($param['o2o_time']) ? (int)$param['o2o_time'] : 0;
         $result['isBalance'] = isset($param['is_balance']) ? (int)$param['is_balance'] : 0;
         $result['payPassword'] = isset($param['pay_password']) ? (string)$param['pay_password'] : '';
@@ -459,11 +489,14 @@ class OrderService extends BaseService
         $result['channelName'] = isset($param['channel_name']) ? htmlspecialchars($param['channel_name']) : '';
         $result['machineSn'] = isset($param['machine_sn']) ? htmlspecialchars($param['machine_sn']) : '';
         // 验证参数
-        if ($result['userId'] < 1 || $result['addressId'] < 1 || !in_array($result['paymentId'],[0,3]) || !in_array($result['expressType'],[0,2,3]) || !in_array($result['isBalance'],[0,1])) {
+        if ($result['userId'] < 1 || $result['addressId'] < 1 || !in_array($result['paymentId'],[0,3])
+            || !in_array($result['expressType'],[0,1,2,3]) || !in_array($result['isBalance'],[0,1])
+            || ($result['expressType'] ==1 && !$result['shopId'])) {
             return $this->uniteReturnResult(HttpStatus::PARAM_ERROR, ['param'=> $param]);
         }
         // 验证用户信息
         $userInfo = BaiyangUserData::getInstance()->getUserInfo($result['userId'], '*');
+        if ($userInfo['status'] == 0) { return $this->uniteReturnResult(HttpStatus::ACCOUNT_FREEZE, $result); }
         if (empty($userInfo)) {
             return $this->uniteReturnResult(HttpStatus::USER_NOT_EXIST, $result);
         }
@@ -632,11 +665,11 @@ class OrderService extends BaseService
                 $result['paymentId'] = 0;
             } else {
                 // 自提
-                $ziTiAddressId = $this->func->isZitiAddress($result['consigneeInfo']);
+                /*$ziTiAddressId = $this->func->isZitiAddress($result['consigneeInfo']);
                 if ($ziTiAddressId) {
                     $result['expressType'] = 1;
                     $result['paymentId'] = 0;
-                } else {
+                } else {*/
                     // 极速配送
                     if ($result['expressType'] > 1) {
                         $o2oInfo = $this->_eventsManager->fire('order:getO2OExpressFee', $this, [
@@ -650,7 +683,7 @@ class OrderService extends BaseService
                         $result['o2oInfo'] = $o2oInfo['data'];
                         $result['freight'] = $o2oInfo['data']['fee'];
                     }
-                }
+//                }
             }
             // 包邮只支持在线支付和普通配送
             if ($result['isExpressFree'] && $result['expressType'] == 0 && $result['paymentId'] == 0) {
@@ -659,7 +692,7 @@ class OrderService extends BaseService
                 // 普通运费模板
                 $result['freight'] = $this->_eventsManager->fire('order:getFreightFee', $this, [
                     'goods_ids' => $result['goodsIds'],
-                    'region_id' => $result['expressType'] == 1 ? $ziTiAddressId : $result['consigneeInfo']['province'],
+                    'region_id' => $result['expressType'] == 1 ? $result['shopId'] : $result['consigneeInfo']['province'],
                     'type' => $result['expressType'] == 1 ? 2 : ($result['paymentId'] == 0 ? 0 : 1),
                     'total' => $result['costPrice'],
                 ])['data']['freight'];
@@ -1985,6 +2018,7 @@ class OrderService extends BaseService
         $orderInfo['shopInfo'] = null;
         // 获取门店
         if ($orderInfo['express_type'] == 1) {
+            $orderInfo['shopInfo'] = [];
             $shopInfo = BaseData::getInstance()->getData([
                 'table' => '\Shop\Models\BaiyangUserSinceShop',
                 'column' => '*',
@@ -1993,7 +2027,12 @@ class OrderService extends BaseService
                     'id' => $order['shop_id']
                 ],
             ],true);
-            $orderInfo['shopInfo'] = !empty($shopInfo) ? $shopInfo : null;
+            if ($shopInfo) {
+                $shopInfo['province'] = $userConsigneeData->getRegionName($shopInfo['province']);
+                $shopInfo['city'] = $userConsigneeData->getRegionName($shopInfo['city']);
+                $shopInfo['county'] = $userConsigneeData->getRegionName($shopInfo['county']);
+                $orderInfo['shopInfo'] = $shopInfo;
+            }
         }
 
         // 初始化key
@@ -3553,18 +3592,15 @@ class OrderService extends BaseService
             return $this->uniteReturnResult(\Shop\Models\HttpStatus::PARAM_ERROR, ['param' => $param]);
         }
         $status = 5;
-        $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? (int)$this->config->yxy_shop_id[$this->config->environment] : 0;
         $orderData = BaiyangOrderData::getInstance();
         $update_service = $orderData->updateReturnService([
             'column' => 'express_no =:express_no:,express_company=:express_company:,status=:status:',
-            //'where' => 'service_sn = :service_sn:' ,
-            'where' => 'service_sn = :service_sn: AND shop_id <> :shop_id:' ,
+            'where' => 'service_sn = :service_sn:' ,
             'bind' => [
                 'express_no'=>$express_no,
                 'express_company'=>$express_company,
                 'service_sn'=>$service_sn,
                 'status'=>$status,
-                'shop_id'=> $yxyShopId, //育学园订单不能添加物流信息  秦亮 #7529
             ],
         ]);
 
@@ -3684,11 +3720,12 @@ class OrderService extends BaseService
         if($serviceData){
             $orderDetailData = BaiyangOrderDetailData::getInstance();
             $return_type_text = ['取消','仅退款','退货退款'];
-            $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
+//            $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
             foreach($serviceData['list'] as &$row){
                 $row['return_type_text'] = $row['return_type']>=0?$return_type_text[$row['return_type']]:'';
                 $row['goodsList'] =  $orderDetailData->getOrderDetailByService($row['id']);
-                $row['is_show'] = $yxyShopId == $row['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+//                $row['is_show'] = $yxyShopId == $row['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+                $row['is_show'] = 1; //显示物流按钮
             }
             return  $this->uniteReturnResult(HttpStatus::SUCCESS,$serviceData);
         }else{
@@ -3732,8 +3769,9 @@ class OrderService extends BaseService
         $serviceRow['add_time'] = date('Y-m-d H:i:s',$serviceRow['add_time']);
         $orderDetailData = BaiyangOrderDetailData::getInstance();
         $serviceRow['goodsList'] = $orderDetailData->getOrderDetailByService($serviceRow['id']);
-        $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
-        $serviceRow['is_show'] = $yxyShopId == $serviceRow['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+//        $yxyShopId = isset($this->config->yxy_shop_id[$this->config->environment]) ? $this->config->yxy_shop_id[$this->config->environment] : -1;
+//        $serviceRow['is_show'] = $yxyShopId == $serviceRow['shop_id'] ? 0 : 1; // 育学园店铺不显示物流按钮
+        $serviceRow['is_show'] = 1; // 显示物流按钮
 
         return  $this->uniteReturnResult(HttpStatus::SUCCESS,$serviceRow);
     }
@@ -3891,11 +3929,26 @@ class OrderService extends BaseService
      */
     public function getSinceShop($param)
     {
+        $param['pageStart'] = isset($param['pageStart']) && (int)$param['pageStart'] > 0 ? (int)$param['pageStart'] : 1;
+        $param['pageSize'] = isset($param['pageSize']) && (int)$param['pageSize'] > 0 ? (int)$param['pageSize'] : 15;
+        $param['province'] = isset($param['province']) && (int)$param['province'] > 0 ? (int)$param['province'] : 0;
+        $param['city'] = isset($param['city']) && (int)$param['city'] > 0 ? (int)$param['city'] : 0;
+        $param['county'] = isset($param['county']) && (int)$param['county'] > 0 ? (int)$param['county'] : 0;
         //参数错误
-        if(!$this->verifyRequiredParam($param)){
+        if(!$this->verifyRequiredParam($param) || !isset($param['payment_id']) || !$param['province'] || !$param['city'] || !$param['county']){
             return $this->uniteReturnResult(\Shop\Models\HttpStatus::PARAM_ERROR, ['param' => $param]);
         }
-        $shopList = BaiyangUserSinceShopData::getInstance()->getSinceShopList();
+        //支付方式（备用）
+        $param['payment_id'] = $param['payment_id'] ? $param['payment_id'] : 0;
+        $BaiyangUserSinceShopData = BaiyangUserSinceShopData::getInstance();
+        $data['where'] = "where city = {$param['city']}";
+        $shopCount = $BaiyangUserSinceShopData->countData([
+            'table' => '\Shop\Models\BaiyangUserSinceShop',
+            'where' => $data['where'],
+        ]);
+        $start = ($param['pageStart'] - 1) * $param['pageSize'];
+        $data['limit'] = "limit {$start},{$param['pageSize']}";
+        $shopList = $BaiyangUserSinceShopData->getSinceShopList($data);
         if (!$shopList) {
             return  $this->uniteReturnResult(HttpStatus::NO_DATA);
         }
@@ -3906,6 +3959,6 @@ class OrderService extends BaseService
             $shop['countyName'] = isset($region[$shop['county']]) ? $region[$shop['county']] : $shop['county'];
             $shopList[$key] = $shop;
         }
-        return $this->uniteReturnResult(HttpStatus::SUCCESS, $shopList);
+        return $this->uniteReturnResult(HttpStatus::SUCCESS, ['shopCount'=>$shopCount,'shopList'=>$shopList]);
     }
 }

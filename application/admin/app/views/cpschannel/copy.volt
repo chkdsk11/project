@@ -68,7 +68,7 @@
                                   <option value="0">--请选择渠道--</option> 
   								 {% if  channel_list is defined  %}
                                  {% for v in channel_list %}
-                                    <option value="{{v['channel_id']}}" >{{v['channel_name']}}</option>
+                                    <option value="{{v['channel_id']}}" {% if list['activity']['channel_id']== v['channel_id'] and p_id == 'ck' %} selected {%endif%} >{{v['channel_name']}}</option>
                                  {% endfor %}
                                  {% endif %}
                                 </select>
@@ -103,8 +103,8 @@
                             <div class="form-group" id="permanent_action"  {% if list['activity']['type_id']!= 1  %} style="display:none" {%endif%}  >
                                 <label class="col-sm-3 control-label no-padding-right" for="promotion_copywriter"  > 永久活动 首单返利</label>
                                 <div class="col-sm-9">
-                                 <label> <input type="text" id="all_first_rebate" name="all_first_rebate" class="col-xs-10 col-sm-5"  value="{% if list['channel']['first_rebate'] is defined %}{{list['channel']['first_rebate'] }}{%endif%}" />%</label>
-                                 <label><input type="text" id="all_back_percent" name="all_back_percent" class="col-xs-10 col-sm-5"  value="{% if list['channel']['back_percent'] is defined %}{{list['channel']['back_percent'] }}{%endif%}" />%</label>
+                                 <label> <input type="text" id="all_first_rebate" name="all_first_rebate" class="col-xs-10 col-sm-5"  value="{% if list['activity']['relation_list'][0]['first_rebate'] is defined %}{{list['activity']['relation_list'][0]['first_rebate'] }}{%endif%}" />%</label>
+                                 <label><input type="text" id="all_back_percent" name="all_back_percent" class="col-xs-10 col-sm-5"  value="{% if list['activity']['relation_list'][0]['back_percent'] is defined %}{{list['activity']['relation_list'][0]['back_percent'] }}{%endif%}" />%</label>
                                 </div>
                             </div>
                             

@@ -194,7 +194,7 @@ class OrderController extends ControllerBase
         $this->view->disable();
 
         $param = [
-            'user_id' => 11019,
+            'user_id' => 11020,
             'channel_subid' => 91,
             'platform' => 'wap',
             'is_first' => 1,
@@ -212,6 +212,7 @@ class OrderController extends ControllerBase
         $param = [
             'channel_subid' => 91,
             'platform' => 'wap',
+            'payment_id' => 0,
         ];
         $order = OrderService::getInstance();
         $res=$order->getSinceShop($param);

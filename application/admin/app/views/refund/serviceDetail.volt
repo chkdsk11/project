@@ -194,7 +194,7 @@
 									{% endif %}
 								</td>
 								<td>
-                                    <a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                    <a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
 										{% if product['drug_type'] == 1 %}
 											<span class="icon-drug-red">Rx</span>
 										{% elseif product['drug_type'] == 2 %}

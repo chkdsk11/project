@@ -346,15 +346,15 @@ class AdwapService extends BaseService
                 'where'=>"WHERE id IN({$ids})  AND product_type = 0  and ((sale_timing_wap = 1 and is_global = 0) or (status = 1 and  is_global = 1))",
             ));
             //查询优惠活动
-            $now = strtotime('now');
-            $result_limit =  $this->data->getData(array(
-                'column'=>" limit_condition",
-                'table'=>$this->goods_timeoffer,
-                'where'=>" WHERE {$now} BETWEEN start_time AND end_time AND limit_type = 4 AND is_cancel = 0",
-            ));
+//            $now = strtotime('now');
+//            $result_limit =  $this->data->getData(array(
+//                'column'=>" limit_condition",
+//                'table'=>$this->goods_timeoffer,
+//                'where'=>" WHERE {$now} BETWEEN start_time AND end_time AND limit_type = 4 AND is_cancel = 0",
+//            ));
 
             // 如果有上传图片则default_image为上传字段
-            if (is_array($upload_images) && !empty($result))
+            if (is_array($upload_images))
             {
                 foreach($result as $key=>$val){
                     //1、判断是否有商品图片，有则处理
@@ -362,16 +362,16 @@ class AdwapService extends BaseService
                     //2、处理商品排序
                     $result[$key]['sort'] = $order_product[$val['product_id']] ? $order_product[$val['product_id']] : 0;
                     //3、处理优惠活动
-                    if($result_limit){
-                        foreach ($result_limit as $k => $v)
-                        {
-                            $condition = json_decode($v['limit_condition'], TRUE);
-                            if (array_key_exists($val['product_id'], $condition))
-                            {
-                                $result[$key]['price'] = $condition[$val['product_id']];
-                            }
-                        }
-                    }
+//                    if($result_limit){
+//                        foreach ($result_limit as $k => $v)
+//                        {
+//                            $condition = json_decode($v['limit_condition'], TRUE);
+//                            if (array_key_exists($val['product_id'], $condition))
+//                            {
+//                                $result[$key]['price'] = $condition[$val['product_id']];
+//                            }
+//                        }
+//                    }
                     //4、促销信息，现在写死
                     $result[$key]['promotion'] = 'hot';
                     unset($result[$key]['small_path']);

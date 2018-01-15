@@ -255,7 +255,7 @@
 												{% if shops[v['shop_id']] is defined %}
 													{{ shops[v['shop_id']] }}
 												{% else %}
-													诚仁堂自营
+													商城自营
 												{% endif %}
 											</span>
                                     {% endif %}
@@ -323,7 +323,7 @@
 										{% if shops[val['shop_id']] is defined %}
 											{{ shops[val['shop_id']] }}
 										{% else %}
-											诚仁堂自营
+											商城自营
 										{% endif %}
 									</span>
                                     {% if val['audit_state'] == 1 and val['status'] == 'shipping' and val['isRefund'] == 0 %}
@@ -342,7 +342,7 @@
                                 {% for product in val['productList'] %}
                                 <div class="item">
                                     {% if product['goods_image'] is defined %}
-                                    <a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                    <a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
                                         <img src="{{ product['goods_image'] }}">
                                     </a>
                                     {% endif %}
@@ -354,7 +354,7 @@
                                         {% elseif product['drug_type'] == 3 %}
                                         <span class="icon-drug-green">OTC</span>
                                         {% endif %}
-                                        <a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                        <a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
                                             {{ product['goods_name'] }}
                                         </a>
                                     </p>
@@ -503,7 +503,7 @@
                                 {% for product in v['productList'] %}
                                 <div class="item">
                                     {% if product['goods_image'] is defined %}
-                                    <a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                    <a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
                                         <img src="{{ product['goods_image'] }}">
                                     </a>
                                     {% endif %}
@@ -515,7 +515,7 @@
                                         {% elseif product['drug_type'] == 3 %}
                                         <span class="icon-drug-green">OTC</span>
                                         {% endif %}
-                                        <a href="{{ config.pc_url[config.environment] }}/product/{{ product['goods_id'] }}.html" target="_blank">
+                                        <a href="{{ jumpUrl }}/product/{{ product['goods_id'] }}.html" target="_blank">
                                             {{ product['goods_name'] }}
                                         </a>
                                     </p>
@@ -673,7 +673,7 @@
 
 {% block footer %}
 <div class="pop-frame-shadow" style="display: none;"></div>
-<input type="hidden" id="pcUrl" value="{{ config.pc_url[config.environment] }}" />
+<input type="hidden" id="pcUrl" value="{{ jumpUrl }}" />
 <div class="pop-frame-content" style="display: none;">
     <i class="ace-icon glyphicon glyphicon-remove"></i>
     <div class="pop-frame">
