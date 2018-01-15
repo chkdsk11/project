@@ -16,14 +16,24 @@ class BaiyangUserSinceShopData extends BaseData
 
     /**
      * @desc 门店列表
+     * @param array $param
      * @return array  []   结果信息
      * @author 柯琼远
      */
-    public function getSinceShopList() {
-        return $this->getData([
+    public function getSinceShopList($param = []) {
+        $data = [
             'column'=>'*',
             'table'=>'\Shop\Models\BaiyangUserSinceShop'
-        ]);
+        ];
+        if ($param) {
+            if (isset($param['where'])) {
+                $data['where'] = $param['where'];
+            }
+            if (isset($param['limit'])) {
+                $data['limit'] = $param['limit'];
+            }
+        }
+        return $this->getData($data);
     }
 
     /**
