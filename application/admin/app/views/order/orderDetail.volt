@@ -337,14 +337,7 @@
 						<p>不需要发票</p>
 					{% else %}
 						<p>
-							发票类型：
-							{% if orderInfo['invoice_type'] == 1 %}
-								个人
-							{% elseif orderInfo['invoice_type'] == 2 %}
-								单位
-							{% else %}
-								纸质发票
-							{% endif %}
+							发票类型：纸质发票
 						</p>
 						<div class="more-content">
 							<span>发票抬头：</span>
