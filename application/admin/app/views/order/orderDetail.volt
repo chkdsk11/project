@@ -595,7 +595,7 @@
 	                <option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 0 %}selected{% endif %} value="0">不开发票</option>
 	                <!--<option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 1 %}selected{% endif %} value="1">个人</option>
 	                <option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 2 %}selected{% endif %} value="2">单位</option>-->
-	                <option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 3 %}selected{% endif %} value="3">纸质发票</option>
+	                <option {% if orderInfo['invoice_type'] is defined and (orderInfo['invoice_type'] == 3 or orderInfo['invoice_type'] == 2 or orderInfo['invoice_type'] == 1) %}selected{% endif %} value="3">纸质发票</option>
 	            </select>
 			</dd>
 			<dt>发票抬头 ：</dt>
