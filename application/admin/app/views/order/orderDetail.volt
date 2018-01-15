@@ -646,5 +646,5 @@
 
 <script src="http://{{ config.domain.static }}/assets/js/jquery.fancybox-2.1.5.js"></script>
 <script src="http://{{ config.domain.static }}/assets/js/lightbox.js"></script>
-<script src="http://{{ config.domain.static }}/assets/admin/js/order/orderDetail.js?201706309"></script>
+<script src="http://{{ config.domain.static }}/assets/admin/js/order/orderDetail.js?20180115"></script>
 {% endblock %}
