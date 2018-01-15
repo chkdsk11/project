@@ -135,9 +135,9 @@
                                     </div>
                                     <!--时间控制器 end-->
                                     <label class="clearfix">
-                                        <select name="platformId" style="margin-left: 10px;display:none;">
-                                            <!--<option value="0">所有端</option>
-                                            <option {% if platformId is 'pc' %}selected{% endif %} value="pc">PC端</option>-->
+                                        <select name="platformId" style="margin-left: 10px;">
+                                            <option value="0">所有端</option>
+                                            <option {% if platformId is 'pc' %}selected{% endif %} value="pc">PC端</option>
                                             <option {% if platformId is 'wap' %}selected{% endif %} value="wap">WAP端</option>
                                         </select>
                                     </label>
