@@ -83,7 +83,7 @@ return new \Phalcon\Config(array(
         'home'  =>DOMAIN_ADMIN,
         'admin' =>DOMAIN_ADMIN,
         'static'=>DOMAIN_STATIC,
-        'img'=> DOMAIN_IMG,
+        'img'=> 'http://'.DOMAIN_IMG.'/',
         'updateEsSearch'=> SEARCH_URL,
         'appImg'=> APP_IMG_PATH,
     ),
