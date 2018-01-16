@@ -1294,7 +1294,7 @@ class OrderService extends BaseService
                 return $this->uniteReturnResult(HttpStatus::NO_DATA);
             }
 
-            $order['data'][$key]['shop_name'] = $global ? '海外优选' : '诚仁堂自营';
+            $order['data'][$key]['shop_name'] = $global ? '海外优选' : $this->config['company_name'] . '自营';
             if($global == 0 && $value['sign'] == 1){
                 $shopNameArr = $skuData->getShopNameByShopId([
                     'column' => 'name',

@@ -390,8 +390,8 @@ class O2OFreightListener extends BaseListen {
             $expressIds[] = $expressInfo['express_type'];
         }
         // 普通配送
-        $globalText = "快递将由诚仁堂选合作方送达";
-        $baiyangText = "快递将由诚仁堂合作方送达";
+        $globalText = "快递将由{$this->config['company_name']}选合作方送达";
+        $baiyangText = "快递将由{$this->config['company_name']}合作方送达";
         $param['expressList'][] = [
             'express_type' => 0,
             'express_name' => '普通配送',

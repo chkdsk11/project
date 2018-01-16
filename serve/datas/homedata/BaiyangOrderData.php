@@ -1085,7 +1085,7 @@ class BaiyangOrderData extends BaseData
             case 2  :   $data['service_info'] = '退款处理中';break;
             case 3  :   $data['service_info'] = '已完成';break;
             case 4  :   $data['service_info'] = '待寄回退货';break;
-            case 5  :   $data['service_info'] = $shopId == 1 ? '待诚仁堂收货' : '待卖家收货';break;
+            case 5  :   $data['service_info'] = $shopId == 1 ? '待' . $this->config['company_name'] . '收货' : '待卖家收货';break;
             case 6  :   $data['service_info'] = '已取消';break;
             default:    $data['service_info'] = '';break;
         }

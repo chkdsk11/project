@@ -132,7 +132,7 @@
 							{% if shops[orderInfo['shop_id']] is defined %}
 								{{ shops[orderInfo['shop_id']] }}
 							{% else %}
-								诚仁堂自营
+								{{ config.company_name }}自营
 							{% endif %}
 						</p>
 						<div class="base-info-explain">
