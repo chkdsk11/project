@@ -132,7 +132,7 @@
 							{% if shops[orderInfo['shop_id']] is defined %}
 								{{ shops[orderInfo['shop_id']] }}
 							{% else %}
-								诚仁堂自营
+								{{ config.company_name }}自营
 							{% endif %}
 						</p>
 						<div class="base-info-explain">
@@ -197,22 +197,34 @@
 						0.00
 					{% endif %}
 				</p>
-				{% if orderInfo['express_sn'] is defined and orderInfo['express_sn'] != '' %}
-				<p>
-					物流公司：
-					{% if orderInfo['express'] is defined %}
-						{{ orderInfo['express'] }}
-					{% endif %}
-				</p>
-				<p>
-					物流单号：
-					{% if orderInfo['express_sn'] is defined %}
-						{{ orderInfo['express_sn'] }}
-					{% endif %}
-				</p>
+				{% if orderInfo['express_type'] is defined and orderInfo['express_type'] == 1 and orderInfo['shopInfo'] is defined and orderInfo['shopInfo'] is not empty %}
+					<p>
+						期望门店：{{ orderInfo['shopInfo']['trade_name'] }}
+					</p>
+					<p>
+						期望时间：{{ orderInfo['shopInfo']['predictTime'] }}
+					</p>
+					<p>
+						门店地址：{{ orderInfo['shopInfo']['address'] }}
+					</p>
 				{% else %}
-					<p>暂无物流信息</p>
-				{%endif%}
+					{% if orderInfo['express_sn'] is defined and orderInfo['express_sn'] != '' %}
+						<p>
+							物流公司：
+							{% if orderInfo['express'] is defined %}
+							{{ orderInfo['express'] }}
+							{% endif %}
+						</p>
+						<p>
+							物流单号：
+							{% if orderInfo['express_sn'] is defined %}
+							{{ orderInfo['express_sn'] }}
+							{% endif %}
+						</p>
+					{% else %}
+						<p>暂无物流信息</p>
+					{% endif %}
+				{% endif %}
 			</div>
 			<div class="col-xs-8 logistics-info">
 				<!-- 物流信息 -->
@@ -337,14 +349,7 @@
 						<p>不需要发票</p>
 					{% else %}
 						<p>
-							发票类型：
-							{% if orderInfo['invoice_type'] == 1 %}
-								个人
-							{% elseif orderInfo['invoice_type'] == 2 %}
-								单位
-							{% else %}
-								纸质发票
-							{% endif %}
+							发票类型：纸质发票
 						</p>
 						<div class="more-content">
 							<span>发票抬头：</span>
@@ -595,7 +600,7 @@
 	                <option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 0 %}selected{% endif %} value="0">不开发票</option>
 	                <!--<option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 1 %}selected{% endif %} value="1">个人</option>
 	                <option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 2 %}selected{% endif %} value="2">单位</option>-->
-	                <option {% if orderInfo['invoice_type'] is defined and orderInfo['invoice_type'] == 3 %}selected{% endif %} value="3">纸质发票</option>
+	                <option {% if orderInfo['invoice_type'] is defined and (orderInfo['invoice_type'] == 3 or orderInfo['invoice_type'] == 2 or orderInfo['invoice_type'] == 1) %}selected{% endif %} value="3">纸质发票</option>
 	            </select>
 			</dd>
 			<dt>发票抬头 ：</dt>
@@ -653,5 +658,5 @@
 
 <script src="http://{{ config.domain.static }}/assets/js/jquery.fancybox-2.1.5.js"></script>
 <script src="http://{{ config.domain.static }}/assets/js/lightbox.js"></script>
-<script src="http://{{ config.domain.static }}/assets/admin/js/order/orderDetail.js?201706309"></script>
+<script src="http://{{ config.domain.static }}/assets/admin/js/order/orderDetail.js?20180115"></script>
 {% endblock %}

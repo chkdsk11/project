@@ -69,10 +69,18 @@ class SearchService extends BaseService
             $data['pageSize'] = 1000;
         }
         $baseData = BaseData::getInstance();
+		/*
         $count = $baseData->countData([
             'table' => 'Shop\Models\BaiyangHistoricalOrigin',
             'where' => $where,
         ]);
+		*/
+		$res = $baseData->getData([
+            'column' => "keywords",
+            'table' => 'Shop\Models\BaiyangHistoricalOrigin',
+            'where' => $where,
+        ]);
+		$count = count($res);
         $pages['page'] = $pageNum;//当前页
         $pages['psize'] = $pageSize;
         $pages['counts'] = $count;

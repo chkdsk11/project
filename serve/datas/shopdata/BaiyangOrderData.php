@@ -200,7 +200,7 @@ class BaiyangOrderData extends BaseData
         $column = "total_sn,order_sn,user_id,shop_id,add_time,pay_time,total,real_pay,status,payment_id,"
             . "province,city,county,pay_type,express_sn,express,channel_subid,consignee,express_type,"
             . "invoice_info,address,is_remind,telephone,zipcode,goods_price,carriage,order_discount_money,"
-            . "balance_price,youhui_price,user_coupon_price,detail_discount_money,real_pay,delivery_time,"
+            . "balance_price,youhui_price,user_coupon_price,detail_discount_money,real_pay,delivery_time,o2o_remark,"
             . "buyer_message,remark,audit_state,callback_phone,ordonnance_photo,order_type,invoice_type,more_platform_sign";
         $sql = "SELECT {$column} FROM baiyang_order WHERE {$where}";
         $stmt = $this->dbRead->prepare($sql);
@@ -285,5 +285,30 @@ class BaiyangOrderData extends BaseData
             }
         }
         return false;
+    }
+
+    /**
+     * 获取自提门店信息
+     * @param $shopId array/string 自提门店ID
+     * @param bool $returnOne 是否返回一条
+     * @return array|bool
+     * @author CSL 2018-01-15
+     */
+    public function getOrderShopList($shopId, $returnOne = false)
+    {
+        if (!$shopId || (!is_array($shopId) && !is_string($shopId))) {
+            return false;
+        }
+        $shop_id = $shopId;
+        if (is_array($shopId)) {
+            $shop_id = implode(',', $shopId);
+        }
+        $shopList = $this->getData([
+            'table' => '\Shop\Models\BaiyangUserSinceShop',
+            'column' => 'id,province,city,county,address,trade_name',
+            'where' => "where id in ({$shop_id})",
+        ], $returnOne);
+        if ($shopList && !$returnOne) $shopList = array_combine(array_column($shopList,'id'), $shopList);
+        return $shopList;
     }
 }

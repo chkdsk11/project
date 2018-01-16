@@ -190,7 +190,7 @@
     									{% if shops[v['shop_id']] is defined %}
     										{{ shops[v['shop_id']] }}
     									{% else %}
-    										诚仁堂自营
+    										{{ config.company_name }}自营
     									{% endif %}
     								</span>
                                     <span>

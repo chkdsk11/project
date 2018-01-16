@@ -1260,7 +1260,7 @@ class O2OPromotionShopping extends BaseListen
                 'allPromotionInfo'=> $shoppingCartInfo['allPromotionInfo'],
                 'allIncreaseBuyList'=> $shoppingCartInfo['allIncreaseBuyList'],
                 'allGiftList'=> $shoppingCartInfo['allGiftList'],
-                'cartName' => "诚仁堂自营",
+                'cartName' => $this->config['company_name'] . "自营",
                 'allSelected' => 1,
                 'rxExist' => 0,
                 'unavailExist' => 0,

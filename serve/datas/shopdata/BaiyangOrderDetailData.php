@@ -36,12 +36,11 @@ class BaiyangOrderDetailData extends BaseData
             $where = $isTotal ? "od.total_sn = '{$orderSn}'" : "od.order_sn = '{$orderSn}'";
         }
         $column = "od.id,od.total_sn,od.order_sn,od.goods_id,od.goods_name,od.goods_image,od.price,od.unit_price,"
-            . "od.goods_number,od.goods_type,spu.drug_type,cpr.name_id,cpr.name_id2,cpr.name_id3,od.promotion_price,"
+            . "od.goods_number,od.goods_type,spu.drug_type,g.rule_value0 name_id,g.rule_value1 name_id2,g.rule_value2 name_id3,od.promotion_price,"
             . "od.promotion_total,od.refund_goods_number,od.is_return";
         $sql = "SELECT {$column} FROM baiyang_order_detail od "
             . "LEFT JOIN baiyang_goods g ON g.id = od.goods_id "
             . "LEFT JOIN baiyang_spu spu ON spu.spu_id = g.spu_id "
-            . "LEFT JOIN baiyang_category_product_rule cpr ON cpr.category_id = spu.category_id "
             . "WHERE {$where}";
         $stmt = $this->dbRead->prepare($sql);
         $stmt->execute();
@@ -76,12 +75,11 @@ class BaiyangOrderDetailData extends BaseData
             $where .= " AND od.bind_id = {$param['detailId']}";
         }
         $column = "od.id,od.total_sn,od.order_sn,od.goods_id,od.goods_name,od.goods_image,od.price,od.unit_price,"
-            . "od.goods_number,od.goods_type,spu.drug_type,cpr.name_id,cpr.name_id2,cpr.name_id3,od.promotion_price,"
+            . "od.goods_number,od.goods_type,spu.drug_type,g.rule_value0 name_id,g.rule_value1 name_id2,g.rule_value2 name_id3,od.promotion_price,"
             . "od.promotion_total,od.refund_goods_number,od.is_return";
         $sql = "SELECT {$column} FROM baiyang_order_detail od "
             . "LEFT JOIN baiyang_goods g ON g.id = od.goods_id "
             . "LEFT JOIN baiyang_spu spu ON spu.spu_id = g.spu_id "
-            . "LEFT JOIN baiyang_category_product_rule cpr ON cpr.category_id = spu.category_id "
             . "{$where}";
         $stmt = $this->dbRead->prepare($sql);
         $stmt->execute();

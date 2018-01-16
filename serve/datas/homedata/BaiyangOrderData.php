@@ -752,8 +752,8 @@ class BaiyangOrderData extends BaseData
                     'last_status' => "paying",
                     'pay_type' => $param['paymentId'] == 3 ? 0 : 1,
                     'express_type' => $param['expressType'],
-                    'o2o_remark' => !empty($param['o2oInfo']) ? $param['o2oInfo']['remark'] : '',
-                    'shop_id' => 0,
+                    'o2o_remark' => !empty($param['o2oInfo']) ? $param['o2oInfo']['remark'] : (isset($param['o2oTime']) && $param['o2oTime'] ? date('Y-m-d', $param['o2oTime']) : ''),
+                    'shop_id' => $param['shopId'],
 //                    'invoice_type' => $param['invoiceType'] > 0 ? 3 : 0,
                     'invoice_type' => $param['invoiceType'],
                     'invoice_info' => $param['invoiceInfo'],
@@ -839,8 +839,9 @@ class BaiyangOrderData extends BaseData
                     'last_status' => 'paying',
                     'pay_type' => $param['paymentId'] == 3 ? 0 : 1,
                     'express_type' => $param['expressType'],
-                    'o2o_remark' => !empty($param['o2oInfo']) ? $param['o2oInfo']['remark'] : '',
-                    'shop_id' => $value['supplier_id'],
+                    'o2o_remark' => !empty($param['o2oInfo']) ? $param['o2oInfo']['remark'] : (isset($param['o2oTime']) && $param['o2oTime'] ? date('Y-m-d', $param['o2oTime']) : ''),
+//                    'shop_id' => $value['supplier_id'],
+                    'shop_id' => $param['shopId'],
 //                    'invoice_type' => $param['invoiceType'] > 0 ? 3 : 0,
                     'invoice_type' => $param['invoiceType'],
                     'invoice_info' => $invoiceInfo,
@@ -1084,7 +1085,7 @@ class BaiyangOrderData extends BaseData
             case 2  :   $data['service_info'] = '退款处理中';break;
             case 3  :   $data['service_info'] = '已完成';break;
             case 4  :   $data['service_info'] = '待寄回退货';break;
-            case 5  :   $data['service_info'] = $shopId == 1 ? '待诚仁堂收货' : '待卖家收货';break;
+            case 5  :   $data['service_info'] = $shopId == 1 ? '待' . $this->config['company_name'] . '收货' : '待卖家收货';break;
             case 6  :   $data['service_info'] = '已取消';break;
             default:    $data['service_info'] = '';break;
         }

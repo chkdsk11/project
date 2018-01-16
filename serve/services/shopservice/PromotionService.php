@@ -793,8 +793,8 @@ class PromotionService extends BaseService
         $promotionEnum['limitBuyForScope'] = BaiyangPromotionEnum::$LimitBuyForScope;
         //适用平台
         $promotionEnum['forPlatform'] = BaiyangPromotionEnum::$ForPlatform;
-        $configPlatform = (array)$this->config['shop_platform']);
-	$configPlatform = $configPlatform ? array_values($configPlatform): ['WAP'];
+        $configPlatform = (array)$this->config['shop_platform'];
+        $configPlatform = $configPlatform ? array_values($configPlatform): ['WAP'];
         foreach ($promotionEnum['forPlatform'] as $k => $platform) {
             if (!in_array($platform, $configPlatform)) {
                 unset($promotionEnum['forPlatform'][$k]);

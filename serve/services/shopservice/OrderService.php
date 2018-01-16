@@ -89,7 +89,7 @@ class OrderService extends BaseService
     ];
     //订单来源
     //public $orderSource = [1 => '诚仁堂', 2 => '易复诊', 3 => '育学园'];
-    public $orderSource = [1 => '诚仁堂'];
+    public $orderSource = [1 => '自营'];
     //订单状态
     public $orderStat = [
         'paying' => '待付款',
@@ -106,7 +106,7 @@ class OrderService extends BaseService
     public $excel_header = [
         'order_sn'=>['text'=>'订单编号','field'=>'o.order_sn','join'=>''],
         'total_sn'=>['text'=>'订单编号','field'=>'o.total_sn','join'=>''],
-        'order_source'=>['text'=>'订单来源','field'=>"if(ISNULL(p.prescription_id),if(o.more_platform_sign = 'yukon','育学院','" . $this->config['company_name'] . "商城'),'易复诊') as order_source",'join'=>'LEFT JOIN baiyang_prescription p ON o.total_sn = p.order_id','table'=>'baiyang_prescription'],
+        'order_source'=>['text'=>'订单来源','field'=>"if(ISNULL(p.prescription_id),if(o.more_platform_sign = 'yukon','育学院','自营商城'),'易复诊') as order_source",'join'=>'LEFT JOIN baiyang_prescription p ON o.total_sn = p.order_id','table'=>'baiyang_prescription'],
         'shop_id'=>['text'=>'店铺','field'=>"sku_supplier.name as shop_id",'join'=>'LEFT JOIN baiyang_sku_supplier as sku_supplier on sku_supplier.id=o.shop_id','table'=>'baiyang_sku_supplier'],
 
         'searchType'=>['text'=>'订单状态','field'=>"CASE o.`status`
@@ -854,6 +854,20 @@ class OrderService extends BaseService
         $info['operationLog'] = BaiyangOrderOperationLogData::getInstance()->getOperationLog([
             'orderSn'=>$orderSn
         ]);
+        //用户自提门店信息
+        $info['shopInfo'] = [];
+        if ($info['express_type'] == 1) {
+            $shopInfo = BaiyangOrderData::getInstance()->getOrderShopList($info['shop_id'], true);
+            if ($shopInfo) {
+                $regionName = $regionData->getRegionAll();
+                $shopInfo['province'] = is_numeric($shopInfo['province']) && isset($regionName[$shopInfo['province']]) ? $regionName[$shopInfo['province']] : $shopInfo['province'];
+                $shopInfo['city'] = is_numeric($shopInfo['city']) && isset($regionName[$shopInfo['city']]) ? $regionName[$shopInfo['city']] : $shopInfo['city'];
+                $shopInfo['county'] = is_numeric($shopInfo['county']) && isset($regionName[$shopInfo['county']]) ? $regionName[$shopInfo['county']] : $shopInfo['county'];
+                $shopInfo['address'] = $shopInfo['province'] . $shopInfo['city'] . $shopInfo['county'] .$shopInfo['address'];
+                $info['shopInfo'] = $shopInfo;
+            }
+            $info['shopInfo']['predictTime'] = $info['o2o_remark'];
+        }
         return $info;
     }
 
@@ -1158,6 +1172,7 @@ class OrderService extends BaseService
     /**
      * 获取所有子订单信息（含未拆分订单）
      * @param $totalSn array 母订单号
+     * @param $isTotal bool 是否根据母订单号查询
      * @return array
      * @author Chensonglu
      */
@@ -1171,6 +1186,9 @@ class OrderService extends BaseService
             $orderGoods = $this->getAllOrderGoods($totalSn, $isTotal);
             //获取子订单号
             $orderSn = array_column($result, 'order_sn');
+            //获取所有自提门店ID
+            $shopIdAll = array_column($result, 'shop_id');
+            $shopList = BaiyangOrderData::getInstance()->getOrderShopList($shopIdAll);
             //获取所有订单服务单信息
             $orderService = $this->getOrderService($orderSn);
             //获取地区信息
@@ -1219,6 +1237,12 @@ class OrderService extends BaseService
                         }
                     }
                 }
+                $info['shopInfo'] = [];
+                //自提门店信息
+                if ($info['express_type'] == 1) {
+                    $info['shopInfo'] = isset($shopList[$info['shop_id']]) ? $shopList[$info['shop_id']] : [];
+                    $info['shopInfo']['predictTime'] = $info['o2o_remark'];
+                }
                 if ($info['total_sn'] != $info['order_sn'] && $isTotal) {
                     $orderInfo[$info['total_sn']][] = $info;
                 } else {
@@ -1249,7 +1273,6 @@ class OrderService extends BaseService
         $getOrderInfo = $this->getOrderInfoAll($totalSn);
         foreach ($result['totalOrder'] as $key => $value) {
             //获取下单用户手机号
-            $user_id = 0;
             if (isset($getParentOrder[$value['total_sn']])) {
                 $value = $getParentOrder[$value['total_sn']];
                 $value['isTotal'] = 1;
@@ -1894,8 +1917,11 @@ class OrderService extends BaseService
                 $region = BaiyangRegionData::getInstance()->getRegionAll();
             }
 
-            if(in_array('invoice_info',$param['export_title']) || in_array('invoice_type',$param['export_title']) || $is_have_address || in_array('order_type', $param['export_title'])){
+            if(in_array('invoice_info',$param['export_title']) || in_array('invoice_type',$param['export_title']) || $is_have_address || in_array('order_source',$param['export_title']) || in_array('order_type', $param['export_title'])){
                 foreach($totalOrder as & $order){
+                    if (isset($order['order_source']) && $order['order_source'] && $this->config['company_name']) {
+                        $order['order_source'] = str_replace("自营",$this->config['company_name'],$order['order_source']);
+                    }
                     if (isset($order['callback_phone']) && $order['callback_phone']) {
                         $order['order_type'] = '处方订单';
                     }
@@ -1917,7 +1943,6 @@ class OrderService extends BaseService
                     }
                 }
             }
-
             $this->downExcel($totalOrder);
         }else{
             return $totalOrder;

@@ -426,9 +426,16 @@
                                     普通快递
                                     {% endif %}
                                 </p>
-                                {% if val['express_sn'] is defined and val['express_sn'] > 0 %}
-                                <p>{{ val['express'] }}</p>
-                                <p>{{ val['express_sn'] }}</p>
+                                {% if val['express_type'] == 1 and val['shopInfo'] is defined and val['shopInfo'] is not empty %}
+                                    <p>期望门店：{{ val['shopInfo']['trade_name'] }}</p>
+                                    <p>期望时间：{{ val['shopInfo']['predictTime'] }}</p>
+                                {% else %}
+                                    {% if val['express_sn'] is defined and val['express_sn'] > 0 %}
+                                        <p>{{ val['express'] }}</p>
+                                        <p>{{ val['express_sn'] }}</p>
+                                    {% else %}
+                                        <p>暂无物流信息</p>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>
@@ -581,11 +588,16 @@
                                     普通快递
                                     {% endif %}
                                 </p>
-                                {% if v['express_sn'] != "" %}
-                                <p>{{ v['express'] }}</p>
-                                <p>{{ v['express_sn'] }}</p>
+                                {% if v['express_type'] == 1 and v['shopInfo'] is defined and v['shopInfo'] is not empty %}
+                                    <p>期望门店：{{ v['shopInfo']['trade_name'] }}</p>
+                                    <p>期望时间：{{ v['shopInfo']['predictTime'] }}</p>
                                 {% else %}
-                                <p>暂无物流信息</p>
+                                    {% if v['express_sn'] != "" %}
+                                        <p>{{ v['express'] }}</p>
+                                        <p>{{ v['express_sn'] }}</p>
+                                    {% else %}
+                                        <p>暂无物流信息</p>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>

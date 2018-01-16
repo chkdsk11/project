@@ -20,6 +20,7 @@ use Shop\Datas\BaseData;
 use Shop\Datas\UpdateCacheSkuData;
 use Shop\Models\CacheGoodsKey;
 use Shop\Datas\BaiyangGoodsData;
+use Shop\Models\CacheKey;
 
 
 class SkuService extends BaseService
@@ -579,7 +580,7 @@ class SkuService extends BaseService
      */
     public function getSkuOneByErp($erp_id,$id=0)
     {
-        if( !isset($erp_id)){
+        if( !isset($erp_id) || $erp_id <= 0 ){
             return $this->arrayData('参数错误','','','error');
         }
         if($id){
@@ -804,6 +805,8 @@ class SkuService extends BaseService
                     if(!$ruleId[$k]){
                         $tmp = $ProductRuleData->insert($ruleTable,$ruleDate,true);
                         $ruleId[$k] = (int)$tmp;
+                        $this->cache->selectDb(0);
+                        $this->cache->delete(CacheKey::ALL_PRODUCT_RULE);
                     }
                 }else{
                     $ruleId[$k] = 0;

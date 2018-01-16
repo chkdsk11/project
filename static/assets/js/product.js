@@ -1348,6 +1348,18 @@ $(document).ready(function(){
     $('#add_gift').click(function() {
         var select_gift = $('#gift_chose option:selected').text();
         var select_gift_id = $('#gift_chose option:selected').val();
+        var error = 0;
+        $('#gift_table tbody input[name="bind_gift[]"]').each(function(){
+            if ($(this).val() == select_gift_id) {
+                error = 1;
+                return;
+            }
+        });
+        if (error == 1) {
+            layer_required('请勿重复添加赠品！');
+            return;
+        }
+
         if(select_gift_id != undefined){
             var str = '<tr>' +
                 '<td class="center">' +
