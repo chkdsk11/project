@@ -15,6 +15,8 @@ define('APP_IMG_PATH','http://zzjh5.51qiyao.com/uploads/');  //移动端图片�
 
 return new \Phalcon\Config(array(
     'debug'=>true,
+    // 环境变量 dev,stg,pro
+    'environment' => 'stg',
     //58服务器
     'database' => array(
         'read' => array(
@@ -102,8 +104,6 @@ return new \Phalcon\Config(array(
         'fileTmp'  => '/tmp/',//文件上传临时存放路径
     ),
 
-    // 环境变量 dev,stg,pro
-    'environment' => 'stg',
     'soa' => [
         'host' => 'http://'.DOMAIN_SOA,
     ],
@@ -208,12 +208,12 @@ return new \Phalcon\Config(array(
         ],
     ],
     //自营商城名称
-    'company_name' => '张仲景'
+    'company_name' => '张仲景',
     //商城各端
     'shop_platform' => [
-//        'pc' => 'PC',
-//        'app' => 'APP',
-      'wap' => 'WAP',
-//        'wechat' => '微商城'
+		//'pc' => 'PC',
+		//'app' => 'APP',
+        'wap' => 'WAP',
+		//'wechat' => '微商城'
     ],
 ));
