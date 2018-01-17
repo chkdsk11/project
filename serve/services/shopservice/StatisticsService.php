@@ -496,7 +496,7 @@ class StatisticsService extends BaseService
     public function numberDailyRegistrationsPastWeek(){
         $timeList = $this->getTimeByType('LastWeekFormNow');
         $table = 'Shop\Models\BaiyangUser';
-        $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}'";
+        $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}' and is_dummy = 0";
         $fields = "count('id') as count,FROM_UNIXTIME(add_time,'%Y-%m-%d') as day";
         $order = "order by day";
         $group = 'group by day';
@@ -792,7 +792,7 @@ class StatisticsService extends BaseService
     public function lastWeekUserRegisterCount(){
         $timeList = $this->getTimeByType('LastWeekFormNow');
         $table = 'Shop\Models\BaiyangUser';
-        $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}'";
+        $where = "where add_time >= '{$timeList['beginLastWeek']}' and add_time <='{$timeList['endLastWeek']}' and is_dummy = 0";
         $fields = "count(id)";
         $count = BaseData::getInstance()->getData([
             'column'    =>  $fields,

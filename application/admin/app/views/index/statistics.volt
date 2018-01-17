@@ -15,7 +15,7 @@
             <span style="float: left;margin-right: 40px;line-height: 30px;">数据缓存一小时，也可手动刷新缓存</span>
             <input type="button" class="btn btn-primary" value="刷新" onclick="clearCatch()"/>
         </div>
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover" id="top_cache" style="display: none;">
             <tr>
                 <th style="text-align: center;padding: 40px;width:25%;">
                     <label>本周订单量</label>
@@ -91,6 +91,7 @@
                             $('#flush-cache').show();
                         }
                         if(info.topStatistics) {
+                            $('#top_cache').show();
                             $("#order_count").html(info.topStatistics.order_count);
                             $("#order_paid_count").html(info.topStatistics.order_paid_count);
                             $("#order_canceled_count").html(info.topStatistics.order_canceled_count);
