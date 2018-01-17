@@ -430,6 +430,7 @@ class StatisticsService extends BaseService
             }
             $return = $temp;
         }
+        array_multisort(array_column($return,'count'), SORT_DESC, $return);
         $result['goodMoveList'] = $return;
         return $result;
     }
@@ -954,8 +955,8 @@ class StatisticsService extends BaseService
                 break;
             //上一周日期间时间
             case 'LastWeekFormNow':
-                $resultList['beginLastWeek'] = mktime(0,0,0,date('m'),date('d')-7+1-date('w'),date('y'));
-                $resultList['endLastWeek'] = mktime(23,59,59,date('m'),date('d')-date('w'),date('y'));
+                $resultList['beginLastWeek'] = mktime(0,0,0,date('m'),date('d')-7,date('y'));
+                $resultList['endLastWeek'] = mktime(23,59,59,date('m'),date('d')-1,date('y'));
                 break;
             //本月时间
             case 'beginThisMonth':
